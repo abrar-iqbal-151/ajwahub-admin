@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/Admin_Description.css';
 
-const API = 'http://localhost:5000/api';
+const API = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api`;
 
 function Description_Admin() {
   const navigate = useNavigate();

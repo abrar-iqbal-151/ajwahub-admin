@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import '../css/AdminPanel.css';
 import '../css/Admin_Product.css';
 
-const API = 'http://localhost:5000/api';
+const API = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api`;
 
 const menuItems = [
   { icon: '🏠', label: 'Dashboard', path: '/panel' },

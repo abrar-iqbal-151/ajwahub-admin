@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/Admin.css';
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 function AdminSignup() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', password: '', confirmPassword: '' });
@@ -38,7 +40,7 @@ function AdminSignup() {
     if (!acceptTerms) { setError('Please accept the Terms of Service'); setLoading(false); return; }
 
     try {
-      const res = await fetch('http://localhost:5000/api/admin/signup', {
+      const res = await fetch(`${API}/api/admin/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: `${firstName.trim()} ${lastName.trim()}`, email: email.toLowerCase().trim(), password })
