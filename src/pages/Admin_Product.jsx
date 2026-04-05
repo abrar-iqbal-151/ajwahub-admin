@@ -176,7 +176,7 @@ function Admin_Product() {
                       }}
                     />
                   </label>
-                  {newProduct.image && <img src={`http://localhost:5173${newProduct.image}`} alt="preview" style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '8px', marginTop: '4px' }} onError={e => e.target.style.display='none'} />}
+                  {newProduct.image && <img src={newProduct.image} alt="preview" style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '8px', marginTop: '4px' }} onError={e => e.target.style.display='none'} />}
                   <label>Description</label>
                   <textarea rows={2} placeholder="Product description" value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
                   <label>Category</label>
@@ -204,7 +204,7 @@ function Admin_Product() {
                 <div key={product.id} className="ap-card">
                   {editProduct?.id === product.id ? (
                     <div className="ap-edit">
-                      <img src={`http://localhost:5173${product.image}`} alt={product.name} className="ap-img" onError={e => e.target.style.display = 'none'} />
+                      <img src={editProduct.image} alt={product.name} className="ap-img" onError={e => e.target.style.display = 'none'} />
                       <label>Name</label>
                       <input value={editProduct.name} onChange={e => setEditProduct({ ...editProduct, name: e.target.value })} />
                       <label>Price (PKR)</label>
@@ -215,6 +215,22 @@ function Admin_Product() {
                       <input value={editProduct.discount} onChange={e => setEditProduct({ ...editProduct, discount: e.target.value })} />
                       <label>Description</label>
                       <textarea rows={3} value={editProduct.description} onChange={e => setEditProduct({ ...editProduct, description: e.target.value })} />
+                      <label>Image URL</label>
+                      <input placeholder="Image URL" value={editProduct.image} onChange={e => setEditProduct({ ...editProduct, image: e.target.value })} />
+                      <label className="ap-upload-label">
+                        📤 Upload Image
+                        <input type="file" accept="image/*" style={{ display: 'none' }}
+                          onChange={async e => {
+                            const file = e.target.files[0];
+                            if (!file) return;
+                            const formData = new FormData();
+                            formData.append('file', file);
+                            const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                            const data = await res.json();
+                            if (res.ok) setEditProduct({ ...editProduct, image: data.url || data.path });
+                          }}
+                        />
+                      </label>
                       <label>Category</label>
                       <select style={{ background: '#1f2937', border: '1px solid #374151', color: '#e5e7eb', padding: '8px 10px', borderRadius: '8px', fontSize: '13px', width: '100%' }}
                         value={editProduct.category} onChange={e => setEditProduct({ ...editProduct, category: e.target.value })}>
@@ -232,7 +248,7 @@ function Admin_Product() {
                     </div>
                   ) : (
                     <div className="ap-view">
-                      <img src={`http://localhost:5173${product.image}`} alt={product.name} className="ap-img" onError={e => e.target.style.display = 'none'} />
+                      <img src={product.image} alt={product.name} className="ap-img" onError={e => e.target.style.display = 'none'} />
                       <h4>{product.name}</h4>
                       <div className="ap-meta">
                         <span className="ap-price">PKR {product.price}</span>
