@@ -149,7 +149,7 @@ function Description_Admin() {
                         <div className="da-video-preview">
                           <p className="da-preview-label">Preview:</p>
                           <video key={editHero.video} autoPlay muted loop playsInline className="da-video">
-                            <source src={`http://localhost:5173${editHero.video}`} type="video/mp4" />
+                            <source src={editHero.video} type="video/mp4" />
                           </video>
                         </div>
                       )}
@@ -162,7 +162,7 @@ function Description_Admin() {
                     <div className="da-card-view">
                       {hero.video && (
                         <video autoPlay muted loop playsInline className="da-video">
-                          <source src={`http://localhost:5173${hero.video}`} type="video/mp4" />
+                          <source src={hero.video} type="video/mp4" />
                         </video>
                       )}
                       <div className="da-card-info">
@@ -200,6 +200,22 @@ function Description_Admin() {
                       <input value={editProduct.discount} onChange={e => setEditProduct({ ...editProduct, discount: e.target.value })} />
                       <label>Description</label>
                       <textarea rows={3} value={editProduct.description} onChange={e => setEditProduct({ ...editProduct, description: e.target.value })} />
+                      <label>Image URL</label>
+                      <input placeholder="Image URL" value={editProduct.image} onChange={e => setEditProduct({ ...editProduct, image: e.target.value })} />
+                      <label className="da-upload-label">
+                        📤 Upload Image
+                        <input type="file" accept="image/*" style={{ display: 'none' }}
+                          onChange={async e => {
+                            const file = e.target.files[0];
+                            if (!file) return;
+                            const formData = new FormData();
+                            formData.append('file', file);
+                            const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                            const data = await res.json();
+                            if (res.ok) setEditProduct({ ...editProduct, image: data.url || data.path });
+                          }}
+                        />
+                      </label>
                       <label className="da-stock-label">
                         <input type="checkbox" checked={editProduct.stock} onChange={e => setEditProduct({ ...editProduct, stock: e.target.checked })} />
                         In Stock
@@ -213,7 +229,7 @@ function Description_Admin() {
                     <div className="da-card-view">
                       <div className="da-product-img-wrap">
                         <img
-                          src={`http://localhost:5173${product.image}`}
+                          src={product.image}
                           alt={product.name}
                           className="da-product-img"
                           onError={e => { e.target.onerror = null; e.target.src = 'https://placehold.co/200x130/1f2937/9ca3af?text=No+Image'; }}
