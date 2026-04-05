@@ -1,0 +1,45 @@
+@import './Admin.css';
+
+.login-page {
+  min-height: 100vh;
+  background: radial-gradient(circle at 30% 50%, #4a0000 0%, #000000 85%);
+  display: flex;
+  flex-direction: column;
+  padding-top: 72px;
+}
+
+.login-container {
+  background: rgba(17, 17, 17, 0.9);
+  backdrop-filter: blur(40px);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  border-radius: 20px;
+  padding: 2.5rem;
+  width: 100%; max-width: 460px;
+  margin: 2rem auto;
+  position: relative;
+  animation: slideUp 0.5s ease;
+}
+
+.login-container::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, #dc2626, transparent);
+  border-radius: 20px 20px 0 0;
+}
+
+.login-header { text-align: center; margin-bottom: 1.5rem; }
+.login-title {
+  font-size: 2rem; font-weight: 800;
+  background: linear-gradient(135deg, #fb923c, #fbbf24);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  margin-bottom: 0.4rem;
+}
+.login-subtitle { color: rgba(255,255,255,0.55); font-size: 0.9rem; }
+
+.field-error { color: #f87171; font-size: 12px; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
+
+.login-form { display: flex; flex-direction: column; gap: 0.75rem; }
+
+@media (max-width: 600px) {
+  .login-container { padding: 1.5rem; margin: 1rem; max-width: calc(100% - 2rem); }
+}

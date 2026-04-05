@@ -1,0 +1,62 @@
+.aw-section { margin-bottom: 28px; }
+.aw-heading { font-size: 15px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; }
+.aw-empty { text-align: center; color: #4b5563; padding: 40px; background: #111827; border-radius: 14px; }
+
+/* POPULAR LIST */
+.aw-popular-list { display: flex; flex-direction: column; gap: 12px; }
+
+.aw-popular-item {
+  background: #111827;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.aw-popular-top {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.aw-rank { font-size: 18px; font-weight: 800; color: #f87171; width: 28px; text-align: center; flex-shrink: 0; }
+.aw-popular-item:nth-child(1) .aw-rank { color: #fbbf24; font-size: 22px; }
+.aw-popular-item:nth-child(2) .aw-rank { color: #9ca3af; }
+.aw-popular-item:nth-child(3) .aw-rank { color: #b45309; }
+
+.aw-product-img { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.08); background: #1f2937; }
+
+.aw-product-info { flex: 1; }
+.aw-product-info h4 { font-size: 14px; font-weight: 600; color: #f1f5f9; margin-bottom: 3px; }
+.aw-product-price { font-size: 13px; color: #4ade80; }
+
+.aw-count-badge { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 60px; }
+.aw-count-badge span { font-size: 15px; font-weight: 700; color: #f87171; }
+.aw-count-badge small { font-size: 11px; color: #6b7280; }
+
+.aw-bar-wrap { width: 120px; height: 6px; background: #1f2937; border-radius: 3px; overflow: hidden; flex-shrink: 0; }
+.aw-bar { height: 100%; background: linear-gradient(90deg, #dc2626, #f87171); border-radius: 3px; }
+
+.aw-delete-btn { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); color: #f87171; border-radius: 8px; padding: 4px 8px; cursor: pointer; font-size: 14px; flex-shrink: 0; transition: background 0.2s; }
+.aw-delete-btn:hover { background: rgba(239,68,68,0.25); }
+
+/* USERS ROW — product ke neeche alag */
+.aw-users-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-left: 42px;
+}
+.aw-user-chip {
+  background: rgba(59,130,246,0.1);
+  border: 1px solid rgba(59,130,246,0.25);
+  color: #93c5fd;
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 20px;
+}

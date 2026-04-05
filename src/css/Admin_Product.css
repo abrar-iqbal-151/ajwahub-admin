@@ -1,0 +1,55 @@
+.ap-msg { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.4); color: #4ade80; padding: 12px 20px; border-radius: 10px; margin-bottom: 20px; font-weight: 600; }
+
+.ap-upload-label {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(59,130,246,0.15); color: #60a5fa;
+  border: 1px solid rgba(59,130,246,0.3);
+  padding: 7px 14px; border-radius: 8px;
+  cursor: pointer; font-size: 13px; font-weight: 600;
+  transition: background 0.2s; width: 100%; justify-content: center;
+}
+.ap-upload-label:hover { background: rgba(59,130,246,0.3); }
+
+.ap-add-form {
+  background: #111827;
+  border: 1px solid rgba(220,38,38,0.3);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+.ap-add-form h3 { font-size: 15px; font-weight: 700; color: #f87171; margin-bottom: 16px; }
+.ap-add-grid { max-width: 320px; }
+
+.ap-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; }
+.ap-count { color: #6b7280; font-size: 13px; white-space: nowrap; }
+
+.ap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+
+.ap-card { background: #111827; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 16px; }
+
+.ap-img { width: 100%; height: 130px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; display: block; }
+
+.ap-view h4 { font-size: 15px; color: #f1f5f9; margin-bottom: 8px; }
+.ap-meta { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
+.ap-price { color: #4ade80; font-weight: 700; font-size: 15px; }
+.ap-discount { color: #fbbf24; font-size: 13px; font-weight: 600; }
+.ap-stock.in { color: #4ade80; font-size: 13px; }
+.ap-stock.out { color: #f87171; font-size: 13px; }
+.ap-rating { display: flex; align-items: center; gap: 4px; margin-bottom: 10px; color: #9ca3af; font-size: 13px; }
+
+.ap-edit-btn { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); padding: 7px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; width: 100%; }
+.ap-edit-btn:hover { background: rgba(59,130,246,0.3); }
+
+.ap-edit { display: flex; flex-direction: column; gap: 8px; }
+.ap-edit label { font-size: 11px; color: #9ca3af; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.ap-edit input, .ap-edit textarea { background: #1f2937; border: 1px solid #374151; color: #e5e7eb; padding: 8px 10px; border-radius: 8px; font-size: 13px; width: 100%; outline: none; resize: vertical; }
+.ap-edit input:focus, .ap-edit textarea:focus { border-color: #dc2626; }
+
+.ap-stock-label { display: flex; align-items: center; gap: 8px; font-size: 13px !important; color: #e5e7eb !important; text-transform: none !important; letter-spacing: 0 !important; cursor: pointer; }
+.ap-stock-label input[type="checkbox"] { width: auto; accent-color: #dc2626; }
+
+.ap-btns { display: flex; gap: 8px; margin-top: 4px; }
+.ap-save { background: linear-gradient(135deg, #dc2626, #991b1b); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; flex: 1; }
+.ap-save:hover { opacity: 0.9; }
+.ap-cancel { background: #1f2937; color: #9ca3af; border: 1px solid #374151; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; flex: 1; }
+.ap-cancel:hover { background: #374151; }
