@@ -93,6 +93,10 @@ function AdminLogin() {
           </button>
         </form>
 
+        <div className="forgot-link-wrap">
+          <button className="forgot-link" onClick={() => navigate('/forgot-password')}>Forgot Password?</button>
+        </div>
+
         <div className="auth-switch">
           Don't have an account? <span onClick={() => navigate('/signup')}>Create one</span>
         </div>
