@@ -40,6 +40,23 @@ function AdminPanel() {
     navigate('/login');
   };
 
+  const [inviteLink, setInviteLink] = useState('');
+  const [inviteLoading, setInviteLoading] = useState(false);
+
+  const generateInvite = async () => {
+    setInviteLoading(true);
+    const tok = localStorage.getItem('ajwaHub_adminToken');
+    try {
+      const res = await fetch(`${API}/admin/invite`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${tok}` }
+      });
+      const data = await res.json();
+      if (res.ok) setInviteLink(data.inviteLink);
+    } catch {}
+    setInviteLoading(false);
+  };
+
   const thisMonth = users.filter(u => {
     const d = new Date(u.createdAt), now = new Date();
     return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
@@ -126,6 +143,24 @@ function AdminPanel() {
                 <p>Server Status</p>
               </div>
             </div>
+          </div>
+
+          {/* INVITE ADMIN */}
+          <div className="invite-card">
+            <div className="invite-header">
+              <h3>🔗 Invite New Admin</h3>
+              <p>Generate a one-time link (expires in 24 hours)</p>
+            </div>
+            <button className="invite-btn" onClick={generateInvite} disabled={inviteLoading}>
+              {inviteLoading ? '⏳ Generating...' : '🔗 Generate Invite Link'}
+            </button>
+            {inviteLink && (
+              <div className="invite-link-box">
+                <input readOnly value={inviteLink} className="invite-link-input" />
+                <button className="invite-copy-btn" onClick={() => { navigator.clipboard.writeText(inviteLink); alert('Link copied!'); }}>📋 Copy</button>
+              </div>
+            )}
+            {inviteLink && <p className="invite-note">⚠️ This link expires in 24 hours. Share it only with trusted people.</p>}
           </div>
 
 

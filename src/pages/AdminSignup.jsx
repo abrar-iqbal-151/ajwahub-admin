@@ -1,11 +1,14 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import '../css/Admin.css';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 function AdminSignup() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const inviteToken = new URLSearchParams(location.search).get('invite') || '';
+  const [inviteValid, setInviteValid] = useState(null);
   const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', password: '', confirmPassword: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -13,6 +16,14 @@ function AdminSignup() {
   const [showConfirm, setShowConfirm] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState('');
+
+  useEffect(() => {
+    if (!inviteToken) { setInviteValid(false); return; }
+    fetch(`${API}/api/admin/invite/verify?token=${inviteToken}`)
+      .then(r => r.json())
+      .then(d => setInviteValid(d.valid))
+      .catch(() => setInviteValid(false));
+  }, [inviteToken]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -43,7 +54,7 @@ function AdminSignup() {
       const res = await fetch(`${API}/api/admin/signup`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: `${firstName.trim()} ${lastName.trim()}`, email: email.toLowerCase().trim(), password })
+        body: JSON.stringify({ name: `${firstName.trim()} ${lastName.trim()}`, email: email.toLowerCase().trim(), password, inviteToken })
       });
       const data = await res.json();
       if (res.ok) {
@@ -80,7 +91,22 @@ function AdminSignup() {
         </div>
       </nav>
 
-      <div className="auth-box">
+      {inviteValid === false && (
+        <div className="auth-box" style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '3rem', marginBottom: '16px' }}>🚫</div>
+          <h2 style={{ color: '#f87171', marginBottom: '8px' }}>Access Denied</h2>
+          <p style={{ color: '#9ca3af' }}>Valid invite link required to create admin account.</p>
+          <p style={{ color: '#6b7280', fontSize: '12px', marginTop: '8px' }}>Contact existing admin for an invite link.</p>
+        </div>
+      )}
+
+      {inviteValid === null && (
+        <div className="auth-box" style={{ textAlign: 'center' }}>
+          <p style={{ color: '#9ca3af' }}>⏳ Verifying invite link...</p>
+        </div>
+      )}
+
+      {inviteValid === true && (
         <div className="auth-header">
           <h1>Create Admin</h1>
           <p>Register as AjwaHub Administrator</p>
@@ -154,6 +180,7 @@ function AdminSignup() {
           Already have an account? <span onClick={() => navigate('/login')}>Sign in</span>
         </div>
       </div>
+      )}
 
       <footer className="footer">
         <div className="footer-content">

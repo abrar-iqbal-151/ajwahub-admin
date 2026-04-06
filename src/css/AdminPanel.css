@@ -228,6 +228,43 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
 .no-data { text-align: center; color: #4b5563; padding: 40px !important; }
 .panel-loading { text-align: center; color: #4b5563; padding: 60px; font-size: 15px; }
 
+/* ── INVITE CARD ── */
+.invite-card {
+  background: #111827;
+  border: 1px solid rgba(59,130,246,0.25);
+  border-radius: 14px;
+  padding: 22px;
+  margin-top: 24px;
+}
+.invite-header h3 { font-size: 15px; font-weight: 700; color: #60a5fa; margin-bottom: 4px; }
+.invite-header p { font-size: 13px; color: #6b7280; margin-bottom: 16px; }
+.invite-btn {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  color: white; border: none;
+  padding: 10px 20px; border-radius: 10px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  transition: opacity 0.2s;
+}
+.invite-btn:hover { opacity: 0.85; }
+.invite-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.invite-link-box {
+  display: flex; gap: 8px; margin-top: 14px; align-items: center;
+}
+.invite-link-input {
+  flex: 1; background: #1f2937; border: 1px solid #374151;
+  color: #60a5fa; padding: 9px 12px; border-radius: 8px;
+  font-size: 12px; outline: none; font-family: monospace;
+}
+.invite-copy-btn {
+  background: rgba(59,130,246,0.15); color: #60a5fa;
+  border: 1px solid rgba(59,130,246,0.3);
+  padding: 9px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 700; cursor: pointer;
+  white-space: nowrap;
+}
+.invite-copy-btn:hover { background: rgba(59,130,246,0.3); }
+.invite-note { font-size: 11px; color: #f59e0b; margin-top: 10px; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 768px) {
   .sidebar { width: 64px; }
