@@ -107,14 +107,15 @@ function AdminSignup() {
       )}
 
       {inviteValid === true && (
-        <div className="auth-header">
-          <h1>Create Admin</h1>
-          <p>Register as AjwaHub Administrator</p>
-        </div>
+        <div className="auth-box">
+          <div className="auth-header">
+            <h1>Create Admin</h1>
+            <p>Register as AjwaHub Administrator</p>
+          </div>
 
-        {error && <div className="auth-error"><span>⚠️</span>{error}</div>}
+          {error && <div className="auth-error"><span>⚠️</span>{error}</div>}
 
-        <form className="auth-form" onSubmit={handleSubmit}>
+          <form className="auth-form" onSubmit={handleSubmit}>
           <div className="form-row">
             <input type="text" placeholder="First Name" className="form-input"
               value={formData.firstName}
@@ -176,10 +177,10 @@ function AdminSignup() {
           </button>
         </form>
 
-        <div className="auth-switch">
-          Already have an account? <span onClick={() => navigate('/login')}>Sign in</span>
+          <div className="auth-switch">
+            Already have an account? <span onClick={() => navigate('/login')}>Sign in</span>
+          </div>
         </div>
-      </div>
       )}
 
       <footer className="footer">
