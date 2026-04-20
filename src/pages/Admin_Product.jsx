@@ -65,7 +65,7 @@ function Admin_Product() {
   const saveProduct = async (product) => {
     const res = await fetch(`${API}/shop-products/${product.id}`, {
       method: 'PUT', headers: authHeaders,
-      body: JSON.stringify({ name: product.name, price: product.price, discount: product.discount, stock: product.stock, description: product.description, rating: product.rating })
+      body: JSON.stringify({ name: product.name, price: product.price, discount: product.discount, stock: product.stock, description: product.description, rating: product.rating, image: product.image, category: product.category })
     });
     if (res.ok) { setProducts(products.map(p => p.id === product.id ? product : p)); setEditProduct(null); showMsg('✅ Product updated!'); }
     else showMsg('❌ Failed to update');
@@ -228,7 +228,7 @@ function Admin_Product() {
                             formData.append('file', file);
                             const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
                             const data = await res.json();
-                            if (res.ok) setEditProduct({ ...editProduct, image: data.url || data.path });
+                            if (res.ok) setEditProduct(prev => ({ ...prev, image: data.url || data.path }));
                           }}
                         />
                       </label>
