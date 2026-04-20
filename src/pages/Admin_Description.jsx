@@ -13,6 +13,8 @@ function Description_Admin() {
   const [editHero, setEditHero] = useState(null);
   const [products, setProducts] = useState([]);
   const [editProduct, setEditProduct] = useState(null);
+  const [newProduct, setNewProduct] = useState({ name: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', discount: '', category: 'dates' });
+  const [showAddProduct, setShowAddProduct] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [editReview, setEditReview] = useState(null);
   const [newReview, setNewReview] = useState({ name: '', text: '', rating: 5 });
@@ -63,9 +65,26 @@ function Description_Admin() {
   const saveProduct = async (product) => {
     const res = await fetch(`${API}/content/product/${product.id}`, {
       method: 'PUT', headers: authHeaders,
-      body: JSON.stringify({ name: product.name, price: product.price, discount: product.discount, stock: product.stock, description: product.description, rating: product.rating })
+      body: JSON.stringify({ name: product.name, price: product.price, discount: product.discount, stock: product.stock, description: product.description, rating: product.rating, image: product.image })
     });
     if (res.ok) { setProducts(products.map(p => p.id === product.id ? product : p)); setEditProduct(null); showMsg('✅ Product updated!'); }
+  };
+
+  const addProduct = async () => {
+    if (!newProduct.name || !newProduct.price) return showMsg('⚠️ Name aur Price required hai');
+    const res = await fetch(`${API}/content/product`, {
+      method: 'POST', headers: authHeaders,
+      body: JSON.stringify({ ...newProduct, price: Number(newProduct.price) })
+    });
+    const data = await res.json();
+    if (res.ok) { setProducts([...products, data.product]); setNewProduct({ name: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', discount: '', category: 'dates' }); setShowAddProduct(false); showMsg('✅ Product added!'); }
+    else showMsg('❌ Failed to add');
+  };
+
+  const deleteProduct = async (id) => {
+    if (!window.confirm('Delete this product?')) return;
+    const res = await fetch(`${API}/content/product/${id}`, { method: 'DELETE', headers: authHeaders });
+    if (res.ok) { setProducts(products.filter(p => p.id !== id)); showMsg('🗑️ Deleted!'); }
   };
 
   const saveReview = async (review) => {
@@ -184,7 +203,58 @@ function Description_Admin() {
 
         {activeTab === 'products' && !loading && (
           <div className="da-section">
-            <h2 className="da-section-title">🛍️ Products ({products.length})</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h2 className="da-section-title" style={{ margin: 0 }}>🛍️ Products ({products.length})</h2>
+              <button className="da-save-btn" style={{ width: 'auto', padding: '8px 18px' }} onClick={() => setShowAddProduct(!showAddProduct)}>
+                {showAddProduct ? '✕ Cancel' : '➕ Add Product'}
+              </button>
+            </div>
+
+            {showAddProduct && (
+              <div className="da-add-review" style={{ marginBottom: '24px' }}>
+                <h3>➕ Add New Product</h3>
+                <div className="da-edit-form">
+                  <label>Name</label>
+                  <input placeholder="Product name" value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
+                  <label>Price (PKR)</label>
+                  <input type="number" placeholder="e.g. 1200" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
+                  <label>Weight</label>
+                  <input placeholder="e.g. 1kg" value={newProduct.weight} onChange={e => setNewProduct({ ...newProduct, weight: e.target.value })} />
+                  <label>Rating (1-5)</label>
+                  <input type="number" min="1" max="5" step="0.1" value={newProduct.rating} onChange={e => setNewProduct({ ...newProduct, rating: Number(e.target.value) })} />
+                  <label>Discount Tag</label>
+                  <input placeholder="e.g. 50% OFF" value={newProduct.discount} onChange={e => setNewProduct({ ...newProduct, discount: e.target.value })} />
+                  <label>Description</label>
+                  <textarea rows={2} placeholder="Product description" value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                  <label>Image URL</label>
+                  <input placeholder="e.g. /Product 1.png" value={newProduct.image} onChange={e => setNewProduct({ ...newProduct, image: e.target.value })} />
+                  <label className="da-upload-label">
+                    📤 Upload Image
+                    <input type="file" accept="image/*" style={{ display: 'none' }}
+                      onChange={async e => {
+                        const file = e.target.files[0]; if (!file) return;
+                        const formData = new FormData(); formData.append('file', file);
+                        const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                        const data = await res.json();
+                        if (res.ok) setNewProduct(p => ({ ...p, image: data.url || data.path }));
+                      }}
+                    />
+                  </label>
+                  {newProduct.image && <img src={newProduct.image} alt="preview" style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '8px' }} onError={e => e.target.style.display='none'} />}
+                  <label>Category</label>
+                  <select style={{ background: '#1f2937', border: '1px solid #374151', color: '#e5e7eb', padding: '8px', borderRadius: '8px', width: '100%' }}
+                    value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
+                    <option value="dates">Dates</option>
+                    <option value="dry">Dry Fruits</option>
+                  </select>
+                  <label className="da-stock-label">
+                    <input type="checkbox" checked={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.checked })} /> In Stock
+                  </label>
+                  <button className="da-save-btn" onClick={addProduct}>➕ Add Product</button>
+                </div>
+              </div>
+            )}
+
             <div className="da-products-grid">
               {products.map(product => (
                 <div key={product.id} className="da-product-card">
@@ -242,7 +312,10 @@ function Description_Admin() {
                         <span className={`da-stock ${product.stock ? 'in' : 'out'}`}>{product.stock ? '✅ In Stock' : '❌ Out of Stock'}</span>
                       </div>
                       <div className="da-rating-row">{renderStars(product.rating)} <span className="da-rating-val">({product.rating})</span></div>
-                      <button className="da-edit-btn" onClick={() => setEditProduct({ ...product })}>✏️ Edit</button>
+                      <div className="da-form-btns">
+                        <button className="da-edit-btn" onClick={() => setEditProduct({ ...product })}>✏️ Edit</button>
+                        <button className="da-delete-btn" onClick={() => deleteProduct(product.id)}>🗑️ Delete</button>
+                      </div>
                     </div>
                   )}
                 </div>
