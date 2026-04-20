@@ -67,7 +67,7 @@ function Admin_Product() {
       method: 'PUT', headers: authHeaders,
       body: JSON.stringify({ name: product.name, price: product.price, discount: product.discount, stock: product.stock, description: product.description, rating: product.rating, image: product.image, category: product.category })
     });
-    if (res.ok) { setProducts(products.map(p => p._id === product._id ? product : p)); setEditProduct(null); showMsg('✅ Product updated!'); }
+    if (res.ok) { fetchProducts(); setEditProduct(null); showMsg('✅ Product updated!'); }
     else showMsg('❌ Failed to update');
   };
 
