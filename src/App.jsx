@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AdminLogin from './pages/AdminLogin';
 import AdminSignup from './pages/AdminSignup';
+import Admin_Premium from './pages/Admin_Premium';
 import AdminForgotPassword from './pages/AdminForgotPassword';
 import AdminPanel from './pages/AdminPanel';
 import Admin_Description from './pages/Admin_Description';
@@ -25,6 +26,7 @@ function App() {
       <Route path="/panel/users" element={<Users />} />
       <Route path="/description" element={<Admin_Description />} />
       <Route path="/home-editor" element={<Admin_Home />} />
+      <Route path="/admin-premium" element={<Admin_Premium />} />
       <Route path="/admin-products" element={<Admin_Product />} />
       <Route path="/admin-wishlist" element={<Admin_Wishlist />} />
       <Route path="/admin-gift-orders" element={<Admin_GiftOrders />} />
