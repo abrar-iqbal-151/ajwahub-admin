@@ -297,10 +297,22 @@ function Admin_Payment() {
             {/* 3. Pricing Settings */}
             <div className="apm-settings-card">
               <div className="apm-settings-header">
-                <h3>💰 Pricing Settings</h3>
+                <h3>👑 Premium Section Titles</h3>
                 {pricingMsg && <span className="apm-msg">{pricingMsg}</span>}
               </div>
               <div className="apm-form-grid">
+                <div className="apm-field">
+                  <label>⭐ Featured Badge Text</label>
+                  <input value={pricingForm.premiumFeaturedTitle || '⭐ Featured'} onChange={e => setPricingForm(p => ({ ...p, premiumFeaturedTitle: e.target.value }))} placeholder="e.g. ⭐ Featured" />
+                </div>
+                <div className="apm-field">
+                  <label>Top Picks Heading</label>
+                  <input value={pricingForm.premiumFeaturedSubtitle || 'Top Picks'} onChange={e => setPricingForm(p => ({ ...p, premiumFeaturedSubtitle: e.target.value }))} placeholder="e.g. Top Picks" />
+                </div>
+                <div className="apm-field">
+                  <label>All Products Section Title</label>
+                  <input value={pricingForm.premiumSectionTitle || 'All Premium Products'} onChange={e => setPricingForm(p => ({ ...p, premiumSectionTitle: e.target.value }))} placeholder="e.g. All Premium Products" />
+                </div>
                 <div className="apm-field">
                   <label>🚚 Shipping (PKR)</label>
                   <input type="number" min="0" value={pricingForm.shippingCost} onChange={e => setPricingForm(p => ({ ...p, shippingCost: parseFloat(e.target.value) || 0 }))} />
@@ -309,17 +321,9 @@ function Admin_Payment() {
                   <label>🧾 Tax Rate (%)</label>
                   <input type="number" min="0" max="100" step="0.1" value={pricingForm.taxRate} onChange={e => setPricingForm(p => ({ ...p, taxRate: parseFloat(e.target.value) || 0 }))} />
                 </div>
-                <div className="apm-field">
-                  <label>📊 Preview</label>
-                  <div className="apm-preview-box">
-                    <div><span>Shipping</span><span>PKR {pricingForm.shippingCost}</span></div>
-                    <div><span>Tax ({pricingForm.taxRate}%)</span><span>PKR {Math.round(pricingForm.shippingCost * pricingForm.taxRate / 100)}</span></div>
-                    <div className="apm-preview-total"><span>Total</span><span>PKR {Math.round(pricingForm.shippingCost + pricingForm.shippingCost * pricingForm.taxRate / 100)}</span></div>
-                  </div>
-                </div>
               </div>
               <button className="apm-save-btn" style={{ marginTop: '10px' }} onClick={savePricing}>
-                💾 Save Pricing
+                💾 Save Settings
               </button>
             </div>
 
