@@ -202,8 +202,8 @@ function Admin_Product() {
           {loading ? <div className="panel-loading">Loading...</div> : (
             <div className="ap-grid">
               {filtered.map(product => (
-                <div key={product.id} className="ap-card">
-                  {editProduct?.id === product.id ? (
+                <div key={product._id} className="ap-card">
+                  {editProduct?._id === product._id ? (
                     <div className="ap-edit">
                       <img src={editProduct.image} alt={product.name} className="ap-img" onError={e => e.target.style.display = 'none'} />
                       <label>Name</label>
