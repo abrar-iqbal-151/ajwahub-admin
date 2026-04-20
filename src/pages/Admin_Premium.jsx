@@ -126,6 +126,18 @@ function Admin_Premium() {
         <div className="dashboard-content">
           {msg && <div className="ap-msg">{msg}</div>}
 
+          {products.length === 0 && !loading && (
+            <div style={{ background: '#111827', border: '1px solid rgba(251,146,60,0.3)', borderRadius: '14px', padding: '30px', textAlign: 'center', marginBottom: '20px' }}>
+              <p style={{ color: '#9ca3af', marginBottom: '16px' }}>No premium products yet. Initialize with sample data.</p>
+              <button className="ap-save" style={{ width: 'auto', padding: '10px 24px' }} onClick={async () => {
+                const res = await fetch(`${API}/premium-products/initialize`, { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
+                const data = await res.json();
+                showMsg(data.message === 'already exists' ? '⚠️ Already initialized!' : '✅ Sample products added!');
+                fetchProducts();
+              }}>🚀 Initialize Premium Products</button>
+            </div>
+          )}
+
           <div className="ap-toolbar">
             <input className="search-input" placeholder="🔍 Search..." value={search} onChange={e => setSearch(e.target.value)} />
             <span className="ap-count">{filtered.length} Products</span>

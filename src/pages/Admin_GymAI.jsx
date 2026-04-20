@@ -244,3 +244,4 @@ function Admin_GymAI() {
 }
 
 export default Admin_GymAI;
+
