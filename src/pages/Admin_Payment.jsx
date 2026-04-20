@@ -345,7 +345,7 @@ function Admin_Payment() {
                     <span className="apm-order-id">#{order.orderId}</span>
                     <span className="apm-email">👤 {order.userEmail || 'Guest'}</span>
                     <span className="apm-method">
-                      {order.paymentMethod === 'card' ? '💳 Card' : order.paymentMethod === 'easypaisa' ? '📱 Easypaisa' : '🎵 JazzCash'}
+                      {order.paymentMethod === 'card' ? '💳 Card' : order.paymentMethod === 'easypaisa' ? '📱 Easypaisa' : order.paymentMethod === 'jazzcash' ? '🎵 JazzCash' : order.paymentMethod === 'cash' ? '💵 Cash on Delivery' : order.paymentMethod}
                     </span>
                   </div>
                   <div className="apm-header-right">
