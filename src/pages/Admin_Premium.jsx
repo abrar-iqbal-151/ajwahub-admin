@@ -80,7 +80,7 @@ function Admin_Premium() {
   const handleEdit = (p) => {
     setForm({ name: p.name, description: p.description, price: p.price, originalPrice: p.originalPrice, image: p.image, category: p.category, badge: p.badge, stock: p.stock, rating: p.rating, weight: p.weight, featured: p.featured });
     setEditId(p._id);
-    setShowForm(true);
+    setShowForm(false);
   };
 
   const uploadImage = async (file) => {
