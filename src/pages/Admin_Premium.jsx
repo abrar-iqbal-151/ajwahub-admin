@@ -185,20 +185,59 @@ function Admin_Premium() {
             <div className="ap-grid">
               {filtered.map(p => (
                 <div key={p._id} className="ap-card">
-                  <div className="ap-view">
-                    <img src={p.image} alt={p.name} className="ap-img" onError={e => e.target.style.display='none'} />
-                    {p.featured && <span style={{ fontSize: '11px', color: '#fbbf24', fontWeight: 700 }}>⭐ Featured</span>}
-                    <h4>{p.name}</h4>
-                    <div className="ap-meta">
-                      <span className="ap-price">PKR {p.price?.toLocaleString()}</span>
-                      {p.originalPrice > p.price && <span className="ap-discount" style={{ color: '#4ade80', fontSize: '11px' }}>Save PKR {(p.originalPrice - p.price).toLocaleString()}</span>}
-                      <span className={`ap-stock ${p.stock ? 'in' : 'out'}`}>{p.stock ? '✅ In Stock' : '❌ Out of Stock'}</span>
+                  {editId === p._id ? (
+                    <div className="ap-edit">
+                      <img src={form.image} alt={p.name} className="ap-img" onError={e => e.target.style.display='none'} />
+                      <label>Name</label>
+                      <input value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+                      <label>Price (PKR)</label>
+                      <input type="number" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} />
+                      <label>Original Price (PKR)</label>
+                      <input type="number" value={form.originalPrice} onChange={e => setForm(f => ({ ...f, originalPrice: e.target.value }))} />
+                      <label>Weight</label>
+                      <input value={form.weight} onChange={e => setForm(f => ({ ...f, weight: e.target.value }))} />
+                      <label>Badge</label>
+                      <input value={form.badge} onChange={e => setForm(f => ({ ...f, badge: e.target.value }))} />
+                      <label>Rating (1-5)</label>
+                      <input type="number" min="1" max="5" step="0.1" value={form.rating} onChange={e => setForm(f => ({ ...f, rating: Number(e.target.value) }))} />
+                      <label>Category</label>
+                      <select style={{ background: '#1f2937', border: '1px solid #374151', color: '#e5e7eb', padding: '8px', borderRadius: '8px', width: '100%' }}
+                        value={form.category} onChange={e => setForm(f => ({ ...f, category: e.target.value }))}>
+                        <option value="dates">Dates</option>
+                        <option value="dry">Dry Fruits</option>
+                      </select>
+                      <label>Description</label>
+                      <textarea rows={2} value={form.description} onChange={e => setForm(f => ({ ...f, description: e.target.value }))} />
+                      <label>Image URL</label>
+                      <input value={form.image} onChange={e => setForm(f => ({ ...f, image: e.target.value }))} />
+                      <label className="ap-upload-label">
+                        📤 Upload Image
+                        <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { if (e.target.files[0]) uploadImage(e.target.files[0]); }} />
+                      </label>
+                      <label className="ap-stock-label"><input type="checkbox" checked={form.stock} onChange={e => setForm(f => ({ ...f, stock: e.target.checked }))} /> In Stock</label>
+                      <label className="ap-stock-label"><input type="checkbox" checked={form.featured} onChange={e => setForm(f => ({ ...f, featured: e.target.checked }))} /> ⭐ Featured</label>
+                      <div className="ap-btns">
+                        <button className="ap-save" onClick={handleSave}>💾 Save</button>
+                        <button className="ap-cancel" onClick={() => { setEditId(null); setForm(empty); }}>Cancel</button>
+                      </div>
                     </div>
-                    <div style={{ display: 'flex', gap: '6px', marginTop: '8px' }}>
-                      <button className="ap-edit-btn" onClick={() => handleEdit(p)}>✏️ Edit</button>
-                      <button className="ap-cancel" style={{ flex: 1 }} onClick={() => handleDelete(p._id)}>🗑️</button>
+                  ) : (
+                    <div className="ap-view">
+                      <img src={p.image} alt={p.name} className="ap-img" onError={e => e.target.style.display='none'} />
+                      {p.featured && <span style={{ fontSize: '11px', color: '#fbbf24', fontWeight: 700 }}>⭐ Featured</span>}
+                      <h4>{p.name}</h4>
+                      <div className="ap-meta">
+                        <span className="ap-price">PKR {p.price?.toLocaleString()}</span>
+                        {p.originalPrice > p.price && <span style={{ color: '#4ade80', fontSize: '11px' }}>Save PKR {(p.originalPrice - p.price).toLocaleString()}</span>}
+                        <span className={`ap-stock ${p.stock ? 'in' : 'out'}`}>{p.stock ? '✅ In Stock' : '❌ Out of Stock'}</span>
+                      </div>
+                      <div className="ap-rating">{[...Array(5)].map((_, i) => <span key={i} style={{ color: i < Math.floor(p.rating) ? '#fbbf24' : '#555', fontSize: '14px' }}>★</span>)} <span>({p.rating})</span></div>
+                      <div style={{ display: 'flex', gap: '6px', marginTop: '8px' }}>
+                        <button className="ap-edit-btn" onClick={() => handleEdit(p)}>✏️ Edit</button>
+                        <button className="ap-cancel" style={{ flex: 1 }} onClick={() => handleDelete(p._id)}>🗑️</button>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               ))}
             </div>
