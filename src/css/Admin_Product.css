@@ -45,8 +45,27 @@
 .ap-edit input, .ap-edit textarea { background: #1f2937; border: 1px solid #374151; color: #e5e7eb; padding: 8px 10px; border-radius: 8px; font-size: 13px; width: 100%; outline: none; resize: vertical; }
 .ap-edit input:focus, .ap-edit textarea:focus { border-color: #dc2626; }
 
-.ap-stock-label { display: flex; align-items: center; gap: 8px; font-size: 13px !important; color: #e5e7eb !important; text-transform: none !important; letter-spacing: 0 !important; cursor: pointer; }
-.ap-stock-label input[type="checkbox"] { width: auto; accent-color: #dc2626; }
+.ap-stock-label { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  font-size: 13px !important; 
+  color: #e5e7eb !important; 
+  text-transform: none !important; 
+  letter-spacing: 0 !important; 
+  cursor: pointer;
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.ap-stock-label:hover { border-color: #dc2626; }
+.ap-stock-label input[type="checkbox"] { 
+  width: 16px; 
+  height: 16px;
+  accent-color: #dc2626; 
+  cursor: pointer;
+}
 
 .ap-btns { display: flex; gap: 8px; margin-top: 4px; }
 .ap-save { background: linear-gradient(135deg, #dc2626, #991b1b); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; flex: 1; }
