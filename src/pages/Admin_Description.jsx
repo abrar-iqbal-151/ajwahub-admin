@@ -13,6 +13,8 @@ function Description_Admin() {
   const [editHero, setEditHero] = useState(null);
   const [feature, setFeature] = useState(null);
   const [editFeature, setEditFeature] = useState(null);
+  const [deliveryMap, setDeliveryMap] = useState(null);
+  const [editDeliveryMap, setEditDeliveryMap] = useState(null);
   const [products, setProducts] = useState([]);
   const [editProduct, setEditProduct] = useState(null);
   const [newProduct, setNewProduct] = useState({ name: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', discount: '', category: 'dates' });
@@ -42,16 +44,18 @@ function Description_Admin() {
 
   const fetchAll = async (t) => {
     setLoading(true);
-    const [h, p, r, f] = await Promise.all([
+    const [h, p, r, f, d] = await Promise.all([
       fetch(`${API}/content/heroes`).then(r => r.json()),
       fetch(`${API}/content/products`).then(r => r.json()),
       fetch(`${API}/content/reviews`).then(r => r.json()),
       fetch(`${API}/content/feature`).then(r => r.json()),
+      fetch(`${API}/content/delivery-map`).then(r => r.json()),
     ]);
     setHeroes(h.heroes || []);
     setProducts(p.products || []);
     setReviews(r.reviews || []);
     setFeature(f.feature || null);
+    setDeliveryMap(d.deliveryMap || null);
     setLoading(false);
   };
 
@@ -150,6 +154,14 @@ function Description_Admin() {
     if (res.ok) { setReviews(reviews.filter(r => r._id !== id)); showMsg('🗑️ Review deleted!'); }
   };
 
+  const saveDeliveryMap = async () => {
+    const res = await fetch(`${API}/content/delivery-map`, {
+      method: 'PUT', headers: authHeaders,
+      body: JSON.stringify({ title: editDeliveryMap.title, mapImage: editDeliveryMap.mapImage })
+    });
+    if (res.ok) { setDeliveryMap(editDeliveryMap); setEditDeliveryMap(null); showMsg('✅ Delivery map updated!'); }
+  };
+
   const renderStars = (rating) =>
     [...Array(5)].map((_, i) => (
       <span key={i} style={{ color: i < Math.floor(rating) ? '#fbbf24' : '#555', fontSize: '18px' }}>★</span>
@@ -187,6 +199,7 @@ function Description_Admin() {
           <button className={`da-tab ${activeTab === 'feature' ? 'active' : ''}`} onClick={() => setActiveTab('feature')}>✨ Feature Section</button>
           <button className={`da-tab ${activeTab === 'products' ? 'active' : ''}`} onClick={() => setActiveTab('products')}>🛍️ Products</button>
           <button className={`da-tab ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => setActiveTab('reviews')}>⭐ Reviews</button>
+          <button className={`da-tab ${activeTab === 'deliveryMap' ? 'active' : ''}`} onClick={() => setActiveTab('deliveryMap')}>🗺️ Delivery Map</button>
         </div>
 
         {loading && <div className="da-loading">Loading...</div>}
@@ -482,6 +495,57 @@ function Description_Admin() {
                   )}
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'deliveryMap' && !loading && deliveryMap && (
+          <div className="da-section">
+            <h2 className="da-section-title">🗺️ Delivery Map Section</h2>
+            <div className="da-cards">
+              <div className="da-card">
+                {editDeliveryMap ? (
+                  <div className="da-edit-form">
+                    <label>Title</label>
+                    <input value={editDeliveryMap.title} onChange={e => setEditDeliveryMap({ ...editDeliveryMap, title: e.target.value })} />
+                    <label>Map Image URL</label>
+                    <input placeholder="e.g. /pakistan-delivery-map.png" value={editDeliveryMap.mapImage} onChange={e => setEditDeliveryMap({ ...editDeliveryMap, mapImage: e.target.value })} />
+                    <label className="da-upload-label">
+                      📤 Upload Map Image
+                      <input type="file" accept="image/*" style={{ display: 'none' }}
+                        onChange={async e => {
+                          const file = e.target.files[0]; if (!file) return;
+                          const formData = new FormData(); formData.append('file', file);
+                          const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                          const data = await res.json();
+                          if (res.ok) setEditDeliveryMap({ ...editDeliveryMap, mapImage: data.url || data.path });
+                        }}
+                      />
+                    </label>
+                    {editDeliveryMap.mapImage && (
+                      <div style={{ marginTop: '12px' }}>
+                        <p className="da-preview-label">Preview:</p>
+                        <img src={editDeliveryMap.mapImage} alt="Map Preview" style={{ width: '100%', maxWidth: '500px', height: 'auto', borderRadius: '12px', border: '2px solid rgba(251,146,60,0.3)' }} onError={e => e.target.src='/dates.png'} />
+                      </div>
+                    )}
+                    <div className="da-form-btns" style={{ marginTop: '16px' }}>
+                      <button className="da-save-btn" onClick={saveDeliveryMap}>💾 Save</button>
+                      <button className="da-cancel-btn" onClick={() => setEditDeliveryMap(null)}>Cancel</button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="da-card-view">
+                    <h3>{deliveryMap.title}</h3>
+                    <div style={{ marginTop: '16px' }}>
+                      <img src={deliveryMap.mapImage} alt="Delivery Map" style={{ width: '100%', maxWidth: '600px', height: 'auto', borderRadius: '12px', border: '2px solid rgba(251,146,60,0.3)' }} onError={e => e.target.src='/dates.png'} />
+                    </div>
+                    <p style={{ color: '#94a3b8', marginTop: '12px', fontSize: '14px' }}>🗺️ {deliveryMap.mapImage}</p>
+                    <div className="da-edit-btn-wrap" style={{ marginTop: '16px' }}>
+                      <button className="da-edit-btn" onClick={() => setEditDeliveryMap({ ...deliveryMap })}>✏️ Edit</button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
