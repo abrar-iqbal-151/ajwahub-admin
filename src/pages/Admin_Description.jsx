@@ -11,6 +11,8 @@ function Description_Admin() {
   const [activeTab, setActiveTab] = useState('heroes');
   const [heroes, setHeroes] = useState([]);
   const [editHero, setEditHero] = useState(null);
+  const [feature, setFeature] = useState(null);
+  const [editFeature, setEditFeature] = useState(null);
   const [products, setProducts] = useState([]);
   const [editProduct, setEditProduct] = useState(null);
   const [newProduct, setNewProduct] = useState({ name: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', discount: '', category: 'dates' });
@@ -40,14 +42,16 @@ function Description_Admin() {
 
   const fetchAll = async (t) => {
     setLoading(true);
-    const [h, p, r] = await Promise.all([
+    const [h, p, r, f] = await Promise.all([
       fetch(`${API}/content/heroes`).then(r => r.json()),
       fetch(`${API}/content/products`).then(r => r.json()),
       fetch(`${API}/content/reviews`).then(r => r.json()),
+      fetch(`${API}/content/feature`).then(r => r.json()),
     ]);
     setHeroes(h.heroes || []);
     setProducts(p.products || []);
     setReviews(r.reviews || []);
+    setFeature(f.feature || null);
     setLoading(false);
   };
 
@@ -60,6 +64,28 @@ function Description_Admin() {
       body: JSON.stringify({ title: hero.title, text: hero.text, video: hero.video })
     });
     if (res.ok) { setHeroes(heroes.map(h => h.key === hero.key ? hero : h)); setEditHero(null); showMsg('✅ Hero updated!'); }
+  };
+
+  const saveFeature = async () => {
+    const res = await fetch(`${API}/content/feature`, {
+      method: 'PUT', headers: authHeaders,
+      body: JSON.stringify({ title: editFeature.title, description: editFeature.description, features: editFeature.features })
+    });
+    if (res.ok) { setFeature(editFeature); setEditFeature(null); showMsg('✅ Feature updated!'); }
+  };
+
+  const addFeatureItem = () => {
+    setEditFeature({ ...editFeature, features: [...editFeature.features, { icon: '✅', text: '' }] });
+  };
+
+  const removeFeatureItem = (index) => {
+    setEditFeature({ ...editFeature, features: editFeature.features.filter((_, i) => i !== index) });
+  };
+
+  const updateFeatureItem = (index, field, value) => {
+    const updated = [...editFeature.features];
+    updated[index][field] = value;
+    setEditFeature({ ...editFeature, features: updated });
   };
 
   const saveProduct = async (product) => {
@@ -144,6 +170,7 @@ function Description_Admin() {
 
         <div className="da-tabs">
           <button className={`da-tab ${activeTab === 'heroes' ? 'active' : ''}`} onClick={() => setActiveTab('heroes')}>🎬 Hero Videos</button>
+          <button className={`da-tab ${activeTab === 'feature' ? 'active' : ''}`} onClick={() => setActiveTab('feature')}>✨ Feature Section</button>
           <button className={`da-tab ${activeTab === 'products' ? 'active' : ''}`} onClick={() => setActiveTab('products')}>🛍️ Products</button>
           <button className={`da-tab ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => setActiveTab('reviews')}>⭐ Reviews</button>
         </div>
@@ -197,6 +224,53 @@ function Description_Admin() {
                   )}
                 </div>
               ))}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'feature' && !loading && feature && (
+          <div className="da-section">
+            <h2 className="da-section-title">✨ Feature Section (Why Choose AjwaHub)</h2>
+            <div className="da-cards">
+              <div className="da-card">
+                {editFeature ? (
+                  <div className="da-edit-form">
+                    <label>Title</label>
+                    <input value={editFeature.title} onChange={e => setEditFeature({ ...editFeature, title: e.target.value })} />
+                    <label>Description</label>
+                    <textarea rows={4} value={editFeature.description} onChange={e => setEditFeature({ ...editFeature, description: e.target.value })} />
+                    <label>Features</label>
+                    {editFeature.features.map((item, i) => (
+                      <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                        <input style={{ width: '60px' }} placeholder="Icon" value={item.icon} onChange={e => updateFeatureItem(i, 'icon', e.target.value)} />
+                        <input style={{ flex: 1 }} placeholder="Feature text" value={item.text} onChange={e => updateFeatureItem(i, 'text', e.target.value)} />
+                        <button className="da-delete-btn" style={{ padding: '6px 12px' }} onClick={() => removeFeatureItem(i)}>🗑️</button>
+                      </div>
+                    ))}
+                    <button className="da-save-btn" style={{ marginTop: '8px', width: 'auto', padding: '6px 16px' }} onClick={addFeatureItem}>➕ Add Feature</button>
+                    <div className="da-form-btns" style={{ marginTop: '16px' }}>
+                      <button className="da-save-btn" onClick={saveFeature}>💾 Save</button>
+                      <button className="da-cancel-btn" onClick={() => setEditFeature(null)}>Cancel</button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="da-card-view">
+                    <h3>{feature.title}</h3>
+                    <p style={{ color: '#cbd5e1', marginBottom: '16px' }}>{feature.description}</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {feature.features.map((item, i) => (
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px', background: 'rgba(251,146,60,0.1)', borderRadius: '8px' }}>
+                          <span style={{ fontSize: '18px' }}>{item.icon}</span>
+                          <p style={{ margin: 0, color: '#f1f5f9' }}>{item.text}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="da-edit-btn-wrap" style={{ marginTop: '16px' }}>
+                      <button className="da-edit-btn" onClick={() => setEditFeature({ ...feature })}>✏️ Edit</button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
