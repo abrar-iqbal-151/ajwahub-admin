@@ -69,7 +69,7 @@ function Description_Admin() {
   const saveFeature = async () => {
     const res = await fetch(`${API}/content/feature`, {
       method: 'PUT', headers: authHeaders,
-      body: JSON.stringify({ title: editFeature.title, description: editFeature.description, features: editFeature.features })
+      body: JSON.stringify({ title: editFeature.title, description: editFeature.description, images: editFeature.images, features: editFeature.features })
     });
     if (res.ok) { setFeature(editFeature); setEditFeature(null); showMsg('✅ Feature updated!'); }
   };
@@ -86,6 +86,20 @@ function Description_Admin() {
     const updated = [...editFeature.features];
     updated[index][field] = value;
     setEditFeature({ ...editFeature, features: updated });
+  };
+
+  const addFeatureImage = () => {
+    setEditFeature({ ...editFeature, images: [...(editFeature.images || []), ''] });
+  };
+
+  const removeFeatureImage = (index) => {
+    setEditFeature({ ...editFeature, images: editFeature.images.filter((_, i) => i !== index) });
+  };
+
+  const updateFeatureImage = (index, value) => {
+    const updated = [...editFeature.images];
+    updated[index] = value;
+    setEditFeature({ ...editFeature, images: updated });
   };
 
   const saveProduct = async (product) => {
@@ -239,7 +253,18 @@ function Description_Admin() {
                     <input value={editFeature.title} onChange={e => setEditFeature({ ...editFeature, title: e.target.value })} />
                     <label>Description</label>
                     <textarea rows={4} value={editFeature.description} onChange={e => setEditFeature({ ...editFeature, description: e.target.value })} />
-                    <label>Features</label>
+                    
+                    <label>Product Images (P1, P2, P3, P4)</label>
+                    {(editFeature.images || []).map((img, i) => (
+                      <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
+                        <input style={{ flex: 1 }} placeholder="Image URL (e.g. /Product 1.png)" value={img} onChange={e => updateFeatureImage(i, e.target.value)} />
+                        {img && <img src={img} alt={`P${i+1}`} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }} onError={e => e.target.style.display='none'} />}
+                        <button className="da-delete-btn" style={{ padding: '6px 12px' }} onClick={() => removeFeatureImage(i)}>🗑️</button>
+                      </div>
+                    ))}
+                    <button className="da-save-btn" style={{ marginTop: '8px', width: 'auto', padding: '6px 16px' }} onClick={addFeatureImage}>➕ Add Image</button>
+                    
+                    <label style={{ marginTop: '16px' }}>Features</label>
                     {editFeature.features.map((item, i) => (
                       <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
                         <input style={{ width: '60px' }} placeholder="Icon" value={item.icon} onChange={e => updateFeatureItem(i, 'icon', e.target.value)} />
@@ -257,6 +282,21 @@ function Description_Admin() {
                   <div className="da-card-view">
                     <h3>{feature.title}</h3>
                     <p style={{ color: '#cbd5e1', marginBottom: '16px' }}>{feature.description}</p>
+                    
+                    {feature.images && feature.images.length > 0 && (
+                      <div style={{ marginBottom: '16px' }}>
+                        <h4 style={{ color: '#fb923c', fontSize: '14px', marginBottom: '8px' }}>Product Images:</h4>
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                          {feature.images.map((img, i) => (
+                            <div key={i} style={{ position: 'relative' }}>
+                              <img src={img} alt={`P${i+1}`} style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '12px', border: '2px solid rgba(251,146,60,0.3)' }} onError={e => e.target.src='/dates.png'} />
+                              <span style={{ position: 'absolute', bottom: '4px', right: '4px', background: 'rgba(0,0,0,0.7)', color: 'white', fontSize: '10px', padding: '2px 6px', borderRadius: '4px' }}>P{i+1}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                    
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                       {feature.features.map((item, i) => (
                         <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px', background: 'rgba(251,146,60,0.1)', borderRadius: '8px' }}>
@@ -266,7 +306,7 @@ function Description_Admin() {
                       ))}
                     </div>
                     <div className="da-edit-btn-wrap" style={{ marginTop: '16px' }}>
-                      <button className="da-edit-btn" onClick={() => setEditFeature({ ...feature })}>✏️ Edit</button>
+                      <button className="da-edit-btn" onClick={() => setEditFeature({ ...feature, images: feature.images || [] })}>✏️ Edit</button>
                     </div>
                   </div>
                 )}
