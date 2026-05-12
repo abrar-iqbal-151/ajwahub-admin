@@ -283,7 +283,18 @@ function Description_Admin() {
                     <label>Product Images (P1, P2, P3, P4)</label>
                     {(editFeature.images || []).map((img, i) => (
                       <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
-                        <input style={{ flex: 1 }} placeholder="Image URL (e.g. /Product 1.png)" value={img} onChange={e => updateFeatureImage(i, e.target.value)} />
+                        <label className="da-upload-label" style={{ flex: 1, margin: 0 }}>
+                          📁 {img ? img.split('/').pop() : 'Choose Image'}
+                          <input type="file" accept="image/*" style={{ display: 'none' }}
+                            onChange={async e => {
+                              const file = e.target.files[0]; if (!file) return;
+                              const formData = new FormData(); formData.append('file', file);
+                              const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                              const data = await res.json();
+                              if (res.ok) updateFeatureImage(i, data.url || data.path);
+                            }}
+                          />
+                        </label>
                         {img && <img src={img} alt={`P${i+1}`} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }} onError={e => e.target.style.display='none'} />}
                         <button className="da-delete-btn" style={{ padding: '6px 12px' }} onClick={() => removeFeatureImage(i)}>🗑️</button>
                       </div>
