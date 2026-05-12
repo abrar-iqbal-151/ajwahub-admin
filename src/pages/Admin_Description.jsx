@@ -17,6 +17,7 @@ function Description_Admin() {
   const [editDeliveryMap, setEditDeliveryMap] = useState(null);
   const [about, setAbout] = useState(null);
   const [editAbout, setEditAbout] = useState(null);
+  const [paymentIcons, setPaymentIcons] = useState([]);
   const [products, setProducts] = useState([]);
   const [editProduct, setEditProduct] = useState(null);
   const [newProduct, setNewProduct] = useState({ name: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', discount: '', category: 'dates' });
@@ -46,13 +47,14 @@ function Description_Admin() {
 
   const fetchAll = async (t) => {
     setLoading(true);
-    const [h, p, r, f, d, a] = await Promise.all([
+    const [h, p, r, f, d, a, pi] = await Promise.all([
       fetch(`${API}/content/heroes`).then(r => r.json()),
       fetch(`${API}/content/products`).then(r => r.json()),
       fetch(`${API}/content/reviews`).then(r => r.json()),
       fetch(`${API}/content/feature`).then(r => r.json()),
       fetch(`${API}/content/delivery-map`).then(r => r.json()),
       fetch(`${API}/content/about`).then(r => r.json()),
+      fetch(`${API}/content/payment-icons`).then(r => r.json()),
     ]);
     setHeroes(h.heroes || []);
     setProducts(p.products || []);
@@ -60,6 +62,7 @@ function Description_Admin() {
     setFeature(f.feature || null);
     setDeliveryMap(d.deliveryMap || null);
     setAbout(a.about || null);
+    setPaymentIcons(pi.icons || []);
     setLoading(false);
   };
 
@@ -158,6 +161,14 @@ function Description_Admin() {
     if (res.ok) { setReviews(reviews.filter(r => r._id !== id)); showMsg('🗑️ Review deleted!'); }
   };
 
+  const savePaymentIcons = async (icons) => {
+    const res = await fetch(`${API}/content/payment-icons`, {
+      method: 'PUT', headers: authHeaders,
+      body: JSON.stringify({ icons })
+    });
+    if (res.ok) { setPaymentIcons(icons); showMsg('✅ Payment icons updated!'); }
+  };
+
   const saveAbout = async () => {
     const res = await fetch(`${API}/content/about`, {
       method: 'PUT', headers: authHeaders,
@@ -213,6 +224,7 @@ function Description_Admin() {
           <button className={`da-tab ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => setActiveTab('reviews')}>⭐ Reviews</button>
           <button className={`da-tab ${activeTab === 'deliveryMap' ? 'active' : ''}`} onClick={() => setActiveTab('deliveryMap')}>🗺️ Delivery Map</button>
           <button className={`da-tab ${activeTab === 'about' ? 'active' : ''}`} onClick={() => setActiveTab('about')}>🌱 About Section</button>
+          <button className={`da-tab ${activeTab === 'payment' ? 'active' : ''}`} onClick={() => setActiveTab('payment')}>💳 Payment Icons</button>
         </div>
 
         {loading && <div className="da-loading">Loading...</div>}
@@ -670,6 +682,37 @@ function Description_Admin() {
                 )}
               </div>
             </div>
+          </div>
+        )}
+        {activeTab === 'payment' && !loading && (
+          <div className="da-section">
+            <h2 className="da-section-title">💳 Payment Icons</h2>
+            <p style={{color:'#94a3b8', marginBottom:'20px', fontSize:'14px'}}>Footer mein dikhne wale payment icons upload karo (Visa, Mastercard, EasyPaisa, JazzCash etc.)</p>
+            <div style={{display:'flex', flexWrap:'wrap', gap:'16px', marginBottom:'24px'}}>
+              {paymentIcons.map((icon, i) => (
+                <div key={i} style={{position:'relative', display:'inline-flex', flexDirection:'column', alignItems:'center', gap:'6px'}}>
+                  <div style={{background:'repeating-conic-gradient(#ccc 0% 25%, #fff 0% 50%) 0 0 / 10px 10px', borderRadius:'8px', padding:'6px'}}>
+                    <img src={icon} alt={`icon-${i}`} style={{height:'40px', width:'auto', objectFit:'contain', display:'block', borderRadius:'4px'}} onError={e => e.target.style.opacity='0.3'} />
+                  </div>
+                  <button onClick={() => savePaymentIcons(paymentIcons.filter((_,j) => j !== i))}
+                    style={{position:'absolute', top:'-8px', right:'-8px', width:'20px', height:'20px', borderRadius:'50%', background:'#ef4444', border:'none', color:'#fff', fontSize:'12px', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+            <label className="da-upload-label">
+              📤 Upload Payment Icon
+              <input type="file" accept="image/*" style={{display:'none'}}
+                onChange={async e => {
+                  const file = e.target.files[0]; if (!file) return;
+                  const formData = new FormData(); formData.append('file', file);
+                  const res = await fetch(`${API}/upload`, { method:'POST', body: formData });
+                  const data = await res.json();
+                  if (res.ok) savePaymentIcons([...paymentIcons, data.url || data.path]);
+                }}
+              />
+            </label>
           </div>
         )}
       </div>
