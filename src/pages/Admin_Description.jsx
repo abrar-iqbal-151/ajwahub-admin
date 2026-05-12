@@ -15,6 +15,8 @@ function Description_Admin() {
   const [editFeature, setEditFeature] = useState(null);
   const [deliveryMap, setDeliveryMap] = useState(null);
   const [editDeliveryMap, setEditDeliveryMap] = useState(null);
+  const [about, setAbout] = useState(null);
+  const [editAbout, setEditAbout] = useState(null);
   const [products, setProducts] = useState([]);
   const [editProduct, setEditProduct] = useState(null);
   const [newProduct, setNewProduct] = useState({ name: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', discount: '', category: 'dates' });
@@ -44,18 +46,20 @@ function Description_Admin() {
 
   const fetchAll = async (t) => {
     setLoading(true);
-    const [h, p, r, f, d] = await Promise.all([
+    const [h, p, r, f, d, a] = await Promise.all([
       fetch(`${API}/content/heroes`).then(r => r.json()),
       fetch(`${API}/content/products`).then(r => r.json()),
       fetch(`${API}/content/reviews`).then(r => r.json()),
       fetch(`${API}/content/feature`).then(r => r.json()),
       fetch(`${API}/content/delivery-map`).then(r => r.json()),
+      fetch(`${API}/content/about`).then(r => r.json()),
     ]);
     setHeroes(h.heroes || []);
     setProducts(p.products || []);
     setReviews(r.reviews || []);
     setFeature(f.feature || null);
     setDeliveryMap(d.deliveryMap || null);
+    setAbout(a.about || null);
     setLoading(false);
   };
 
@@ -154,6 +158,14 @@ function Description_Admin() {
     if (res.ok) { setReviews(reviews.filter(r => r._id !== id)); showMsg('🗑️ Review deleted!'); }
   };
 
+  const saveAbout = async () => {
+    const res = await fetch(`${API}/content/about`, {
+      method: 'PUT', headers: authHeaders,
+      body: JSON.stringify({ title: editAbout.title, paragraphs: editAbout.paragraphs, images: editAbout.images })
+    });
+    if (res.ok) { setAbout(editAbout); setEditAbout(null); showMsg('✅ About section updated!'); }
+  };
+
   const saveDeliveryMap = async () => {
     const res = await fetch(`${API}/content/delivery-map`, {
       method: 'PUT', headers: authHeaders,
@@ -200,6 +212,7 @@ function Description_Admin() {
           <button className={`da-tab ${activeTab === 'products' ? 'active' : ''}`} onClick={() => setActiveTab('products')}>🛍️ Products</button>
           <button className={`da-tab ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => setActiveTab('reviews')}>⭐ Reviews</button>
           <button className={`da-tab ${activeTab === 'deliveryMap' ? 'active' : ''}`} onClick={() => setActiveTab('deliveryMap')}>🗺️ Delivery Map</button>
+          <button className={`da-tab ${activeTab === 'about' ? 'active' : ''}`} onClick={() => setActiveTab('about')}>🌱 About Section</button>
         </div>
 
         {loading && <div className="da-loading">Loading...</div>}
@@ -542,6 +555,105 @@ function Description_Admin() {
                     <p style={{ color: '#94a3b8', marginTop: '12px', fontSize: '14px' }}>🗺️ {deliveryMap.mapImage}</p>
                     <div className="da-edit-btn-wrap" style={{ marginTop: '16px' }}>
                       <button className="da-edit-btn" onClick={() => setEditDeliveryMap({ ...deliveryMap })}>✏️ Edit</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        {activeTab === 'about' && !loading && about && (
+          <div className="da-section">
+            <h2 className="da-section-title">🌱 About Section</h2>
+            <div className="da-cards">
+              <div className="da-card">
+                {editAbout ? (
+                  <div className="da-edit-form">
+                    <label>Title</label>
+                    <input value={editAbout.title} onChange={e => setEditAbout({ ...editAbout, title: e.target.value })} />
+
+                    <label>Paragraphs</label>
+                    {editAbout.paragraphs.map((para, i) => (
+                      <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+                        <textarea rows={3} style={{ flex: 1 }} value={para}
+                          onChange={e => {
+                            const updated = [...editAbout.paragraphs];
+                            updated[i] = e.target.value;
+                            setEditAbout({ ...editAbout, paragraphs: updated });
+                          }}
+                        />
+                        <button className="da-delete-btn" style={{ padding: '6px 12px', alignSelf: 'flex-start' }}
+                          onClick={() => setEditAbout({ ...editAbout, paragraphs: editAbout.paragraphs.filter((_, j) => j !== i) })}>
+                          🗑️
+                        </button>
+                      </div>
+                    ))}
+                    <button className="da-save-btn" style={{ width: 'auto', padding: '6px 16px', marginBottom: '16px' }}
+                      onClick={() => setEditAbout({ ...editAbout, paragraphs: [...editAbout.paragraphs, ''] })}>
+                      ➕ Add Paragraph
+                    </button>
+
+                    <label>Slideshow Images (4 recommended)</label>
+                    {editAbout.images.map((img, i) => (
+                      <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
+                        <input style={{ flex: 1 }} placeholder="Image URL e.g. /Product 1.png" value={img}
+                          onChange={e => {
+                            const updated = [...editAbout.images];
+                            updated[i] = e.target.value;
+                            setEditAbout({ ...editAbout, images: updated });
+                          }}
+                        />
+                        <label className="da-upload-label" style={{ margin: 0, padding: '6px 10px', fontSize: '12px' }}>
+                          📤
+                          <input type="file" accept="image/*" style={{ display: 'none' }}
+                            onChange={async e => {
+                              const file = e.target.files[0]; if (!file) return;
+                              const formData = new FormData(); formData.append('file', file);
+                              const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                              const data = await res.json();
+                              if (res.ok) {
+                                const updated = [...editAbout.images];
+                                updated[i] = data.url || data.path;
+                                setEditAbout({ ...editAbout, images: updated });
+                              }
+                            }}
+                          />
+                        </label>
+                        {img && <img src={img} alt={`slide${i}`} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }} onError={e => e.target.style.display='none'} />}
+                        <button className="da-delete-btn" style={{ padding: '6px 12px' }}
+                          onClick={() => setEditAbout({ ...editAbout, images: editAbout.images.filter((_, j) => j !== i) })}>
+                          🗑️
+                        </button>
+                      </div>
+                    ))}
+                    <button className="da-save-btn" style={{ width: 'auto', padding: '6px 16px', marginBottom: '16px' }}
+                      onClick={() => setEditAbout({ ...editAbout, images: [...editAbout.images, ''] })}>
+                      ➕ Add Image
+                    </button>
+
+                    <div className="da-form-btns">
+                      <button className="da-save-btn" onClick={saveAbout}>💾 Save</button>
+                      <button className="da-cancel-btn" onClick={() => setEditAbout(null)}>Cancel</button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="da-card-view">
+                    <h3>{about.title}</h3>
+                    <div style={{ margin: '12px 0', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {about.paragraphs.map((para, i) => (
+                        <p key={i} style={{ color: '#cbd5e1', fontSize: '14px', lineHeight: '1.6', padding: '10px', background: 'rgba(255,255,255,0.04)', borderRadius: '8px', margin: 0 }}>{para}</p>
+                      ))}
+                    </div>
+                    <div style={{ marginTop: '16px' }}>
+                      <h4 style={{ color: '#fb923c', fontSize: '14px', marginBottom: '8px' }}>Slideshow Images:</h4>
+                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                        {about.images.map((img, i) => (
+                          <img key={i} src={img} alt={`slide${i+1}`} style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '12px', border: '2px solid rgba(251,146,60,0.3)' }} onError={e => e.target.src='/dates.png'} />
+                        ))}
+                      </div>
+                    </div>
+                    <div className="da-edit-btn-wrap" style={{ marginTop: '16px' }}>
+                      <button className="da-edit-btn" onClick={() => setEditAbout({ ...about })}>✏️ Edit</button>
                     </div>
                   </div>
                 )}
