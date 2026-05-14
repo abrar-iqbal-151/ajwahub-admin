@@ -31,7 +31,7 @@ function Admin_Product() {
   const [editProduct, setEditProduct] = useState(null);
   const [search, setSearch] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
-  const [newProduct, setNewProduct] = useState({ name: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', category: 'dates' });
+
 
   useEffect(() => {
     const adminData = localStorage.getItem('ajwaHub_admin');
@@ -62,10 +62,24 @@ function Admin_Product() {
     fetchProducts();
   };
 
+  const [newProduct, setNewProduct] = useState({ name: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', category: 'dates', storageNote: 'To maintain freshness and softness, store dates in the refrigerator after receiving the parcel....', weights: [], arabicName: '' });
+
   const saveProduct = async (product) => {
     const res = await fetch(`${API}/shop-products/${product._id}`, {
       method: 'PUT', headers: authHeaders,
-      body: JSON.stringify({ name: product.name, price: product.price, discount: product.discount, stock: product.stock, description: product.description, rating: product.rating, image: product.image, category: product.category })
+      body: JSON.stringify({ 
+        name: product.name, 
+        price: product.price, 
+        discount: product.discount, 
+        stock: product.stock, 
+        description: product.description, 
+        rating: product.rating, 
+        image: product.image, 
+        category: product.category,
+        storageNote: product.storageNote,
+        weights: product.weights,
+        arabicName: product.arabicName
+      })
     });
     if (res.ok) { fetchProducts(); setEditProduct(null); showMsg('✅ Product updated!'); }
     else showMsg('❌ Failed to update');
@@ -75,12 +89,18 @@ function Admin_Product() {
     if (!newProduct.name || !newProduct.price) return showMsg('⚠️ Name aur Price required hai');
     const res = await fetch(`${API}/shop-products`, {
       method: 'POST', headers: authHeaders,
-      body: JSON.stringify({ ...newProduct, price: Number(newProduct.price) })
+      body: JSON.stringify({ 
+        ...newProduct, 
+        price: Number(newProduct.price),
+        storageNote: newProduct.storageNote,
+        weights: newProduct.weights,
+        arabicName: newProduct.arabicName
+      })
     });
     if (res.ok) {
       showMsg('✅ Product added!');
       setShowAddForm(false);
-      setNewProduct({ name: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', category: 'dates' });
+      setNewProduct({ name: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', category: 'dates', storageNote: 'To maintain freshness and softness, store dates in the refrigerator after receiving the parcel....', weights: [] });
       fetchProducts();
     } else showMsg('❌ Failed to add');
   };
@@ -150,47 +170,90 @@ function Admin_Product() {
 
           {showAddForm && (
             <div className="ap-add-form">
-              <h3>Add New Product</h3>
-              <div className="ap-add-grid">
-                <div className="ap-edit">
+              <h3>➕ Add New Boutique Product</h3>
+              <div className="ap-edit-flex">
+                <div className="ap-edit-left">
+                  <div style={{ position: 'relative', background: '#f8f8f8', borderRadius: '12px', height: '350px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid #eee' }}>
+                    {newProduct.image ? (
+                      <img src={newProduct.image} alt="preview" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }} />
+                    ) : (
+                      <div style={{ color: '#ccc', textAlign: 'center' }}>
+                        <span style={{ fontSize: '48px' }}>🖼️</span>
+                        <p>No image selected</p>
+                      </div>
+                    )}
+                    <label className="ap-upload-label" style={{ position: 'absolute', bottom: '10px', right: '10px', width: 'auto', background: 'rgba(255,255,255,0.9)' }}>
+                      📤 Upload Image
+                      <input type="file" accept="image/*" style={{ display: 'none' }}
+                        onChange={async e => {
+                          const file = e.target.files[0];
+                          if (!file) return;
+                          const formData = new FormData();
+                          formData.append('file', file);
+                          const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                          const data = await res.json();
+                          if (res.ok) setNewProduct({ ...newProduct, image: data.path });
+                        }}
+                      />
+                    </label>
+                  </div>
+                  <label>Image URL</label>
+                  <input placeholder="e.g. /Product 1.png" value={newProduct.image} onChange={e => setNewProduct({ ...newProduct, image: e.target.value })} />
+                </div>
+
+                <div className="ap-edit-right">
                   <label>Name</label>
                   <input placeholder="Product name" value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
+                  
+                  <label>Arabic Name</label>
+                  <input placeholder="عجوة" style={{ textAlign: 'right', fontSize: '18px' }} value={newProduct.arabicName} onChange={e => setNewProduct({ ...newProduct, arabicName: e.target.value })} />
+
                   <label>Price (PKR)</label>
                   <input type="number" placeholder="e.g. 1200" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
-                  <label>Weight</label>
-                  <input placeholder="e.g. 1kg" value={newProduct.weight} onChange={e => setNewProduct({ ...newProduct, weight: e.target.value })} />
-                  <label>Rating (1-5)</label>
-                  <input type="number" min="1" max="5" step="0.1" value={newProduct.rating} onChange={e => setNewProduct({ ...newProduct, rating: Number(e.target.value) })} />
-                  <label>Image</label>
-                  <input placeholder="e.g. /Product 1.png" value={newProduct.image} onChange={e => setNewProduct({ ...newProduct, image: e.target.value })} />
-                  <label className="ap-upload-label">
-                    📤 Upload Image
-                    <input type="file" accept="image/*" style={{ display: 'none' }}
-                      onChange={async e => {
-                        const file = e.target.files[0];
-                        if (!file) return;
-                        const formData = new FormData();
-                        formData.append('file', file);
-                        const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
-                        const data = await res.json();
-                        if (res.ok) setNewProduct({ ...newProduct, image: data.path });
-                      }}
-                    />
-                  </label>
-                  {newProduct.image && <img src={newProduct.image} alt="preview" style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '8px', marginTop: '4px' }} onError={e => e.target.style.display='none'} />}
-                  <label>Description</label>
-                  <textarea rows={2} placeholder="Product description" value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                  
                   <label>Category</label>
-                  <select style={{ background: '#1f2937', border: '1px solid #374151', color: '#e5e7eb', padding: '8px 10px', borderRadius: '8px', fontSize: '13px', width: '100%' }}
-                    value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
+                  <select value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
                     <option value="dates">Dates</option>
                     <option value="dry">Dry Fruits</option>
                   </select>
+
+                  <label>Storage Note</label>
+                  <textarea rows={2} placeholder="Storage advice..." value={newProduct.storageNote} onChange={e => setNewProduct({ ...newProduct, storageNote: e.target.value })} />
+                  
+                          <label>Weight Options & Savings</label>
+                          <div className="ap-weights-manager" style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: '#fdfaf3', padding: '12px', borderRadius: '8px', border: '1px solid #c5a059' }}>
+                            {(newProduct.weights || []).map((w, idx) => (
+                              <div key={idx} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                <input placeholder="e.g. 2kg Box" value={w.label} onChange={e => {
+                                  const newWeights = [...newProduct.weights];
+                                  newWeights[idx].label = e.target.value;
+                                  setNewProduct({ ...newProduct, weights: newWeights });
+                                }} style={{ flex: 2, fontSize: '12px' }} />
+                                <input placeholder="e.g. (Save Rs 500)" value={w.savings} onChange={e => {
+                                  const newWeights = [...newProduct.weights];
+                                  newWeights[idx].savings = e.target.value;
+                                  setNewProduct({ ...newProduct, weights: newWeights });
+                                }} style={{ flex: 1, fontSize: '12px' }} />
+                                <button onClick={() => {
+                                  const newWeights = newProduct.weights.filter((_, i) => i !== idx);
+                                  setNewProduct({ ...newProduct, weights: newWeights });
+                                }} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer' }}>✕</button>
+                              </div>
+                            ))}
+                            <button className="ap-add-weight-btn" onClick={() => {
+                              const newWeights = [...(newProduct.weights || []), { label: '', savings: '' }];
+                              setNewProduct({ ...newProduct, weights: newWeights });
+                            }} style={{ background: '#c5a059', color: '#fff', border: 'none', borderRadius: '6px', padding: '6px', cursor: 'pointer', fontSize: '12px', marginTop: '5px' }}>
+                              + Add Weight Option
+                            </button>
+                          </div>
+
                   <label className="ap-stock-label">
                     <input type="checkbox" checked={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.checked })} />
                     In Stock
                   </label>
-                  <div className="ap-btns">
+                  
+                  <div className="ap-btns" style={{ marginTop: 'auto' }}>
                     <button className="ap-save" onClick={addProduct}>➕ Add Product</button>
                     <button className="ap-cancel" onClick={() => setShowAddForm(false)}>Cancel</button>
                   </div>
@@ -199,65 +262,107 @@ function Admin_Product() {
             </div>
           )}
 
-          {loading ? <div className="panel-loading">Loading...</div> : (
+          {loading ? <div className="panel-loading">Loading boutique inventory...</div> : (
             <div className="ap-grid">
               {filtered.map(product => (
                 <div key={product._id} className="ap-card">
                   {editProduct?._id === product._id ? (
                     <div className="ap-edit">
-                      <img src={editProduct.image} alt={product.name} className="ap-img" onError={e => e.target.style.display = 'none'} />
-                      <label>Name</label>
-                      <input value={editProduct.name} onChange={e => setEditProduct({ ...editProduct, name: e.target.value })} />
-                      <label>Price (PKR)</label>
-                      <input type="number" value={editProduct.price} onChange={e => setEditProduct({ ...editProduct, price: Number(e.target.value) })} />
-                      <label>Rating (1-5)</label>
-                      <input type="number" min="1" max="5" step="0.1" value={editProduct.rating} onChange={e => setEditProduct({ ...editProduct, rating: Number(e.target.value) })} />
-                      <label>Discount</label>
-                      <input value={editProduct.discount} onChange={e => setEditProduct({ ...editProduct, discount: e.target.value })} />
-                      <label>Description</label>
-                      <textarea rows={3} value={editProduct.description} onChange={e => setEditProduct({ ...editProduct, description: e.target.value })} />
-                      <label>Image URL</label>
-                      <input placeholder="Image URL" value={editProduct.image} onChange={e => setEditProduct({ ...editProduct, image: e.target.value })} />
-                      <label className="ap-upload-label">
-                        📤 Upload Image
-                        <input type="file" accept="image/*" style={{ display: 'none' }}
-                          onChange={async e => {
-                            const file = e.target.files[0];
-                            if (!file) return;
-                            const formData = new FormData();
-                            formData.append('file', file);
-                            const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
-                            const data = await res.json();
-                            if (res.ok) setEditProduct(prev => ({ ...prev, image: data.url || data.path }));
-                          }}
-                        />
-                      </label>
-                      <label>Category</label>
-                      <select style={{ background: '#1f2937', border: '1px solid #374151', color: '#e5e7eb', padding: '8px 10px', borderRadius: '8px', fontSize: '13px', width: '100%' }}
-                        value={editProduct.category} onChange={e => setEditProduct({ ...editProduct, category: e.target.value })}>
-                        <option value="dates">Dates</option>
-                        <option value="dry">Dry Fruits</option>
-                      </select>
-                      <label className="ap-stock-label">
-                        <input type="checkbox" checked={editProduct.stock} onChange={e => setEditProduct({ ...editProduct, stock: e.target.checked })} />
-                        In Stock
-                      </label>
-                      <div className="ap-btns">
-                        <button className="ap-save" onClick={() => saveProduct(editProduct)}>💾 Save</button>
-                        <button className="ap-cancel" onClick={() => setEditProduct(null)}>Cancel</button>
+                      <div className="ap-edit-flex">
+                        <div className="ap-edit-left">
+                          <div style={{ position: 'relative' }}>
+                            <img src={editProduct.image} alt={product.name} className="ap-img" style={{ height: '350px', objectFit: 'contain', background: '#fff', border: '1px solid #eee' }} onError={e => e.target.style.display = 'none'} />
+                            <label className="ap-upload-label" style={{ position: 'absolute', bottom: '10px', right: '10px', width: 'auto', background: 'rgba(255,255,255,0.9)' }}>
+                              📸 Upload Image
+                              <input type="file" accept="image/*" style={{ display: 'none' }}
+                                onChange={async e => {
+                                  const file = e.target.files[0];
+                                  if (!file) return;
+                                  const formData = new FormData();
+                                  formData.append('file', file);
+                                  const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                                  const data = await res.json();
+                                  if (res.ok) setEditProduct(prev => ({ ...prev, image: data.url || data.path }));
+                                }}
+                              />
+                            </label>
+                          </div>
+                          <label>Image URL</label>
+                          <input value={editProduct.image} onChange={e => setEditProduct({ ...editProduct, image: e.target.value })} />
+                        </div>
+                        
+                        <div className="ap-edit-right">
+                          <label>English Name</label>
+                          <input value={editProduct.name} onChange={e => setEditProduct({ ...editProduct, name: e.target.value })} />
+                          
+                          <label>Arabic Name</label>
+                          <input style={{ textAlign: 'right', fontSize: '18px' }} value={editProduct.arabicName} onChange={e => setEditProduct({ ...editProduct, arabicName: e.target.value })} />
+
+                          <label>Price (PKR)</label>
+                          <input type="number" value={editProduct.price} onChange={e => setEditProduct({ ...editProduct, price: Number(e.target.value) })} />
+                          
+                          <label>Category</label>
+                          <select value={editProduct.category} onChange={e => setEditProduct({ ...editProduct, category: e.target.value })}>
+                            <option value="dates">Dates</option>
+                            <option value="dry">Dry Fruits</option>
+                          </select>
+
+                          <label>Storage Note</label>
+                          <textarea rows={2} value={editProduct.storageNote} onChange={e => setEditProduct({ ...editProduct, storageNote: e.target.value })} />
+                          
+                          <label>Weight Options & Savings</label>
+                          <div className="ap-weights-manager" style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: '#fdfaf3', padding: '12px', borderRadius: '8px', border: '1px solid #c5a059' }}>
+                            {(editProduct.weights || []).map((w, idx) => (
+                              <div key={idx} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                <input placeholder="e.g. 2kg Box" value={w.label} onChange={e => {
+                                  const newWeights = [...editProduct.weights];
+                                  newWeights[idx].label = e.target.value;
+                                  setEditProduct({ ...editProduct, weights: newWeights });
+                                }} style={{ flex: 2, fontSize: '12px' }} />
+                                <input placeholder="e.g. (Save Rs 500)" value={w.savings} onChange={e => {
+                                  const newWeights = [...editProduct.weights];
+                                  newWeights[idx].savings = e.target.value;
+                                  setEditProduct({ ...editProduct, weights: newWeights });
+                                }} style={{ flex: 1, fontSize: '12px' }} />
+                                <button onClick={() => {
+                                  const newWeights = editProduct.weights.filter((_, i) => i !== idx);
+                                  setEditProduct({ ...editProduct, weights: newWeights });
+                                }} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer' }}>✕</button>
+                              </div>
+                            ))}
+                            <button className="ap-add-weight-btn" onClick={() => {
+                              const newWeights = [...(editProduct.weights || []), { label: '', savings: '' }];
+                              setEditProduct({ ...editProduct, weights: newWeights });
+                            }} style={{ background: '#c5a059', color: '#fff', border: 'none', borderRadius: '6px', padding: '6px', cursor: 'pointer', fontSize: '12px', marginTop: '5px' }}>
+                              + Add Weight Option
+                            </button>
+                          </div>
+
+                          <label className="ap-stock-label">
+                            <input type="checkbox" checked={editProduct.stock} onChange={e => setEditProduct({ ...editProduct, stock: e.target.checked })} />
+                            In Stock
+                          </label>
+
+                          <div className="ap-btns" style={{ marginTop: 'auto' }}>
+                            <button className="ap-save" onClick={() => saveProduct(editProduct)}>💾 Save Changes</button>
+                            <button className="ap-cancel" onClick={() => setEditProduct(null)}>Cancel</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ) : (
                     <div className="ap-view">
                       <img src={product.image} alt={product.name} className="ap-img" onError={e => e.target.style.display = 'none'} />
-                      <h4>{product.name}</h4>
+                      <div className="ap-view-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                        <h4 style={{ margin: 0 }}>{product.name}</h4>
+                        <h4 className="ap-arabic" style={{ margin: 0, color: '#c5a059', fontFamily: "'Playfair Display', serif" }}>{product.arabicName}</h4>
+                      </div>
                       <div className="ap-meta">
-                        <span className="ap-price">PKR {product.price}</span>
-                        <span className="ap-discount">{product.discount}</span>
-                        <span className={`ap-stock ${product.stock ? 'in' : 'out'}`}>{product.stock ? '✅ In Stock' : '❌ Out of Stock'}</span>
+                        <span className="ap-price">PKR {product.price.toLocaleString()}</span>
+                        <span className={`ap-stock ${product.stock ? 'in' : 'out'}`}>{product.stock ? '● In Stock' : '○ Out of Stock'}</span>
                       </div>
                       <div className="ap-rating">{renderStars(product.rating)} <span>({product.rating})</span></div>
-                      <button className="ap-edit-btn" onClick={() => setEditProduct({ ...product })}>✏️ Edit</button>
+                      <button className="ap-edit-btn" onClick={() => setEditProduct({ ...product })}>✏️ Edit Product</button>
                     </div>
                   )}
                 </div>

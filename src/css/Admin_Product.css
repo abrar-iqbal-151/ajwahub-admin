@@ -1,74 +1,198 @@
-.ap-msg { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.4); color: #4ade80; padding: 12px 20px; border-radius: 10px; margin-bottom: 20px; font-weight: 600; }
+.ap-msg { 
+  background: #fdfaf3; 
+  border: 1px solid #c5a059; 
+  color: #5c4b37; 
+  padding: 12px 20px; 
+  border-radius: 10px; 
+  margin-bottom: 20px; 
+  font-weight: 600; 
+  box-shadow: 0 4px 12px rgba(197, 160, 89, 0.1);
+}
 
 .ap-upload-label {
   display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(59,130,246,0.15); color: #60a5fa;
-  border: 1px solid rgba(59,130,246,0.3);
-  padding: 7px 14px; border-radius: 8px;
+  background: #fdfaf3; color: #c5a059;
+  border: 1px solid #c5a059;
+  padding: 10px 14px; border-radius: 8px;
   cursor: pointer; font-size: 13px; font-weight: 600;
-  transition: background 0.2s; width: 100%; justify-content: center;
+  transition: all 0.2s; width: 100%; justify-content: center;
 }
-.ap-upload-label:hover { background: rgba(59,130,246,0.3); }
+.ap-upload-label:hover { 
+  background: #c5a059; 
+  color: #fff;
+}
 
 .ap-add-form {
-  background: #111827;
-  border: 1px solid rgba(220,38,38,0.3);
-  border-radius: 14px;
-  padding: 20px;
-  margin-bottom: 20px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
 }
-.ap-add-form h3 { font-size: 15px; font-weight: 700; color: #f87171; margin-bottom: 16px; }
-.ap-add-grid { max-width: 320px; }
+.ap-add-form h3 { 
+  font-size: 1.2rem; 
+  font-weight: 600; 
+  color: #1a1a1a; 
+  margin-bottom: 20px;
+  font-family: 'Playfair Display', serif;
+}
+.ap-add-grid { max-width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
 
-.ap-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; gap: 12px; }
-.ap-count { color: #6b7280; font-size: 13px; white-space: nowrap; }
+.ap-toolbar { 
+  display: flex; 
+  align-items: center; 
+  justify-content: space-between; 
+  margin-bottom: 24px; 
+  gap: 15px;
+  background: #ffffff;
+  padding: 15px 20px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+.ap-count { color: #8d7558; font-size: 14px; font-weight: 500; }
 
-.ap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+.ap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
 
-.ap-card { background: #111827; border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 16px; }
+.ap-card { 
+  background: #ffffff; 
+  border: 1px solid #e5e7eb; 
+  border-radius: 12px; 
+  padding: 15px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.ap-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
 
-.ap-img { width: 100%; height: 130px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; display: block; }
+.ap-img { 
+  width: 100%; 
+  height: 200px; 
+  object-fit: cover; 
+  border-radius: 8px; 
+  margin-bottom: 15px; 
+  display: block; 
+  background: #f8f8f8;
+}
 
-.ap-view h4 { font-size: 15px; color: #f1f5f9; margin-bottom: 8px; }
-.ap-meta { display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px; }
-.ap-price { color: #4ade80; font-weight: 700; font-size: 15px; }
-.ap-discount { color: #fbbf24; font-size: 13px; font-weight: 600; }
-.ap-stock.in { color: #4ade80; font-size: 13px; }
-.ap-stock.out { color: #f87171; font-size: 13px; }
-.ap-rating { display: flex; align-items: center; gap: 4px; margin-bottom: 10px; color: #9ca3af; font-size: 13px; }
+.ap-view h4 { 
+  font-size: 1.2rem; 
+  color: #1a1a1a; 
+  margin-bottom: 8px; 
+  font-family: 'Playfair Display', serif;
+  font-weight: 500;
+}
+.ap-meta { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.ap-price { color: #1a1a1a; font-weight: 600; font-size: 1.1rem; }
+.ap-discount { color: #c5a059; font-size: 13px; font-weight: 600; }
+.ap-stock.in { color: #059669; font-size: 13px; font-weight: 500; }
+.ap-stock.out { color: #dc2626; font-size: 13px; font-weight: 500; }
+.ap-rating { display: flex; align-items: center; gap: 4px; margin-bottom: 15px; color: #6b7280; font-size: 13px; }
 
-.ap-edit-btn { background: rgba(59,130,246,0.15); color: #60a5fa; border: 1px solid rgba(59,130,246,0.3); padding: 7px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; font-weight: 600; width: 100%; }
-.ap-edit-btn:hover { background: rgba(59,130,246,0.3); }
+.ap-edit-btn { 
+  background: #1a1a1a; 
+  color: #fff; 
+  border: none;
+  padding: 10px 16px; 
+  border-radius: 6px; 
+  cursor: pointer; 
+  font-size: 13px; 
+  font-weight: 600; 
+  width: 100%; 
+  transition: all 0.2s;
+}
+.ap-edit-btn:hover { 
+  background: #333;
+}
 
-.ap-edit { display: flex; flex-direction: column; gap: 8px; }
-.ap-edit label { font-size: 11px; color: #9ca3af; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-.ap-edit input, .ap-edit textarea { background: #1f2937; border: 1px solid #374151; color: #e5e7eb; padding: 8px 10px; border-radius: 8px; font-size: 13px; width: 100%; outline: none; resize: vertical; }
-.ap-edit input:focus, .ap-edit textarea:focus { border-color: #dc2626; }
+.ap-edit { display: flex; flex-direction: column; gap: 12px; }
+.ap-edit-flex { display: flex; gap: 24px; min-height: 400px; }
+.ap-edit-left { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+.ap-edit-right { flex: 1.2; display: flex; flex-direction: column; gap: 15px; }
+
+@media (max-width: 768px) {
+  .ap-edit-flex { flex-direction: column; }
+}
+
+.ap-edit label { font-size: 12px; color: #4b5563; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: -5px; }
+.ap-edit input, .ap-edit textarea, .ap-edit select { 
+  background: #fdfdfd; 
+  border: 1px solid #e5e7eb; 
+  color: #1a1a1a; 
+  padding: 10px 12px; 
+  border-radius: 8px; 
+  font-size: 14px; 
+  width: 100%; 
+  outline: none; 
+  resize: vertical;
+}
+.ap-edit input:focus, .ap-edit textarea:focus { border-color: #c5a059; background: #fff; }
+
+.ap-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.ap-view-header h4 { margin: 0; }
+.ap-arabic { color: #c5a059; font-family: 'Playfair Display', serif; font-size: 1.4rem; }
+
+.ap-storage-preview {
+  font-size: 12px;
+  color: #6b7280;
+  line-height: 1.4;
+  margin-bottom: 12px;
+  font-style: italic;
+  padding: 8px;
+  background: #fdfaf3;
+  border-radius: 6px;
+}
 
 .ap-stock-label { 
   display: flex; 
   align-items: center; 
   gap: 10px; 
-  font-size: 13px !important; 
-  color: #e5e7eb !important; 
+  font-size: 14px !important; 
+  color: #1a1a1a !important; 
   text-transform: none !important; 
   letter-spacing: 0 !important; 
   cursor: pointer;
-  background: #1f2937;
-  border: 1px solid #374151;
+  background: #fdfaf3;
+  border: 1px solid #c5a059;
   border-radius: 8px;
-  padding: 10px 12px;
+  padding: 12px;
 }
-.ap-stock-label:hover { border-color: #dc2626; }
 .ap-stock-label input[type="checkbox"] { 
-  width: 16px; 
-  height: 16px;
-  accent-color: #dc2626; 
+  width: 18px; 
+  height: 18px;
+  accent-color: #c5a059; 
   cursor: pointer;
 }
 
-.ap-btns { display: flex; gap: 8px; margin-top: 4px; }
-.ap-save { background: linear-gradient(135deg, #dc2626, #991b1b); color: #fff; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 13px; flex: 1; }
-.ap-save:hover { opacity: 0.9; }
-.ap-cancel { background: #1f2937; color: #9ca3af; border: 1px solid #374151; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 13px; flex: 1; }
-.ap-cancel:hover { background: #374151; }
+.ap-btns { display: flex; gap: 10px; margin-top: 10px; }
+.ap-save { 
+  background: #1a1a1a; 
+  color: #fff; 
+  border: none; 
+  padding: 12px 16px; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  font-weight: 600; 
+  font-size: 14px; 
+  flex: 1; 
+  transition: all 0.2s;
+}
+.ap-save:hover { background: #333; }
+.ap-cancel { 
+  background: #fff; 
+  color: #4b5563; 
+  border: 1px solid #e5e7eb; 
+  padding: 12px 16px; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  font-size: 14px; 
+  flex: 1;
+}
+.ap-cancel:hover { background: #f9fafb; }

@@ -6,15 +6,15 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
 .dashboard {
   display: flex;
   min-height: 100vh;
-  background: #0a0a0a;
-  color: #e5e7eb;
+  background: #fdfaf3;
+  color: #1a1a1a;
 }
 
 /* ── SIDEBAR ── */
 .sidebar {
   width: 240px;
-  background: #111;
-  border-right: 1px solid rgba(220,38,38,0.2);
+  background: #ffffff;
+  border-right: 1px solid #e5e7eb;
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -22,6 +22,7 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
   z-index: 200;
   transition: width 0.25s ease;
   overflow: hidden;
+  box-shadow: 4px 0 15px rgba(0,0,0,0.02);
 }
 .sidebar.closed { width: 64px; }
 
@@ -30,29 +31,30 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
   align-items: center;
   gap: 10px;
   padding: 18px 16px;
-  border-bottom: 1px solid rgba(220,38,38,0.15);
+  border-bottom: 1px solid #fdfaf3;
   min-height: 64px;
+  background: #ffffff;
 }
-.sidebar-logo-img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
-.sidebar-logo-text { font-size: 16px; font-weight: 800; color: #f87171; white-space: nowrap; }
+.sidebar-logo-img { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 1px solid #c5a059; }
+.sidebar-logo-text { font-size: 18px; font-weight: 700; color: #1a1a1a; white-space: nowrap; font-family: 'Playfair Display', serif; }
 
 .sidebar-nav {
   flex: 1;
-  padding: 12px 8px;
+  padding: 15px 10px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .sidebar-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 10px 12px;
-  border-radius: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
   border: none;
   background: transparent;
-  color: #9ca3af;
+  color: #6b7280;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
@@ -61,17 +63,17 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
   transition: all 0.2s;
   white-space: nowrap;
 }
-.sidebar-item:hover { background: rgba(220,38,38,0.1); color: #f87171; }
-.sidebar-item.active { background: rgba(220,38,38,0.15); color: #f87171; font-weight: 700; border-left: 3px solid #dc2626; }
+.sidebar-item:hover { background: #fdfaf3; color: #c5a059; }
+.sidebar-item.active { background: #fdfaf3; color: #c5a059; font-weight: 600; border-left: 4px solid #c5a059; }
 
 .sidebar-icon { font-size: 18px; flex-shrink: 0; width: 24px; text-align: center; }
 .sidebar-label { overflow: hidden; }
 
 .sidebar-footer {
-  padding: 8px;
-  border-top: 1px solid rgba(220,38,38,0.15);
+  padding: 10px;
+  border-top: 1px solid #fdfaf3;
 }
-.sidebar-logout:hover { background: rgba(220,38,38,0.2) !important; color: #f87171 !important; }
+.sidebar-logout:hover { background: #fff5f5 !important; color: #dc2626 !important; }
 
 /* ── MAIN ── */
 .dashboard-main {
@@ -91,28 +93,29 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
   gap: 16px;
   padding: 0 24px;
   height: 64px;
-  background: #111;
-  border-bottom: 1px solid rgba(220,38,38,0.2);
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
   position: sticky;
   top: 0;
   z-index: 100;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.02);
 }
 .topbar-toggle {
-  background: rgba(220,38,38,0.1);
-  border: 1px solid rgba(220,38,38,0.2);
-  color: #f87171;
+  background: #fdfaf3;
+  border: 1px solid #e5e7eb;
+  color: #c5a059;
   width: 32px; height: 32px;
   border-radius: 8px;
   cursor: pointer;
   font-size: 12px;
   display: flex; align-items: center; justify-content: center;
-  transition: background 0.2s;
+  transition: all 0.2s;
   flex-shrink: 0;
 }
-.topbar-toggle:hover { background: rgba(220,38,38,0.25); }
-.topbar-title { font-size: 16px; font-weight: 700; color: #f1f5f9; flex: 1; }
+.topbar-toggle:hover { background: #c5a059; color: #fff; border-color: #c5a059; }
+.topbar-title { font-size: 18px; font-weight: 600; color: #1a1a1a; flex: 1; font-family: 'Playfair Display', serif; }
 .topbar-right { display: flex; align-items: center; gap: 12px; }
-.topbar-admin { color: #6b7280; font-size: 13px; }
+.topbar-admin { color: #6b7280; font-size: 14px; font-weight: 500; }
 
 /* ── CONTENT ── */
 .dashboard-content { padding: 28px; max-width: 1100px; }
