@@ -446,63 +446,43 @@ function Description_Admin() {
             </div>
 
             {showAddProduct && (
-              <div className="da-add-review" style={{ marginBottom: '24px' }}>
-                <h3>➕ Add New Product</h3>
-                <div className="da-product-edit-flex" style={{ display: 'flex', gap: '30px' }}>
-                  <div className="da-edit-left" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                    <div style={{ 
-                      position: 'relative', 
-                      background: '#fdfaf3', 
-                      borderRadius: '24px', 
-                      height: '280px', 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center', 
-                      border: '1px solid rgba(197, 160, 89, 0.2)',
-                      overflow: 'hidden',
-                      padding: '20px',
-                      boxShadow: '0 10px 25px rgba(0,0,0,0.05)'
-                    }}>
-                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+              <div className="da-add-product" style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #c5a059', padding: '30px', marginBottom: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
+                <h3 className="da-section-title" style={{ fontSize: '1.2rem', marginBottom: '25px' }}>➕ Add New Boutique Product</h3>
+                <div className="da-product-edit-flex">
+                  <div className="da-edit-left">
+                    <div className="da-image-preview-box">
                       {newProduct.image ? (
-                        <img src={newProduct.image} alt="preview" style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15))', position: 'relative', zIndex: 1 }} />
+                        <img src={newProduct.image} alt="preview" />
                       ) : (
-                        <div style={{ color: '#ccc', textAlign: 'center', position: 'relative', zIndex: 1 }}><span style={{ fontSize: '48px' }}>🖼️</span><p style={{ color: '#94a3b8' }}>Main Image</p></div>
+                        <div className="da-no-image">
+                          <span>🖼️</span>
+                          <p>Catalog Image</p>
+                        </div>
                       )}
                     </div>
                     <label>Main Catalog Image URL</label>
                     <input placeholder="e.g. /Product 1.png" value={newProduct.image} onChange={e => setNewProduct({ ...newProduct, image: e.target.value })} />
 
-                    <div style={{ 
-                      position: 'relative', 
-                      background: '#fdfaf3', 
-                      borderRadius: '24px', 
-                      height: '280px', 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center', 
-                      border: '1px solid rgba(197, 160, 89, 0.2)',
-                      overflow: 'hidden',
-                      padding: '20px',
-                      boxShadow: '0 10px 25px rgba(0,0,0,0.05)'
-                    }}>
-                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                    <div className="da-image-preview-box" style={{ marginTop: '20px' }}>
                       {newProduct.detailImage ? (
-                        <img src={newProduct.detailImage} alt="preview" style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15))', position: 'relative', zIndex: 1 }} />
+                        <img src={newProduct.detailImage} alt="preview" />
                       ) : (
-                        <div style={{ color: '#ccc', textAlign: 'center', position: 'relative', zIndex: 1 }}><span style={{ fontSize: '48px' }}>🖼️</span><p style={{ color: '#94a3b8' }}>Detail Image</p></div>
+                        <div className="da-no-image">
+                          <span>🖼️</span>
+                          <p>Detail Image</p>
+                        </div>
                       )}
                     </div>
                     <label>Detail View Image URL</label>
                     <input placeholder="Detail View Image" value={newProduct.detailImage || ''} onChange={e => setNewProduct({ ...newProduct, detailImage: e.target.value })} />
                   </div>
 
-                  <div className="da-edit-right" style={{ flex: 1.2 }}>
+                  <div className="da-edit-right">
                     <label>Name</label>
                     <input placeholder="Product name" value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
                   
                     <label>Arabic Name</label>
-                    <input placeholder="عجوة بني" style={{ textAlign: 'right' }} value={newProduct.arabicName} onChange={e => setNewProduct({ ...newProduct, arabicName: e.target.value })} />
+                    <input placeholder="عجوة بني" style={{ textAlign: 'right', fontSize: '1.2rem' }} value={newProduct.arabicName} onChange={e => setNewProduct({ ...newProduct, arabicName: e.target.value })} />
 
                     <label>Price (PKR)</label>
                     <input type="number" placeholder="e.g. 1200" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
@@ -549,58 +529,36 @@ function Description_Admin() {
 
             <div className="da-products-grid">
               {products.map(product => (
-                <div key={product.id} className="da-product-card">
+                <div key={product.id} className={`da-product-card ${editProduct?.id === product.id ? 'editing' : ''}`}>
                   {editProduct?.id === product.id ? (
                     <div className="da-edit-form">
-                      <div className="da-product-edit-flex" style={{ display: 'flex', gap: '30px' }}>
-                        <div className="da-edit-left" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                          <div style={{ 
-                            position: 'relative', 
-                            background: '#fdfaf3', 
-                            borderRadius: '24px', 
-                            height: '250px', 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center', 
-                            border: '1px solid rgba(197, 160, 89, 0.2)',
-                            overflow: 'hidden',
-                            padding: '15px'
-                          }}>
-                            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
-                            <img src={editProduct.image} alt="preview" style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15))', position: 'relative', zIndex: 1 }} />
+                      <div className="da-product-edit-flex">
+                        <div className="da-edit-left">
+                          <div className="da-image-preview-box">
+                            <img src={editProduct.image} alt="preview" />
                           </div>
                           <label>Main Catalog Image URL</label>
                           <input value={editProduct.image} onChange={e => setEditProduct({ ...editProduct, image: e.target.value })} />
 
-                          <div style={{ 
-                            position: 'relative', 
-                            background: '#fdfaf3', 
-                            borderRadius: '24px', 
-                            height: '250px', 
-                            display: 'flex', 
-                            alignItems: 'center', 
-                            justifyContent: 'center', 
-                            border: '1px solid rgba(197, 160, 89, 0.2)',
-                            overflow: 'hidden',
-                            padding: '15px',
-                            marginTop: '15px'
-                          }}>
-                            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                          <div className="da-image-preview-box" style={{ marginTop: '20px' }}>
                             {editProduct.detailImage ? (
-                              <img src={editProduct.detailImage} alt="detail preview" style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15))', position: 'relative', zIndex: 1 }} />
+                              <img src={editProduct.detailImage} alt="detail preview" />
                             ) : (
-                              <div style={{ color: '#ccc', textAlign: 'center' }}><span style={{ fontSize: '32px' }}>🖼️</span><p style={{ fontSize: '10px' }}>No detail image</p></div>
+                              <div className="da-no-image">
+                                <span>🖼️</span>
+                                <p>No detail image</p>
+                              </div>
                             )}
                           </div>
                           <label>Detail View Image URL</label>
                           <input value={editProduct.detailImage || ''} onChange={e => setEditProduct({ ...editProduct, detailImage: e.target.value })} />
                         </div>
 
-                        <div className="da-edit-right" style={{ flex: 1.2 }}>
+                        <div className="da-edit-right">
                           <label>Name</label>
                           <input value={editProduct.name} onChange={e => setEditProduct({ ...editProduct, name: e.target.value })} />
                           <label>Arabic Name</label>
-                          <input style={{ textAlign: 'right' }} value={editProduct.arabicName} onChange={e => setEditProduct({ ...editProduct, arabicName: e.target.value })} />
+                          <input style={{ textAlign: 'right', fontSize: '1.2rem' }} value={editProduct.arabicName} onChange={e => setEditProduct({ ...editProduct, arabicName: e.target.value })} />
                           <label>Price (PKR)</label>
                           <input type="number" value={editProduct.price} onChange={e => setEditProduct({ ...editProduct, price: Number(e.target.value) })} />
                           <label>Storage Note</label>
