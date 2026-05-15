@@ -125,6 +125,7 @@ function Description_Admin() {
         description: product.description, 
         rating: product.rating, 
         image: product.image,
+        detailImage: product.detailImage,
         storageNote: product.storageNote,
         weights: product.weights
       })
@@ -139,7 +140,7 @@ function Description_Admin() {
       body: JSON.stringify({ ...newProduct, price: Number(newProduct.price) })
     });
     const data = await res.json();
-    if (res.ok) { setProducts([...products, data.product]); setNewProduct({ name: '', arabicName: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', discount: '', category: 'dates', storageNote: '', weights: [] }); setShowAddProduct(false); showMsg('✅ Product added!'); }
+    if (res.ok) { setProducts([...products, data.product]); setNewProduct({ name: '', arabicName: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', detailImage: '', description: '', discount: '', category: 'dates', storageNote: '', weights: [] }); setShowAddProduct(false); showMsg('✅ Product added!'); }
     else showMsg('❌ Failed to add');
   };
 
@@ -402,14 +403,39 @@ function Description_Admin() {
           <div className="da-section">
             <h2 className="da-section-title">🛍️ Premium Collection Products</h2>
 
-            <div className="da-video-specs-note" style={{ borderColor: '#4ade80', background: 'rgba(74,222,128,0.05)' }}>
-              <strong style={{ color: '#4ade80' }}>📸 Recommended Product Image Specs:</strong>
-              <ul>
-                <li><span>Resolution:</span> 1000x1000 (1:1 Square Ratio)</li>
-                <li><span>Background:</span> Transparent or clean lifestyle background</li>
-                <li><span>Format:</span> PNG (for transparent) or JPG</li>
-                <li><span>Size:</span> Under 300KB for best performance</li>
-              </ul>
+            <div className="da-video-specs-note" style={{ 
+              borderColor: '#c5a059', 
+              background: '#ffffff', 
+              margin: '15px 0', 
+              width: '100%', 
+              padding: '16px', 
+              borderRadius: '16px', 
+              border: '1px solid rgba(197, 160, 89, 0.3)',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '18px' }}>📸</span>
+                <strong style={{ color: '#1a1a1a', fontSize: '14px', letterSpacing: '0.5px' }}>RECOMMENDED IMAGE SPECIFICATIONS</strong>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
+                <div style={{ background: '#fdfaf3', padding: '10px', borderRadius: '10px', border: '1px solid rgba(197, 160, 89, 0.1)' }}>
+                  <p style={{ color: '#c5a059', fontSize: '11px', fontWeight: '800', marginBottom: '4px' }}>MAIN CATALOG IMAGE</p>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '12px', color: '#4b5563' }}>
+                    <li>• Resolution: 1200 x 1200</li>
+                    <li>• Format: WebP / JPG</li>
+                  </ul>
+                </div>
+                <div style={{ background: '#fdfaf3', padding: '10px', borderRadius: '10px', border: '1px solid rgba(197, 160, 89, 0.1)' }}>
+                  <p style={{ color: '#c5a059', fontSize: '11px', fontWeight: '800', marginBottom: '4px' }}>DETAIL VIEW IMAGE</p>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '12px', color: '#4b5563' }}>
+                    <li>• Resolution: 1200 x 1200</li>
+                    <li>• Style: Premium Lifestyle</li>
+                  </ul>
+                </div>
+              </div>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
@@ -422,54 +448,101 @@ function Description_Admin() {
             {showAddProduct && (
               <div className="da-add-review" style={{ marginBottom: '24px' }}>
                 <h3>➕ Add New Product</h3>
-                <div className="da-edit-form">
-                  <label>Name</label>
-                  <input placeholder="Product name" value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
-                  
-                  <label>Arabic Name</label>
-                  <input placeholder="عجوة بني" style={{ textAlign: 'right' }} value={newProduct.arabicName} onChange={e => setNewProduct({ ...newProduct, arabicName: e.target.value })} />
+                <div className="da-product-edit-flex" style={{ display: 'flex', gap: '30px' }}>
+                  <div className="da-edit-left" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                    <div style={{ 
+                      position: 'relative', 
+                      background: '#fdfaf3', 
+                      borderRadius: '24px', 
+                      height: '280px', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      border: '1px solid rgba(197, 160, 89, 0.2)',
+                      overflow: 'hidden',
+                      padding: '20px',
+                      boxShadow: '0 10px 25px rgba(0,0,0,0.05)'
+                    }}>
+                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                      {newProduct.image ? (
+                        <img src={newProduct.image} alt="preview" style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15))', position: 'relative', zIndex: 1 }} />
+                      ) : (
+                        <div style={{ color: '#ccc', textAlign: 'center', position: 'relative', zIndex: 1 }}><span style={{ fontSize: '48px' }}>🖼️</span><p style={{ color: '#94a3b8' }}>Main Image</p></div>
+                      )}
+                    </div>
+                    <label>Main Catalog Image URL</label>
+                    <input placeholder="e.g. /Product 1.png" value={newProduct.image} onChange={e => setNewProduct({ ...newProduct, image: e.target.value })} />
 
-                  <label>Price (PKR)</label>
-                  <input type="number" placeholder="e.g. 1200" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
-                  
-                  <label>Storage Note</label>
-                  <textarea rows={3} placeholder="Storage advice..." value={newProduct.storageNote} onChange={e => setNewProduct({ ...newProduct, storageNote: e.target.value })} />
-
-                  <label>Weights & Savings</label>
-                  <div className="da-weights-editor">
-                    {(newProduct.weights || []).map((w, idx) => (
-                      <div key={idx} className="da-weight-row">
-                        <input placeholder="Label (e.g. 1kg Box)" value={w.label} onChange={e => {
-                          const ws = [...newProduct.weights]; ws[idx].label = e.target.value;
-                          setNewProduct({ ...newProduct, weights: ws });
-                        }} />
-                        <input placeholder="Savings (e.g. Save Rs 500)" value={w.savings} onChange={e => {
-                          const ws = [...newProduct.weights]; ws[idx].savings = e.target.value;
-                          setNewProduct({ ...newProduct, weights: ws });
-                        }} />
-                        <button onClick={() => setNewProduct({ ...newProduct, weights: newProduct.weights.filter((_, i) => i !== idx) })}>✕</button>
-                      </div>
-                    ))}
-                    <button className="da-add-btn" onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '', savings: '' }] })}>+ Add Weight Option</button>
+                    <div style={{ 
+                      position: 'relative', 
+                      background: '#fdfaf3', 
+                      borderRadius: '24px', 
+                      height: '280px', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      border: '1px solid rgba(197, 160, 89, 0.2)',
+                      overflow: 'hidden',
+                      padding: '20px',
+                      boxShadow: '0 10px 25px rgba(0,0,0,0.05)'
+                    }}>
+                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                      {newProduct.detailImage ? (
+                        <img src={newProduct.detailImage} alt="preview" style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15))', position: 'relative', zIndex: 1 }} />
+                      ) : (
+                        <div style={{ color: '#ccc', textAlign: 'center', position: 'relative', zIndex: 1 }}><span style={{ fontSize: '48px' }}>🖼️</span><p style={{ color: '#94a3b8' }}>Detail Image</p></div>
+                      )}
+                    </div>
+                    <label>Detail View Image URL</label>
+                    <input placeholder="Detail View Image" value={newProduct.detailImage || ''} onChange={e => setNewProduct({ ...newProduct, detailImage: e.target.value })} />
                   </div>
 
-                  <label>Rating (1-5)</label>
-                  <input type="number" min="1" max="5" step="0.1" value={newProduct.rating} onChange={e => setNewProduct({ ...newProduct, rating: Number(e.target.value) })} />
+                  <div className="da-edit-right" style={{ flex: 1.2 }}>
+                    <label>Name</label>
+                    <input placeholder="Product name" value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
                   
-                  <label>Discount Tag</label>
-                  <input placeholder="e.g. 50% OFF" value={newProduct.discount} onChange={e => setNewProduct({ ...newProduct, discount: e.target.value })} />
-                  
-                  <label>Description</label>
-                  <textarea rows={2} placeholder="Product description" value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
-                  
-                  <label>Image URL</label>
-                  <input placeholder="e.g. /Product 1.png" value={newProduct.image} onChange={e => setNewProduct({ ...newProduct, image: e.target.value })} />
-                  
-                  <label className="da-stock-label">
-                    <input type="checkbox" checked={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.checked })} /> In Stock
-                  </label>
-                  
-                  <button className="da-save-btn" onClick={addProduct}>➕ Add Product</button>
+                    <label>Arabic Name</label>
+                    <input placeholder="عجوة بني" style={{ textAlign: 'right' }} value={newProduct.arabicName} onChange={e => setNewProduct({ ...newProduct, arabicName: e.target.value })} />
+
+                    <label>Price (PKR)</label>
+                    <input type="number" placeholder="e.g. 1200" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
+                    
+                    <label>Storage Note</label>
+                    <textarea rows={3} placeholder="Storage advice..." value={newProduct.storageNote} onChange={e => setNewProduct({ ...newProduct, storageNote: e.target.value })} />
+
+                    <label>Weights & Savings</label>
+                    <div className="da-weights-editor">
+                      {(newProduct.weights || []).map((w, idx) => (
+                        <div key={idx} className="da-weight-row">
+                          <input placeholder="Label (e.g. 1kg Box)" value={w.label} onChange={e => {
+                            const ws = [...newProduct.weights]; ws[idx].label = e.target.value;
+                            setNewProduct({ ...newProduct, weights: ws });
+                          }} />
+                          <input placeholder="Savings (e.g. Save Rs 500)" value={w.savings} onChange={e => {
+                            const ws = [...newProduct.weights]; ws[idx].savings = e.target.value;
+                            setNewProduct({ ...newProduct, weights: ws });
+                          }} />
+                          <button onClick={() => setNewProduct({ ...newProduct, weights: newProduct.weights.filter((_, i) => i !== idx) })}>✕</button>
+                        </div>
+                      ))}
+                      <button className="da-add-btn" onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '', savings: '' }] })}>+ Add Weight Option</button>
+                    </div>
+
+                    <label>Rating (1-5)</label>
+                    <input type="number" min="1" max="5" step="0.1" value={newProduct.rating} onChange={e => setNewProduct({ ...newProduct, rating: Number(e.target.value) })} />
+                    
+                    <label>Discount Tag</label>
+                    <input placeholder="e.g. 50% OFF" value={newProduct.discount} onChange={e => setNewProduct({ ...newProduct, discount: e.target.value })} />
+                    
+                    <label>Description</label>
+                    <textarea rows={2} placeholder="Product description" value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                    
+                    <label className="da-stock-label">
+                      <input type="checkbox" checked={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.checked })} /> In Stock
+                    </label>
+                    
+                    <button className="da-save-btn" style={{ marginTop: '20px' }} onClick={addProduct}>➕ Add Product</button>
+                  </div>
                 </div>
               </div>
             )}
@@ -479,44 +552,90 @@ function Description_Admin() {
                 <div key={product.id} className="da-product-card">
                   {editProduct?.id === product.id ? (
                     <div className="da-edit-form">
-                      <label>Name</label>
-                      <input value={editProduct.name} onChange={e => setEditProduct({ ...editProduct, name: e.target.value })} />
-                      <label>Arabic Name</label>
-                      <input style={{ textAlign: 'right' }} value={editProduct.arabicName} onChange={e => setEditProduct({ ...editProduct, arabicName: e.target.value })} />
-                      <label>Price (PKR)</label>
-                      <input type="number" value={editProduct.price} onChange={e => setEditProduct({ ...editProduct, price: Number(e.target.value) })} />
-                      <label>Storage Note</label>
-                      <textarea rows={3} value={editProduct.storageNote} onChange={e => setEditProduct({ ...editProduct, storageNote: e.target.value })} />
-                      
-                      <label>Weights & Savings</label>
-                      <div className="da-weights-editor">
-                        {(editProduct.weights || []).map((w, idx) => (
-                          <div key={idx} className="da-weight-row">
-                            <input placeholder="Label" value={w.label} onChange={e => {
-                              const ws = [...editProduct.weights]; ws[idx].label = e.target.value;
-                              setEditProduct({ ...editProduct, weights: ws });
-                            }} />
-                            <input placeholder="Savings" value={w.savings} onChange={e => {
-                              const ws = [...editProduct.weights]; ws[idx].savings = e.target.value;
-                              setEditProduct({ ...editProduct, weights: ws });
-                            }} />
-                            <button onClick={() => setEditProduct({ ...editProduct, weights: editProduct.weights.filter((_, i) => i !== idx) })}>✕</button>
+                      <div className="da-product-edit-flex" style={{ display: 'flex', gap: '30px' }}>
+                        <div className="da-edit-left" style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                          <div style={{ 
+                            position: 'relative', 
+                            background: '#fdfaf3', 
+                            borderRadius: '24px', 
+                            height: '250px', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            border: '1px solid rgba(197, 160, 89, 0.2)',
+                            overflow: 'hidden',
+                            padding: '15px'
+                          }}>
+                            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                            <img src={editProduct.image} alt="preview" style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15))', position: 'relative', zIndex: 1 }} />
                           </div>
-                        ))}
-                        <button className="da-add-btn" onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '', savings: '' }] })}>+ Add Weight Option</button>
-                      </div>
+                          <label>Main Catalog Image URL</label>
+                          <input value={editProduct.image} onChange={e => setEditProduct({ ...editProduct, image: e.target.value })} />
 
-                      <label>Rating (1 - 5)</label>
-                      <input type="number" min="1" max="5" step="0.1" value={editProduct.rating} onChange={e => setEditProduct({ ...editProduct, rating: Number(e.target.value) })} />
-                      <label>Discount Tag</label>
-                      <input value={editProduct.discount} onChange={e => setEditProduct({ ...editProduct, discount: e.target.value })} />
-                      <label>Description</label>
-                      <textarea rows={3} value={editProduct.description} onChange={e => setEditProduct({ ...editProduct, description: e.target.value })} />
-                      <label>Image URL</label>
-                      <input placeholder="Image URL" value={editProduct.image} onChange={e => setEditProduct({ ...editProduct, image: e.target.value })} />
-                      <div className="da-form-btns">
-                        <button className="da-save-btn" onClick={() => saveProduct(editProduct)}>💾 Save</button>
-                        <button className="da-cancel-btn" onClick={() => setEditProduct(null)}>Cancel</button>
+                          <div style={{ 
+                            position: 'relative', 
+                            background: '#fdfaf3', 
+                            borderRadius: '24px', 
+                            height: '250px', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center', 
+                            border: '1px solid rgba(197, 160, 89, 0.2)',
+                            overflow: 'hidden',
+                            padding: '15px',
+                            marginTop: '15px'
+                          }}>
+                            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                            {editProduct.detailImage ? (
+                              <img src={editProduct.detailImage} alt="detail preview" style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'contain', filter: 'drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15))', position: 'relative', zIndex: 1 }} />
+                            ) : (
+                              <div style={{ color: '#ccc', textAlign: 'center' }}><span style={{ fontSize: '32px' }}>🖼️</span><p style={{ fontSize: '10px' }}>No detail image</p></div>
+                            )}
+                          </div>
+                          <label>Detail View Image URL</label>
+                          <input value={editProduct.detailImage || ''} onChange={e => setEditProduct({ ...editProduct, detailImage: e.target.value })} />
+                        </div>
+
+                        <div className="da-edit-right" style={{ flex: 1.2 }}>
+                          <label>Name</label>
+                          <input value={editProduct.name} onChange={e => setEditProduct({ ...editProduct, name: e.target.value })} />
+                          <label>Arabic Name</label>
+                          <input style={{ textAlign: 'right' }} value={editProduct.arabicName} onChange={e => setEditProduct({ ...editProduct, arabicName: e.target.value })} />
+                          <label>Price (PKR)</label>
+                          <input type="number" value={editProduct.price} onChange={e => setEditProduct({ ...editProduct, price: Number(e.target.value) })} />
+                          <label>Storage Note</label>
+                          <textarea rows={3} value={editProduct.storageNote} onChange={e => setEditProduct({ ...editProduct, storageNote: e.target.value })} />
+                          
+                          <label>Weights & Savings</label>
+                          <div className="da-weights-editor">
+                            {(editProduct.weights || []).map((w, idx) => (
+                              <div key={idx} className="da-weight-row">
+                                <input placeholder="Label" value={w.label} onChange={e => {
+                                  const ws = [...editProduct.weights]; ws[idx].label = e.target.value;
+                                  setEditProduct({ ...editProduct, weights: ws });
+                                }} />
+                                <input placeholder="Savings" value={w.savings} onChange={e => {
+                                  const ws = [...editProduct.weights]; ws[idx].savings = e.target.value;
+                                  setEditProduct({ ...editProduct, weights: ws });
+                                }} />
+                                <button onClick={() => setEditProduct({ ...editProduct, weights: editProduct.weights.filter((_, i) => i !== idx) })}>✕</button>
+                              </div>
+                            ))}
+                            <button className="da-add-btn" onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '', savings: '' }] })}>+ Add Weight Option</button>
+                          </div>
+
+                          <label>Rating (1 - 5)</label>
+                          <input type="number" min="1" max="5" step="0.1" value={editProduct.rating} onChange={e => setEditProduct({ ...editProduct, rating: Number(e.target.value) })} />
+                          <label>Discount Tag</label>
+                          <input value={editProduct.discount} onChange={e => setEditProduct({ ...editProduct, discount: e.target.value })} />
+                          <label>Description</label>
+                          <textarea rows={3} value={editProduct.description} onChange={e => setEditProduct({ ...editProduct, description: e.target.value })} />
+                          
+                          <div className="da-form-btns" style={{ marginTop: '20px' }}>
+                            <button className="da-save-btn" onClick={() => saveProduct(editProduct)}>💾 Save</button>
+                            <button className="da-cancel-btn" onClick={() => setEditProduct(null)}>Cancel</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   ) : (
@@ -663,6 +782,7 @@ function Description_Admin() {
             </div>
           </div>
         )}
+
         {activeTab === 'about' && !loading && about && (
           <div className="da-section">
             <h2 className="da-section-title">🌱 About Section (How Our Dates Are Grown)</h2>
@@ -773,6 +893,7 @@ function Description_Admin() {
             </div>
           </div>
         )}
+
         {activeTab === 'payment' && !loading && (
           <div className="da-section">
             <h2 className="da-section-title">💳 Payment Icons</h2>

@@ -33,7 +33,7 @@
 .ap-add-form h3 { 
   font-size: 1.2rem; 
   font-weight: 600; 
-  color: #1a1a1a; 
+  color: #1a1a1a !important; 
   margin-bottom: 20px;
   font-family: 'Playfair Display', serif;
 }
@@ -50,7 +50,7 @@
   border-radius: 12px;
   border: 1px solid #e5e7eb;
 }
-.ap-count { color: #8d7558; font-size: 14px; font-weight: 500; }
+.ap-count { color: #8d7558 !important; font-size: 14px; font-weight: 500; }
 
 .ap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
 
@@ -79,17 +79,17 @@
 
 .ap-view h4 { 
   font-size: 1.2rem; 
-  color: #1a1a1a; 
+  color: #1a1a1a !important; 
   margin-bottom: 8px; 
   font-family: 'Playfair Display', serif;
   font-weight: 500;
 }
 .ap-meta { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-.ap-price { color: #1a1a1a; font-weight: 600; font-size: 1.1rem; }
-.ap-discount { color: #c5a059; font-size: 13px; font-weight: 600; }
-.ap-stock.in { color: #059669; font-size: 13px; font-weight: 500; }
-.ap-stock.out { color: #dc2626; font-size: 13px; font-weight: 500; }
-.ap-rating { display: flex; align-items: center; gap: 4px; margin-bottom: 15px; color: #6b7280; font-size: 13px; }
+.ap-price { color: #1a1a1a !important; font-weight: 600; font-size: 1.1rem; }
+.ap-discount { color: #c5a059 !important; font-size: 13px; font-weight: 600; }
+.ap-stock.in { color: #059669 !important; font-size: 13px; font-weight: 500; }
+.ap-stock.out { color: #dc2626 !important; font-size: 13px; font-weight: 500; }
+.ap-rating { display: flex; align-items: center; gap: 4px; margin-bottom: 15px; color: #6b7280 !important; font-size: 13px; }
 
 .ap-edit-btn { 
   background: #1a1a1a; 
@@ -116,11 +116,21 @@
   .ap-edit-flex { flex-direction: column; }
 }
 
-.ap-edit label { font-size: 12px; color: #4b5563; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: -5px; }
-.ap-edit input, .ap-edit textarea, .ap-edit select { 
-  background: #fdfdfd; 
-  border: 1px solid #e5e7eb; 
-  color: #1a1a1a; 
+.ap-edit label, .ap-add-form label { 
+  font-size: 12px; 
+  color: #1a1a1a !important; 
+  font-weight: 700; 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px; 
+  margin-bottom: -5px; 
+  display: block;
+}
+
+.ap-edit input, .ap-edit textarea, .ap-edit select,
+.ap-add-form input, .ap-add-form textarea, .ap-add-form select { 
+  background: #ffffff; 
+  border: 1px solid #c5a059; 
+  color: #1a1a1a !important; 
   padding: 10px 12px; 
   border-radius: 8px; 
   font-size: 14px; 
@@ -128,7 +138,10 @@
   outline: none; 
   resize: vertical;
 }
-.ap-edit input:focus, .ap-edit textarea:focus { border-color: #c5a059; background: #fff; }
+
+.ap-edit input::placeholder, .ap-add-form input::placeholder {
+  color: #94a3b8;
+}
 
 .ap-view-header {
   display: flex;
