@@ -20,7 +20,10 @@ function Description_Admin() {
   const [paymentIcons, setPaymentIcons] = useState([]);
   const [products, setProducts] = useState([]);
   const [editProduct, setEditProduct] = useState(null);
+  const [aiSection, setAiSection] = useState(null);
+  const [editAiSection, setEditAiSection] = useState(null);
   const [newProduct, setNewProduct] = useState({ name: '', arabicName: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', discount: '', category: 'dates', storageNote: '', weights: [] });
+
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [editReview, setEditReview] = useState(null);
@@ -55,7 +58,9 @@ function Description_Admin() {
       fetch(`${API}/content/delivery-map`).then(r => r.json()),
       fetch(`${API}/content/about`).then(r => r.json()),
       fetch(`${API}/content/payment-icons`).then(r => r.json()),
+      fetch(`${API}/content/ai-section`).then(r => r.json()),
     ]);
+
     setHeroes(h.heroes || []);
     setProducts(p.products || []);
     setReviews(r.reviews || []);
@@ -63,7 +68,9 @@ function Description_Admin() {
     setDeliveryMap(d.deliveryMap || null);
     setAbout(a.about || null);
     setPaymentIcons(pi.icons || []);
+    setAiSection(ai.aiSection || null);
     setLoading(false);
+
   };
 
   const showMsg = (text) => { setMsg(text); setTimeout(() => setMsg(''), 3000); };
@@ -197,6 +204,21 @@ function Description_Admin() {
     if (res.ok) { setDeliveryMap(editDeliveryMap); setEditDeliveryMap(null); showMsg('✅ Delivery map updated!'); }
   };
 
+  const saveAiSection = async () => {
+    const res = await fetch(`${API}/content/ai-section`, {
+      method: 'PUT', headers: authHeaders,
+      body: JSON.stringify(editAiSection)
+    });
+    if (res.ok) { setAiSection(editAiSection); setEditAiSection(null); showMsg('✅ AI section updated!'); }
+  };
+
+  const updateAiFeature = (index, field, value) => {
+    const updated = [...editAiSection.features];
+    updated[index][field] = value;
+    setEditAiSection({ ...editAiSection, features: updated });
+  };
+
+
   const renderStars = (rating) =>
     [...Array(5)].map((_, i) => (
       <span key={i} style={{ color: i < Math.floor(rating) ? '#fbbf24' : '#555', fontSize: '18px' }}>★</span>
@@ -232,7 +254,9 @@ function Description_Admin() {
         <div className="da-tabs">
           <button className={`da-tab ${activeTab === 'heroes' ? 'active' : ''}`} onClick={() => setActiveTab('heroes')}>🎬 Hero Videos</button>
           <button className={`da-tab ${activeTab === 'feature' ? 'active' : ''}`} onClick={() => setActiveTab('feature')}>✨ Feature Section</button>
+          <button className={`da-tab ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => setActiveTab('ai')}>🤖 AI Section</button>
           <button className={`da-tab ${activeTab === 'products' ? 'active' : ''}`} onClick={() => setActiveTab('products')}>🛍️ Products</button>
+
           <button className={`da-tab ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => setActiveTab('reviews')}>⭐ Reviews</button>
           <button className={`da-tab ${activeTab === 'deliveryMap' ? 'active' : ''}`} onClick={() => setActiveTab('deliveryMap')}>🗺️ Delivery Map</button>
           <button className={`da-tab ${activeTab === 'about' ? 'active' : ''}`} onClick={() => setActiveTab('about')}>🌱 About Section</button>
@@ -391,6 +415,94 @@ function Description_Admin() {
                     
                     <div className="da-edit-btn-wrap">
                       <button className="da-edit-btn" onClick={() => setEditFeature({ ...feature })}>✏️ Edit Section</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+        {activeTab === 'ai' && !loading && aiSection && (
+          <div className="da-section">
+            <h2 className="da-section-title">🤖 AI Powered Wellness Section</h2>
+
+            <div className="da-video-specs-note" style={{ borderColor: '#8b5cf6', background: 'rgba(139,92,246,0.05)' }}>
+              <strong style={{ color: '#8b5cf6' }}>🎬 AI Video Recommendation:</strong>
+              <ul>
+                <li><span>Resolution:</span> 1920x1080 (16:9 Landscape)</li>
+                <li><span>Style:</span> High-tech / Futuristic / Health themed</li>
+                <li><span>Format:</span> MP4</li>
+              </ul>
+            </div>
+
+            <div className="da-cards">
+              <div className="da-card">
+                {editAiSection ? (
+                  <div className="da-edit-form">
+                    <label>Badge Text</label>
+                    <input value={editAiSection.badge} onChange={e => setEditAiSection({ ...editAiSection, badge: e.target.value })} />
+                    <label>Main Title</label>
+                    <input value={editAiSection.title} onChange={e => setEditAiSection({ ...editAiSection, title: e.target.value })} />
+                    <label>Description</label>
+                    <textarea rows={4} value={editAiSection.description} onChange={e => setEditAiSection({ ...editAiSection, description: e.target.value })} />
+                    
+                    <label>Video URL / Path</label>
+                    <input value={editAiSection.video} onChange={e => setEditAiSection({ ...editAiSection, video: e.target.value })} />
+                    
+                    <label className="da-upload-label">
+                      📤 Upload AI Video
+                      <input type="file" accept="video/*" style={{ display: 'none' }}
+                        onChange={async e => {
+                          const file = e.target.files[0]; if (!file) return;
+                          const formData = new FormData(); formData.append('file', file);
+                          const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                          const data = await res.json();
+                          if (res.ok) setEditAiSection({ ...editAiSection, video: data.url || data.path });
+                        }}
+                      />
+                    </label>
+
+                    <label style={{ marginTop: '20px' }}>AI Features (Icons & Text)</label>
+                    {editAiSection.features.map((f, i) => (
+                      <div key={i} className="da-ai-feature-edit" style={{ background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '12px', marginBottom: '15px' }}>
+                        <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                          <input style={{ width: '60px' }} placeholder="Icon" value={f.icon} onChange={e => updateAiFeature(i, 'icon', e.target.value)} />
+                          <input style={{ flex: 1 }} placeholder="Feature Title" value={f.title} onChange={e => updateAiFeature(i, 'title', e.target.value)} />
+                        </div>
+                        <textarea rows={2} placeholder="Feature Description" value={f.text} onChange={e => updateAiFeature(i, 'text', e.target.value)} />
+                      </div>
+                    ))}
+
+                    <div className="da-form-btns">
+                      <button className="da-save-btn" onClick={saveAiSection}>💾 Save AI Section</button>
+                      <button className="da-cancel-btn" onClick={() => setEditAiSection(null)}>Cancel</button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="da-card-view">
+                    <div className="da-card-info">
+                      <div className="da-card-badge">{aiSection.badge}</div>
+                      <h3>{aiSection.title}</h3>
+                      <p style={{ color: '#94a3b8', fontSize: '14px', marginBottom: '20px' }}>{aiSection.description}</p>
+                      
+                      <div className="da-video-preview" style={{ marginBottom: '20px' }}>
+                        <video key={aiSection.video} autoPlay muted loop playsInline style={{ width: '100%', borderRadius: '12px', border: '1px solid #8b5cf6' }}>
+                          <source src={aiSection.video} type="video/mp4" />
+                        </video>
+                      </div>
+
+                      <div className="da-ai-features-preview" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                        {aiSection.features.map((f, i) => (
+                          <div key={i} style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '10px' }}>
+                            <span style={{ fontSize: '20px' }}>{f.icon}</span>
+                            <h4 style={{ color: '#fff', fontSize: '14px', margin: '5px 0' }}>{f.title}</h4>
+                            <p style={{ color: '#94a3b8', fontSize: '12px', margin: 0 }}>{f.text}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    <div className="da-edit-btn-wrap" style={{ marginTop: '20px' }}>
+                      <button className="da-edit-btn" onClick={() => setEditAiSection({ ...aiSection })}>✏️ Edit AI Section</button>
                     </div>
                   </div>
                 )}
