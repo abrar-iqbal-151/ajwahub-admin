@@ -163,6 +163,15 @@ function Admin_Product() {
           <div className="ap-toolbar">
             <input className="search-input" placeholder="🔍 Search products..." value={search} onChange={e => setSearch(e.target.value)} />
             <span className="ap-count">{filtered.length} Products</span>
+            
+            <div className="da-video-specs-note" style={{ borderColor: '#8b5cf6', background: 'rgba(139,92,246,0.05)', margin: '15px 0 0 0', width: '100%' }}>
+              <strong style={{ color: '#8b5cf6' }}>📸 Recommended Shop Image Specs:</strong>
+              <ul style={{ listStyle: 'none', display: 'flex', gap: '20px', flexWrap: 'wrap', padding: 0 }}>
+                <li style={{ fontSize: '11px', color: '#9ca3af' }}><span style={{ color: '#eee', fontWeight: '600' }}>Resolution:</span> 1200x1200</li>
+                <li style={{ fontSize: '11px', color: '#9ca3af' }}><span style={{ color: '#eee', fontWeight: '600' }}>Format:</span> WebP / JPG</li>
+                <li style={{ fontSize: '11px', color: '#9ca3af' }}><span style={{ color: '#eee', fontWeight: '600' }}>Size:</span> Under 400KB</li>
+              </ul>
+            </div>
             <button className="ap-save" style={{ width: 'auto', padding: '8px 18px' }} onClick={() => setShowAddForm(!showAddForm)}>
               {showAddForm ? '✕ Cancel' : '➕ Add Product'}
             </button>

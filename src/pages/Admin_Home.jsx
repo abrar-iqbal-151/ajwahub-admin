@@ -175,6 +175,14 @@ function Admin_Home() {
               {/* SECTIONS TAB */}
               {activeTab === 'sections' && (
                 <div className="ah-sections">
+                  <div className="da-video-specs-note" style={{ borderColor: '#60a5fa', background: 'rgba(96,165,250,0.05)', margin: '0 0 20px 0', borderLeft: '4px solid #60a5fa', padding: '12px 15px', borderRadius: '8px' }}>
+                    <strong style={{ color: '#60a5fa', display: 'block', fontSize: '14px', marginBottom: '8px' }}>📸 Recommended Section Image Specs:</strong>
+                    <ul style={{ listStyle: 'none', display: 'flex', gap: '20px', flexWrap: 'wrap', padding: 0, margin: 0 }}>
+                      <li style={{ fontSize: '12px', color: '#9ca3af' }}><span style={{ color: '#eee', fontWeight: '600' }}>Resolution:</span> 800x800 (Square)</li>
+                      <li style={{ fontSize: '12px', color: '#9ca3af' }}><span style={{ color: '#eee', fontWeight: '600' }}>Format:</span> PNG or WebP</li>
+                      <li style={{ fontSize: '12px', color: '#9ca3af' }}><span style={{ color: '#eee', fontWeight: '600' }}>Size:</span> Under 300KB</li>
+                    </ul>
+                  </div>
                   {content.sections?.map((section, si) => (
                     <div key={section.key} className="ah-section-card">
                       {editSection?.key === section.key ? (
@@ -239,7 +247,16 @@ function Admin_Home() {
               {activeTab === 'slider' && (
                 <div className="ah-section-card">
                   <div className="ah-section-header">
-                    <h3>🖼️ Slider Images (3 images)</h3>
+                    <h3>🖼️ Main Slider Images (3 images)</h3>
+                  </div>
+
+                  <div className="da-video-specs-note" style={{ borderColor: '#f59e0b', background: 'rgba(245,158,11,0.05)', margin: '0 0 20px 0', borderLeft: '4px solid #f59e0b', padding: '12px 15px', borderRadius: '8px' }}>
+                    <strong style={{ color: '#f59e0b', display: 'block', fontSize: '14px', marginBottom: '8px' }}>📸 Recommended Slider Image Specs:</strong>
+                    <ul style={{ listStyle: 'none', display: 'flex', gap: '20px', flexWrap: 'wrap', padding: 0, margin: 0 }}>
+                      <li style={{ fontSize: '12px', color: '#9ca3af' }}><span style={{ color: '#eee', fontWeight: '600' }}>Resolution:</span> 1920x820 (Widescreen)</li>
+                      <li style={{ fontSize: '12px', color: '#9ca3af' }}><span style={{ color: '#eee', fontWeight: '600' }}>Format:</span> High Quality JPG or WebP</li>
+                      <li style={{ fontSize: '12px', color: '#9ca3af' }}><span style={{ color: '#eee', fontWeight: '600' }}>Size:</span> Under 800KB</li>
+                    </ul>
                   </div>
                   <div className="ah-slider-grid">
                     {sliderImages.map((img, i) => (

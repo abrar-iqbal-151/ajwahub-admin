@@ -243,6 +243,17 @@ function Description_Admin() {
         {activeTab === 'heroes' && !loading && (
           <div className="da-section">
             <h2 className="da-section-title">🎬 Hero Video Sections</h2>
+            
+            <div className="da-video-specs-note">
+              <strong>💡 Recommended Video Specs:</strong>
+              <ul>
+                <li><span>Resolution:</span> 1920x1080 (16:9 Aspect Ratio)</li>
+                <li><span>Frame Rate:</span> 24fps or 30fps (for smooth cinematic feel)</li>
+                <li><span>Format:</span> MP4 (H.264)</li>
+                <li><span>Size:</span> Keep below 10MB for fast loading</li>
+              </ul>
+            </div>
+
             <div className="da-cards">
               {heroes.map(hero => (
                 <div key={hero.key} className="da-card">
@@ -294,6 +305,17 @@ function Description_Admin() {
         {activeTab === 'feature' && !loading && feature && (
           <div className="da-section">
             <h2 className="da-section-title">✨ Feature Section (Why Choose AjwaHub)</h2>
+
+            <div className="da-video-specs-note" style={{ borderColor: '#fb923c', background: 'rgba(251,146,60,0.05)' }}>
+              <strong style={{ color: '#fb923c' }}>📸 Recommended Image Specs:</strong>
+              <ul>
+                <li><span>Resolution:</span> 800x800 (Square 1:1 Ratio)</li>
+                <li><span>Quality:</span> High Resolution (clear and sharp)</li>
+                <li><span>Format:</span> PNG or WebP (for best quality)</li>
+                <li><span>Size:</span> Under 500KB for each picture</li>
+              </ul>
+            </div>
+
             <div className="da-cards">
               <div className="da-card">
                 {editFeature ? (
@@ -340,33 +362,34 @@ function Description_Admin() {
                   </div>
                 ) : (
                   <div className="da-card-view">
-                    <h3>{feature.title}</h3>
-                    <p style={{ color: '#cbd5e1', marginBottom: '16px' }}>{feature.description}</p>
-                    
-                    {feature.images && feature.images.length > 0 && (
-                      <div style={{ marginBottom: '16px' }}>
-                        <h4 style={{ color: '#fb923c', fontSize: '14px', marginBottom: '8px' }}>Product Images:</h4>
-                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                          {feature.images.map((img, i) => (
-                            <div key={i} style={{ position: 'relative' }}>
-                              <img src={img} alt={`P${i+1}`} style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '12px', border: '2px solid rgba(251,146,60,0.3)' }} onError={e => e.target.src='/dates.png'} />
-                              <span style={{ position: 'absolute', bottom: '4px', right: '4px', background: 'rgba(0,0,0,0.7)', color: 'white', fontSize: '10px', padding: '2px 6px', borderRadius: '4px' }}>P{i+1}</span>
-                            </div>
-                          ))}
-                        </div>
+                    <div className="da-card-info">
+                      <div className="da-card-badge">Why Choose AjwaHub</div>
+                      <h3>{feature.title}</h3>
+                      <p style={{ color: '#9ca3af', fontSize: '14px', lineHeight: '1.6', marginBottom: '20px' }}>{feature.description}</p>
+                      
+                      <h4 style={{ color: '#fb923c', fontSize: '13px', textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '0.5px' }}>🖼️ Product Images (P1 - P4):</h4>
+                      <div className="da-feature-img-grid">
+                        {(feature.images || []).map((img, i) => (
+                          <div key={i} className="da-feature-img-box">
+                            <img src={img} alt={`P${i+1}`} onError={e => { e.target.onerror = null; e.target.src = 'https://placehold.co/100x100/1f2937/9ca3af?text=P'+(i+1); }} />
+                            <span>P{i+1}</span>
+                          </div>
+                        ))}
                       </div>
-                    )}
-                    
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                      {feature.features.map((item, i) => (
-                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '8px', background: 'rgba(251,146,60,0.1)', borderRadius: '8px' }}>
-                          <span style={{ fontSize: '18px' }}>{item.icon}</span>
-                          <p style={{ margin: 0, color: '#f1f5f9' }}>{item.text}</p>
-                        </div>
-                      ))}
+
+                      <h4 style={{ color: '#fb923c', fontSize: '13px', textTransform: 'uppercase', marginTop: '20px', marginBottom: '12px', letterSpacing: '0.5px' }}>✅ Key Features:</h4>
+                      <div className="da-feature-list">
+                        {(feature.features || []).map((f, i) => (
+                          <div key={i} className="da-feature-item-view">
+                            <span className="da-feature-icon">{f.icon}</span>
+                            <span className="da-feature-text">{f.text}</span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div className="da-edit-btn-wrap" style={{ marginTop: '16px' }}>
-                      <button className="da-edit-btn" onClick={() => setEditFeature({ ...feature, images: feature.images || [] })}>✏️ Edit</button>
+                    
+                    <div className="da-edit-btn-wrap">
+                      <button className="da-edit-btn" onClick={() => setEditFeature({ ...feature })}>✏️ Edit Section</button>
                     </div>
                   </div>
                 )}
@@ -377,6 +400,18 @@ function Description_Admin() {
 
         {activeTab === 'products' && !loading && (
           <div className="da-section">
+            <h2 className="da-section-title">🛍️ Premium Collection Products</h2>
+
+            <div className="da-video-specs-note" style={{ borderColor: '#4ade80', background: 'rgba(74,222,128,0.05)' }}>
+              <strong style={{ color: '#4ade80' }}>📸 Recommended Product Image Specs:</strong>
+              <ul>
+                <li><span>Resolution:</span> 1000x1000 (1:1 Square Ratio)</li>
+                <li><span>Background:</span> Transparent or clean lifestyle background</li>
+                <li><span>Format:</span> PNG (for transparent) or JPG</li>
+                <li><span>Size:</span> Under 300KB for best performance</li>
+              </ul>
+            </div>
+
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
               <h2 className="da-section-title" style={{ margin: 0 }}>🛍️ Products ({products.length})</h2>
               <button className="da-save-btn" style={{ width: 'auto', padding: '8px 18px' }} onClick={() => setShowAddProduct(!showAddProduct)}>
@@ -570,6 +605,17 @@ function Description_Admin() {
         {activeTab === 'deliveryMap' && !loading && deliveryMap && (
           <div className="da-section">
             <h2 className="da-section-title">🗺️ Delivery Map Section</h2>
+
+            <div className="da-video-specs-note" style={{ borderColor: '#60a5fa', background: 'rgba(96,165,250,0.05)' }}>
+              <strong style={{ color: '#60a5fa' }}>📸 Recommended Map Image Specs:</strong>
+              <ul>
+                <li><span>Resolution:</span> 1200x800 (Landscape 3:2 Ratio)</li>
+                <li><span>Clarity:</span> High Resolution (text must be readable)</li>
+                <li><span>Format:</span> PNG or JPG</li>
+                <li><span>Size:</span> Under 800KB</li>
+              </ul>
+            </div>
+
             <div className="da-cards">
               <div className="da-card">
                 {editDeliveryMap ? (
@@ -619,7 +665,18 @@ function Description_Admin() {
         )}
         {activeTab === 'about' && !loading && about && (
           <div className="da-section">
-            <h2 className="da-section-title">🌱 About Section</h2>
+            <h2 className="da-section-title">🌱 About Section (How Our Dates Are Grown)</h2>
+
+            <div className="da-video-specs-note" style={{ borderColor: '#22c55e', background: 'rgba(34,197,94,0.05)' }}>
+              <strong style={{ color: '#22c55e' }}>📸 Recommended Slideshow Image Specs:</strong>
+              <ul>
+                <li><span>Resolution:</span> 1200x800 (Landscape 3:2 Ratio)</li>
+                <li><span>Aesthetic:</span> High-quality farm/process photography</li>
+                <li><span>Format:</span> JPG or WebP</li>
+                <li><span>Size:</span> Under 600KB for each slide</li>
+              </ul>
+            </div>
+
             <div className="da-cards">
               <div className="da-card">
                 {editAbout ? (
