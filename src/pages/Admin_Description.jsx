@@ -20,7 +20,7 @@ function Description_Admin() {
   const [paymentIcons, setPaymentIcons] = useState([]);
   const [products, setProducts] = useState([]);
   const [editProduct, setEditProduct] = useState(null);
-  const [newProduct, setNewProduct] = useState({ name: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', discount: '', category: 'dates' });
+  const [newProduct, setNewProduct] = useState({ name: '', arabicName: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', discount: '', category: 'dates', storageNote: '', weights: [] });
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [reviews, setReviews] = useState([]);
   const [editReview, setEditReview] = useState(null);
@@ -116,7 +116,18 @@ function Description_Admin() {
   const saveProduct = async (product) => {
     const res = await fetch(`${API}/content/product/${product.id}`, {
       method: 'PUT', headers: authHeaders,
-      body: JSON.stringify({ name: product.name, price: product.price, discount: product.discount, stock: product.stock, description: product.description, rating: product.rating, image: product.image })
+      body: JSON.stringify({ 
+        name: product.name, 
+        arabicName: product.arabicName,
+        price: product.price, 
+        discount: product.discount, 
+        stock: product.stock, 
+        description: product.description, 
+        rating: product.rating, 
+        image: product.image,
+        storageNote: product.storageNote,
+        weights: product.weights
+      })
     });
     if (res.ok) { setProducts(products.map(p => p.id === product.id ? product : p)); setEditProduct(null); showMsg('✅ Product updated!'); }
   };
@@ -128,7 +139,7 @@ function Description_Admin() {
       body: JSON.stringify({ ...newProduct, price: Number(newProduct.price) })
     });
     const data = await res.json();
-    if (res.ok) { setProducts([...products, data.product]); setNewProduct({ name: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', discount: '', category: 'dates' }); setShowAddProduct(false); showMsg('✅ Product added!'); }
+    if (res.ok) { setProducts([...products, data.product]); setNewProduct({ name: '', arabicName: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', discount: '', category: 'dates', storageNote: '', weights: [] }); setShowAddProduct(false); showMsg('✅ Product added!'); }
     else showMsg('❌ Failed to add');
   };
 
@@ -379,40 +390,50 @@ function Description_Admin() {
                 <div className="da-edit-form">
                   <label>Name</label>
                   <input placeholder="Product name" value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
+                  
+                  <label>Arabic Name</label>
+                  <input placeholder="عجوة بني" style={{ textAlign: 'right' }} value={newProduct.arabicName} onChange={e => setNewProduct({ ...newProduct, arabicName: e.target.value })} />
+
                   <label>Price (PKR)</label>
                   <input type="number" placeholder="e.g. 1200" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
-                  <label>Weight</label>
-                  <input placeholder="e.g. 1kg" value={newProduct.weight} onChange={e => setNewProduct({ ...newProduct, weight: e.target.value })} />
+                  
+                  <label>Storage Note</label>
+                  <textarea rows={3} placeholder="Storage advice..." value={newProduct.storageNote} onChange={e => setNewProduct({ ...newProduct, storageNote: e.target.value })} />
+
+                  <label>Weights & Savings</label>
+                  <div className="da-weights-editor">
+                    {(newProduct.weights || []).map((w, idx) => (
+                      <div key={idx} className="da-weight-row">
+                        <input placeholder="Label (e.g. 1kg Box)" value={w.label} onChange={e => {
+                          const ws = [...newProduct.weights]; ws[idx].label = e.target.value;
+                          setNewProduct({ ...newProduct, weights: ws });
+                        }} />
+                        <input placeholder="Savings (e.g. Save Rs 500)" value={w.savings} onChange={e => {
+                          const ws = [...newProduct.weights]; ws[idx].savings = e.target.value;
+                          setNewProduct({ ...newProduct, weights: ws });
+                        }} />
+                        <button onClick={() => setNewProduct({ ...newProduct, weights: newProduct.weights.filter((_, i) => i !== idx) })}>✕</button>
+                      </div>
+                    ))}
+                    <button className="da-add-btn" onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '', savings: '' }] })}>+ Add Weight Option</button>
+                  </div>
+
                   <label>Rating (1-5)</label>
                   <input type="number" min="1" max="5" step="0.1" value={newProduct.rating} onChange={e => setNewProduct({ ...newProduct, rating: Number(e.target.value) })} />
+                  
                   <label>Discount Tag</label>
                   <input placeholder="e.g. 50% OFF" value={newProduct.discount} onChange={e => setNewProduct({ ...newProduct, discount: e.target.value })} />
+                  
                   <label>Description</label>
                   <textarea rows={2} placeholder="Product description" value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+                  
                   <label>Image URL</label>
                   <input placeholder="e.g. /Product 1.png" value={newProduct.image} onChange={e => setNewProduct({ ...newProduct, image: e.target.value })} />
-                  <label className="da-upload-label">
-                    📤 Upload Image
-                    <input type="file" accept="image/*" style={{ display: 'none' }}
-                      onChange={async e => {
-                        const file = e.target.files[0]; if (!file) return;
-                        const formData = new FormData(); formData.append('file', file);
-                        const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
-                        const data = await res.json();
-                        if (res.ok) setNewProduct(p => ({ ...p, image: data.url || data.path }));
-                      }}
-                    />
-                  </label>
-                  {newProduct.image && <img src={newProduct.image} alt="preview" style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '8px' }} onError={e => e.target.style.display='none'} />}
-                  <label>Category</label>
-                  <select style={{ background: '#1f2937', border: '1px solid #374151', color: '#e5e7eb', padding: '8px', borderRadius: '8px', width: '100%' }}
-                    value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
-                    <option value="dates">Dates</option>
-                    <option value="dry">Dry Fruits</option>
-                  </select>
+                  
                   <label className="da-stock-label">
                     <input type="checkbox" checked={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.checked })} /> In Stock
                   </label>
+                  
                   <button className="da-save-btn" onClick={addProduct}>➕ Add Product</button>
                 </div>
               </div>
@@ -425,8 +446,31 @@ function Description_Admin() {
                     <div className="da-edit-form">
                       <label>Name</label>
                       <input value={editProduct.name} onChange={e => setEditProduct({ ...editProduct, name: e.target.value })} />
+                      <label>Arabic Name</label>
+                      <input style={{ textAlign: 'right' }} value={editProduct.arabicName} onChange={e => setEditProduct({ ...editProduct, arabicName: e.target.value })} />
                       <label>Price (PKR)</label>
                       <input type="number" value={editProduct.price} onChange={e => setEditProduct({ ...editProduct, price: Number(e.target.value) })} />
+                      <label>Storage Note</label>
+                      <textarea rows={3} value={editProduct.storageNote} onChange={e => setEditProduct({ ...editProduct, storageNote: e.target.value })} />
+                      
+                      <label>Weights & Savings</label>
+                      <div className="da-weights-editor">
+                        {(editProduct.weights || []).map((w, idx) => (
+                          <div key={idx} className="da-weight-row">
+                            <input placeholder="Label" value={w.label} onChange={e => {
+                              const ws = [...editProduct.weights]; ws[idx].label = e.target.value;
+                              setEditProduct({ ...editProduct, weights: ws });
+                            }} />
+                            <input placeholder="Savings" value={w.savings} onChange={e => {
+                              const ws = [...editProduct.weights]; ws[idx].savings = e.target.value;
+                              setEditProduct({ ...editProduct, weights: ws });
+                            }} />
+                            <button onClick={() => setEditProduct({ ...editProduct, weights: editProduct.weights.filter((_, i) => i !== idx) })}>✕</button>
+                          </div>
+                        ))}
+                        <button className="da-add-btn" onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '', savings: '' }] })}>+ Add Weight Option</button>
+                      </div>
+
                       <label>Rating (1 - 5)</label>
                       <input type="number" min="1" max="5" step="0.1" value={editProduct.rating} onChange={e => setEditProduct({ ...editProduct, rating: Number(e.target.value) })} />
                       <label>Discount Tag</label>
@@ -435,24 +479,6 @@ function Description_Admin() {
                       <textarea rows={3} value={editProduct.description} onChange={e => setEditProduct({ ...editProduct, description: e.target.value })} />
                       <label>Image URL</label>
                       <input placeholder="Image URL" value={editProduct.image} onChange={e => setEditProduct({ ...editProduct, image: e.target.value })} />
-                      <label className="da-upload-label">
-                        📤 Upload Image
-                        <input type="file" accept="image/*" style={{ display: 'none' }}
-                          onChange={async e => {
-                            const file = e.target.files[0];
-                            if (!file) return;
-                            const formData = new FormData();
-                            formData.append('file', file);
-                            const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
-                            const data = await res.json();
-                            if (res.ok) setEditProduct({ ...editProduct, image: data.url || data.path });
-                          }}
-                        />
-                      </label>
-                      <label className="da-stock-label">
-                        <input type="checkbox" checked={editProduct.stock} onChange={e => setEditProduct({ ...editProduct, stock: e.target.checked })} />
-                        In Stock
-                      </label>
                       <div className="da-form-btns">
                         <button className="da-save-btn" onClick={() => saveProduct(editProduct)}>💾 Save</button>
                         <button className="da-cancel-btn" onClick={() => setEditProduct(null)}>Cancel</button>
@@ -468,13 +494,19 @@ function Description_Admin() {
                           onError={e => { e.target.onerror = null; e.target.src = 'https://placehold.co/200x130/1f2937/9ca3af?text=No+Image'; }}
                         />
                       </div>
-                      <h4>{product.name}</h4>
+                      <div className="da-product-header">
+                        <h4>{product.name}</h4>
+                        <span className="da-arabic-text">{product.arabicName}</span>
+                      </div>
                       <div className="da-product-meta">
                         <span className="da-price">PKR {product.price}</span>
                         <span className="da-discount">{product.discount}</span>
                         <span className={`da-stock ${product.stock ? 'in' : 'out'}`}>{product.stock ? '✅ In Stock' : '❌ Out of Stock'}</span>
                       </div>
                       <div className="da-rating-row">{renderStars(product.rating)} <span className="da-rating-val">({product.rating})</span></div>
+                      
+                      {product.storageNote && <p className="da-storage-preview">{product.storageNote.substring(0, 40)}...</p>}
+                      
                       <div className="da-form-btns">
                         <button className="da-edit-btn" onClick={() => setEditProduct({ ...product })}>✏️ Edit</button>
                         <button className="da-delete-btn" onClick={() => deleteProduct(product.id)}>🗑️ Delete</button>
