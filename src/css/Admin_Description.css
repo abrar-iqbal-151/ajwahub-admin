@@ -244,3 +244,97 @@
     flex: 1;
   }
 }
+/* AI SECTION MODERN STYLES */
+.da-ai-feature-edit {
+  background: rgba(15, 23, 42, 0.4) !important;
+  border: 1px solid rgba(139, 92, 246, 0.2) !important;
+  backdrop-filter: blur(10px);
+  padding: 20px !important;
+  border-radius: 16px !important;
+  transition: all 0.3s ease;
+}
+
+.da-ai-feature-edit:hover {
+  border-color: rgba(139, 92, 246, 0.5) !important;
+  background: rgba(139, 92, 246, 0.05) !important;
+}
+
+.da-ai-features-preview {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.da-ai-feature-preview-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 16px;
+  border-radius: 14px;
+  transition: all 0.3s ease;
+}
+
+.da-ai-feature-preview-card:hover {
+  background: rgba(139, 92, 246, 0.08);
+  border-color: rgba(139, 92, 246, 0.3);
+  transform: translateY(-4px);
+}
+
+.da-ai-preview-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+  display: block;
+  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
+}
+
+.da-ai-video-container {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid rgba(139, 92, 246, 0.2);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  background: #000;
+  margin: 20px 0;
+}
+
+.da-ai-video-container video {
+  width: 100%;
+  display: block;
+}
+
+.da-ai-video-overlay-badge {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: rgba(139, 92, 246, 0.8);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  backdrop-filter: blur(4px);
+}
+
+/* Tab specific colors */
+.da-tab[data-tab="ai"].active {
+  background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+  border-color: #8b5cf6;
+}
+
+.da-ai-save-btn {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+}
+
+.da-ai-save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(139, 92, 246, 0.5);
+}
+
+@media (max-width: 768px) {
+  .da-ai-features-preview {
+    grid-template-columns: 1fr;
+  }
+}

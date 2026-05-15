@@ -50,7 +50,7 @@ function Description_Admin() {
 
   const fetchAll = async (t) => {
     setLoading(true);
-    const [h, p, r, f, d, a, pi] = await Promise.all([
+    const [h, p, r, f, d, a, pi, ai] = await Promise.all([
       fetch(`${API}/content/heroes`).then(r => r.json()),
       fetch(`${API}/content/products`).then(r => r.json()),
       fetch(`${API}/content/reviews`).then(r => r.json()),
@@ -254,8 +254,9 @@ function Description_Admin() {
         <div className="da-tabs">
           <button className={`da-tab ${activeTab === 'heroes' ? 'active' : ''}`} onClick={() => setActiveTab('heroes')}>🎬 Hero Videos</button>
           <button className={`da-tab ${activeTab === 'feature' ? 'active' : ''}`} onClick={() => setActiveTab('feature')}>✨ Feature Section</button>
-          <button className={`da-tab ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => setActiveTab('ai')}>🤖 AI Section</button>
+          <button className={`da-tab ${activeTab === 'ai' ? 'active' : ''}`} onClick={() => setActiveTab('ai')} data-tab="ai">🤖 AI Section</button>
           <button className={`da-tab ${activeTab === 'products' ? 'active' : ''}`} onClick={() => setActiveTab('products')}>🛍️ Products</button>
+
 
           <button className={`da-tab ${activeTab === 'reviews' ? 'active' : ''}`} onClick={() => setActiveTab('reviews')}>⭐ Reviews</button>
           <button className={`da-tab ${activeTab === 'deliveryMap' ? 'active' : ''}`} onClick={() => setActiveTab('deliveryMap')}>🗺️ Delivery Map</button>
@@ -474,38 +475,40 @@ function Description_Admin() {
                     ))}
 
                     <div className="da-form-btns">
-                      <button className="da-save-btn" onClick={saveAiSection}>💾 Save AI Section</button>
+                      <button className="da-save-btn da-ai-save-btn" onClick={saveAiSection}>💾 Save AI Section</button>
                       <button className="da-cancel-btn" onClick={() => setEditAiSection(null)}>Cancel</button>
                     </div>
                   </div>
                 ) : (
                   <div className="da-card-view">
                     <div className="da-card-info">
-                      <div className="da-card-badge">{aiSection.badge}</div>
-                      <h3>{aiSection.title}</h3>
-                      <p style={{ color: '#94a3b8', fontSize: '14px', marginBottom: '20px' }}>{aiSection.description}</p>
+                      <div className="da-card-badge" style={{ background: 'rgba(139, 92, 246, 0.2)', color: '#a78bfa', borderColor: 'rgba(139, 92, 246, 0.4)' }}>{aiSection.badge}</div>
+                      <h3 style={{ fontSize: '24px', margin: '10px 0' }}>{aiSection.title}</h3>
+                      <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: '1.7', marginBottom: '25px' }}>{aiSection.description}</p>
                       
-                      <div className="da-video-preview" style={{ marginBottom: '20px' }}>
-                        <video key={aiSection.video} autoPlay muted loop playsInline style={{ width: '100%', borderRadius: '12px', border: '1px solid #8b5cf6' }}>
+                      <div className="da-ai-video-container">
+                        <div className="da-ai-video-overlay-badge">Live Preview</div>
+                        <video key={aiSection.video} autoPlay muted loop playsInline>
                           <source src={aiSection.video} type="video/mp4" />
                         </video>
                       </div>
 
-                      <div className="da-ai-features-preview" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
+                      <div className="da-ai-features-preview">
                         {aiSection.features.map((f, i) => (
-                          <div key={i} style={{ background: 'rgba(255,255,255,0.05)', padding: '12px', borderRadius: '10px' }}>
-                            <span style={{ fontSize: '20px' }}>{f.icon}</span>
-                            <h4 style={{ color: '#fff', fontSize: '14px', margin: '5px 0' }}>{f.title}</h4>
-                            <p style={{ color: '#94a3b8', fontSize: '12px', margin: 0 }}>{f.text}</p>
+                          <div key={i} className="da-ai-feature-preview-card">
+                            <span className="da-ai-preview-icon">{f.icon}</span>
+                            <h4 style={{ color: '#fff', fontSize: '15px', fontWeight: '700', marginBottom: '6px' }}>{f.title}</h4>
+                            <p style={{ color: '#94a3b8', fontSize: '13px', lineHeight: '1.5', margin: 0 }}>{f.text}</p>
                           </div>
                         ))}
                       </div>
                     </div>
-                    <div className="da-edit-btn-wrap" style={{ marginTop: '20px' }}>
-                      <button className="da-edit-btn" onClick={() => setEditAiSection({ ...aiSection })}>✏️ Edit AI Section</button>
+                    <div className="da-edit-btn-wrap" style={{ marginTop: '25px' }}>
+                      <button className="da-edit-btn" style={{ borderColor: 'rgba(139, 92, 246, 0.4)', color: '#a78bfa', background: 'rgba(139, 92, 246, 0.1)' }} onClick={() => setEditAiSection({ ...aiSection })}>✏️ Edit AI Section</button>
                     </div>
                   </div>
                 )}
+
               </div>
             </div>
           </div>
