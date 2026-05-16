@@ -71,9 +71,18 @@ function Admin_Home() {
   };
 
   const saveSection = async (section) => {
+    const cleanedItems = section.items.map(item => {
+      const newItem = { name: item.name };
+      if (section.key === 'fitness') {
+        newItem.video = item.video || '';
+      } else {
+        newItem.image = item.image || '';
+      }
+      return newItem;
+    });
     const res = await fetch(`${API}/home-content/section/${section.key}`, {
       method: 'PUT', headers: authHeaders,
-      body: JSON.stringify({ title: section.title, items: section.items })
+      body: JSON.stringify({ title: section.title, items: cleanedItems })
     });
     if (res.ok) { showMsg('✅ Section updated!'); setEditSection(null); fetchContent(token); }
     else showMsg('❌ Failed to update');
@@ -107,6 +116,20 @@ function Admin_Home() {
     const updated = JSON.parse(JSON.stringify(editSection));
     updated.items[itemIdx][field] = value;
     setEditSection(updated);
+  };
+
+  const startEditing = (section) => {
+    const cloned = JSON.parse(JSON.stringify(section));
+    cloned.items = cloned.items.map(item => {
+      const newItem = { name: item.name };
+      if (cloned.key === 'fitness') {
+        newItem.video = item.video || '';
+      } else {
+        newItem.image = item.image || '';
+      }
+      return newItem;
+    });
+    setEditSection(cloned);
   };
 
   const uploadFile = async (file, callback) => {
@@ -194,7 +217,7 @@ function Admin_Home() {
                             {editSection.items.map((item, ii) => (
                               <div key={ii} className="ah-item-edit">
                                 <input placeholder="Name" value={item.name} onChange={e => updateItem(si, ii, 'name', e.target.value)} />
-                                {item.video !== undefined ? (
+                                {editSection.key === 'fitness' ? (
                                   <>
                                     <input placeholder="Video path" value={item.video} onChange={e => updateItem(si, ii, 'video', e.target.value)} />
                                     <label className="ah-upload-label">
@@ -225,13 +248,13 @@ function Admin_Home() {
                         <div className="ah-section-view">
                           <div className="ah-section-header">
                             <h3>{section.title}</h3>
-                            <button className="ah-btn-edit" onClick={() => setEditSection(JSON.parse(JSON.stringify(section)))}>✏️ Edit</button>
+                            <button className="ah-btn-edit" onClick={() => startEditing(section)}>✏️ Edit</button>
                           </div>
                           <div className="ah-items-preview">
                             {section.items.map((item, ii) => (
                               <div key={ii} className="ah-item-chip">
-                                {item.image && <img src={`http://localhost:5173${item.image}`} alt={item.name} onError={e => e.target.style.display = 'none'} />}
-                                {item.video && <span className="ah-video-icon">🎬</span>}
+                                {section.key !== 'fitness' && item.image && <img src={`http://localhost:5173${item.image}`} alt={item.name} onError={e => e.target.style.display = 'none'} />}
+                                {section.key === 'fitness' && item.video && <span className="ah-video-icon">🎬</span>}
                                 <span>{item.name}</span>
                               </div>
                             ))}
