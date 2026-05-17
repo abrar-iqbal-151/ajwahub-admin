@@ -11,7 +11,6 @@ import Admin_Product from './pages/Admin_Product';
 import Admin_Wishlist from './pages/Admin_Wishlist';
 import Admin_GiftOrders from './pages/Admin_GiftOrders';
 import Admin_GiftBoxes from './pages/Admin_GiftBoxes';
-import Admin_Contact from './pages/Admin_Contact';
 import Admin_Payment from './pages/Admin_Payment';
 import Admin_GymAI from './pages/Admin_GymAI';
 
@@ -31,7 +30,6 @@ function App() {
       <Route path="/admin-wishlist" element={<Admin_Wishlist />} />
       <Route path="/admin-gift-orders" element={<Admin_GiftOrders />} />
       <Route path="/admin-gift-boxes" element={<Admin_GiftBoxes />} />
-      <Route path="/admin-contact" element={<Admin_Contact />} />
       <Route path="/admin-payments" element={<Admin_Payment />} />
       <Route path="/admin-gymai" element={<Admin_GymAI />} />
     </Routes>
