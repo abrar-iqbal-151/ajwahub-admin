@@ -14,9 +14,7 @@ const menuItems = [
   { icon: '👑', label: 'Premium', path: '/admin-premium' },
   { icon: '❤️', label: 'Wishlists', path: '/admin-wishlist' },
   { icon: '🎁', label: 'Gift Orders', path: '/admin-gift-orders' },
-  { icon: '📦', label: 'Gift Boxes', path: '/admin-gift-boxes' },
-  { icon: '📬', label: 'Contact', path: '/admin-contact' },
-  { icon: '💳', label: 'Payments', path: '/admin-payments' },
+  { icon: '📦', label: 'Gift Boxes', path: '/admin-gift-boxes' },  { icon: '💳', label: 'Payments', path: '/admin-payments' },
 ];
 
 function Admin_Product() {
