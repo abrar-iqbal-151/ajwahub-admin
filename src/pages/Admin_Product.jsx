@@ -13,9 +13,10 @@ const menuItems = [
   { icon: '🛍️', label: 'Products', path: '/admin-products' },
   { icon: '👑', label: 'Premium', path: '/admin-premium' },
   { icon: '❤️', label: 'Wishlists', path: '/admin-wishlist' },
-  { icon: '??', label: 'Ratings', path: '/admin-ratings' },
+  { icon: '🌟', label: 'Ratings', path: '/admin-ratings' },
   { icon: '🎁', label: 'Gift Orders', path: '/admin-gift-orders' },
-  { icon: '📦', label: 'Gift Boxes', path: '/admin-gift-boxes' },  { icon: '💳', label: 'Payments', path: '/admin-payments' },
+  { icon: '📦', label: 'Gift Boxes', path: '/admin-gift-boxes' },
+  { icon: '💳', label: 'Payments', path: '/admin-payments' },
 ];
 
 function Admin_Product() {

@@ -1,1 +1,214 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ── AJWAHUB ADMIN UNIFIED DEEP CRIMSON RED & GOLD THEME ── */
+
+:root {
+  --primary-red: #dc2626;
+  --secondary-red: #991b1b;
+  --neon-red: #ef4444;
+  --light-red: #f87171;
+  --gold-accent: #c5a059;
+  --dark-bg-start: #260000;
+  --dark-bg-end: #090000;
+  --card-bg-dark: #120404;
+  --glass-red: rgba(220, 38, 38, 0.15);
+  --glass-border-red: rgba(220, 38, 38, 0.3);
+}
+
+/* Global Background Override for All Pages */
+body, 
+.da-page, 
+.dashboard, 
+.auth-page,
+.ap-page,
+.ah-page,
+.aw-page,
+.ago-page,
+.agb-page,
+.app-page {
+  background: radial-gradient(circle at 30% 50%, var(--dark-bg-start) 0%, var(--dark-bg-end) 85%) !important;
+  color: #f1f5f9 !important;
+}
+
+/* Navbar / Topbar Global Overrides */
+.navbar,
+.da-nav,
+.topbar,
+.ap-nav,
+.ah-nav,
+.aw-nav,
+.ago-nav,
+.agb-nav,
+.app-nav {
+  background: rgba(20, 10, 10, 0.95) !important;
+  border-bottom: 1px solid var(--glass-border-red) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Sidebar Overrides */
+.sidebar {
+  background: #120404 !important;
+  border-right: 1px solid var(--glass-border-red) !important;
+}
+.sidebar-logo {
+  background: #120404 !important;
+  border-bottom: 1px solid var(--glass-border-red) !important;
+}
+.sidebar-footer {
+  border-top: 1px solid var(--glass-border-red) !important;
+}
+
+/* Title and Branding Accents */
+.da-nav-title,
+.topbar-title,
+.welcome-time,
+.stat-card h2,
+.da-section-title,
+.ah-section-title,
+.ap-title,
+.aw-title,
+.ago-title,
+.invite-header h3,
+.auth-header h1 {
+  color: var(--light-red) !important;
+  background: linear-gradient(135deg, var(--light-red), var(--gold-accent)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+.da-nav-divider {
+  background: var(--glass-border-red) !important;
+}
+
+/* Welcome and Summary Cards */
+.welcome-card,
+.invite-card {
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.15), rgba(153, 27, 27, 0.08)) !important;
+  border: 1px solid var(--glass-border-red) !important;
+}
+
+.stat-card,
+.quick-card,
+.da-card,
+.ap-card,
+.ah-card,
+.panel-table-box,
+.da-init-box,
+.auth-box {
+  background: var(--card-bg-dark) !important;
+  border: 1px solid rgba(220, 38, 38, 0.15) !important;
+}
+
+/* Buttons Theme Overrides (Vibrant Red Gradients) */
+.btn-primary,
+.auth-btn,
+.login-btn,
+.signup-btn,
+.da-save-btn,
+.ah-btn-primary,
+.ap-btn-primary,
+.ago-order-btn,
+.invite-btn {
+  background: linear-gradient(135deg, var(--primary-red), var(--secondary-red)) !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.btn-primary:hover,
+.auth-btn:hover:not(:disabled),
+.login-btn:hover:not(:disabled),
+.signup-btn:hover:not(:disabled),
+.da-save-btn:hover,
+.ah-btn-primary:hover,
+.ap-btn-primary:hover,
+.ago-order-btn:hover,
+.invite-btn:hover {
+  opacity: 0.95 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.45) !important;
+}
+
+.btn-secondary,
+.da-back-btn,
+.da-logout-btn,
+.da-edit-btn,
+.ah-btn-secondary,
+.ap-btn-secondary,
+.invite-copy-btn {
+  background: var(--glass-red) !important;
+  color: var(--light-red) !important;
+  border: 1px solid var(--glass-border-red) !important;
+}
+
+.btn-secondary:hover,
+.da-back-btn:hover,
+.da-logout-btn:hover,
+.da-edit-btn:hover,
+.ah-btn-secondary:hover,
+.ap-btn-secondary:hover,
+.invite-copy-btn:hover {
+  background: rgba(220, 38, 38, 0.28) !important;
+  color: #fff !important;
+}
+
+/* Sidebar Hover / Active states */
+.sidebar-item:hover {
+  background: var(--glass-red) !important;
+  color: var(--gold-accent) !important;
+}
+
+.sidebar-item.active {
+  background: rgba(220, 38, 38, 0.2) !important;
+  color: var(--gold-accent) !important;
+  border-left: 4px solid var(--gold-accent) !important;
+}
+
+/* Quick card Hover */
+.quick-card:hover {
+  background: rgba(220, 38, 38, 0.15) !important;
+  border-color: var(--glass-border-red) !important;
+  color: var(--gold-accent) !important;
+}
+.quick-card:hover .quick-arrow {
+  color: var(--gold-accent) !important;
+}
+
+/* Active tab styles */
+.da-tab.active,
+.ah-tab.active,
+.ap-tab.active {
+  background: linear-gradient(135deg, var(--primary-red), var(--secondary-red)) !important;
+  color: #fff !important;
+  border-color: var(--primary-red) !important;
+}
+
+.da-card-badge {
+  background: var(--glass-red) !important;
+  color: var(--light-red) !important;
+  border: 1px solid var(--glass-border-red) !important;
+}
+
+/* Input Focus Overrides */
+.form-input:focus,
+.search-input:focus,
+.da-edit-form input:focus,
+.da-edit-form textarea:focus,
+.ah-title-input:focus,
+.ah-item-edit input:focus,
+.ah-slider-item input:focus,
+.ah-edit-box input:focus {
+  border-color: var(--neon-red) !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2) !important;
+}
+
+.checkmark {
+  border: 1.5px solid rgba(220, 38, 38, 0.4) !important;
+}
+.checkbox-container input:checked + .checkmark {
+  background: var(--primary-red) !important;
+  border-color: var(--primary-red) !important;
+}
+
+.aw-bar {
+  background: linear-gradient(90deg, var(--primary-red), var(--light-red)) !important;
+}

@@ -1,14 +1,38 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import '../css/Admin_Description.css';
+import '../css/AdminPanel.css';
 
 const API = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api`;
 
+const menuItems = [
+  { icon: '🏠', label: 'Dashboard', path: '/panel' },
+  { icon: '👥', label: 'Users', path: '/panel/users' },
+  { icon: '🎬', label: 'Description Editor', path: '/description' },
+  { icon: '🏡', label: 'Home Editor', path: '/home-editor' },
+  { icon: '🛍️', label: 'Products', path: '/admin-products' },
+  { icon: '👑', label: 'Premium', path: '/admin-premium' },
+  { icon: '❤️', label: 'Wishlists', path: '/admin-wishlist' },
+  { icon: '🌟', label: 'Ratings', path: '/admin-ratings' },
+  { icon: '🎁', label: 'Gift Orders', path: '/admin-gift-orders' },
+  { icon: '📦', label: 'Gift Boxes', path: '/admin-gift-boxes' },
+  { icon: '💳', label: 'Payments', path: '/admin-payments' },
+  { icon: '🎥', label: 'GymAI Videos', path: '/admin-gymai' },
+];
+
 function Description_Admin() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [token, setToken] = useState('');
   const [admin, setAdmin] = useState(null);
   const [activeTab, setActiveTab] = useState('heroes');
+
+  const handleLogout = () => {
+    localStorage.removeItem('ajwaHub_admin');
+    localStorage.removeItem('ajwaHub_adminToken');
+    navigate('/login');
+  };
   const [heroes, setHeroes] = useState([]);
   const [editHero, setEditHero] = useState(null);
   const [feature, setFeature] = useState(null);
@@ -225,24 +249,49 @@ function Description_Admin() {
     ));
 
   return (
-    <div className="da-page">
-      <nav className="da-nav">
-        <div className="da-nav-left">
-          <button className="da-back-btn" onClick={() => navigate('/panel')}>
-            ←
-          </button>
-          <div className="da-nav-divider" />
-          <img src="/LOGO.jpeg" alt="Logo" className="da-nav-logo" />
-          <span className="da-nav-title">Description Editor</span>
-        </div>
-        <div className="da-nav-right">
-          {admin && <span className="da-admin-name">👤 {admin.name}</span>}
-          <button className="da-logout-btn" onClick={() => { localStorage.removeItem('ajwaHub_admin'); localStorage.removeItem('ajwaHub_adminToken'); navigate('/login'); }}>🚪 Logout</button>
-        </div>
-      </nav>
+    <div className="dashboard">
 
-      <div className="da-body">
-        {msg && <div className="da-msg">{msg}</div>}
+      {/* SIDEBAR */}
+      <aside className={`sidebar ${sidebarOpen ? 'open' : 'closed'}`}>
+        <div className="sidebar-logo">
+          <img src="/LOGO.jpeg" alt="logo" className="sidebar-logo-img" />
+          {sidebarOpen && <span className="sidebar-logo-text">AjwaHub</span>}
+        </div>
+        <nav className="sidebar-nav">
+          {menuItems.map(item => (
+            <button
+              key={item.path}
+              className={`sidebar-item ${location.pathname === item.path ? 'active' : ''}`}
+              onClick={() => navigate(item.path)}
+            >
+              <span className="sidebar-icon">{item.icon}</span>
+              {sidebarOpen && <span className="sidebar-label">{item.label}</span>}
+            </button>
+          ))}
+        </nav>
+        <div className="sidebar-footer">
+          <button className="sidebar-item sidebar-logout" onClick={handleLogout}>
+            <span className="sidebar-icon">🚪</span>
+            {sidebarOpen && <span className="sidebar-label">Logout</span>}
+          </button>
+        </div>
+      </aside>
+
+      {/* MAIN */}
+      <div className="dashboard-main">
+        <header className="topbar">
+          <button className="topbar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>
+            {sidebarOpen ? '◀' : '▶'}
+          </button>
+          <h1 className="topbar-title">🎬 Description Editor</h1>
+          <div className="topbar-right">
+            {admin && <span className="topbar-admin">👤 {admin.name}</span>}
+          </div>
+        </header>
+
+        <div className="dashboard-content">
+          <div className="da-body">
+            {msg && <div className="da-msg">{msg}</div>}
 
         {heroes.length === 0 && products.length === 0 && !loading && (
           <div className="da-init-box">
@@ -998,6 +1047,8 @@ function Description_Admin() {
             </label>
           </div>
         )}
+          </div>
+        </div>
       </div>
     </div>
   );
