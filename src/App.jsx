@@ -13,6 +13,7 @@ import Admin_GiftOrders from './pages/Admin_GiftOrders';
 import Admin_GiftBoxes from './pages/Admin_GiftBoxes';
 import Admin_Payment from './pages/Admin_Payment';
 import Admin_GymAI from './pages/Admin_GymAI';
+import Admin_Ratings from './pages/Admin_Ratings';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
       <Route path="/admin-premium" element={<Admin_Premium />} />
       <Route path="/admin-products" element={<Admin_Product />} />
       <Route path="/admin-wishlist" element={<Admin_Wishlist />} />
+      <Route path="/admin-ratings" element={<Admin_Ratings />} />
       <Route path="/admin-gift-orders" element={<Admin_GiftOrders />} />
       <Route path="/admin-gift-boxes" element={<Admin_GiftBoxes />} />
       <Route path="/admin-payments" element={<Admin_Payment />} />
