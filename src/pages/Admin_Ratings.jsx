@@ -24,9 +24,16 @@ function Admin_Ratings() {
   const [admin, setAdmin] = useState(null);
   const [token, setToken] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [ratings, setRatings] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState('');
+  const [activeTab, setActiveTab] = useState('product'); // 'product', 'website', 'messages'
+
+  // Data states
+  const [ratings, setRatings] = useState([]);
+  const [websiteReviews, setWebsiteReviews] = useState([]);
+  const [messages, setMessages] = useState([]);
+
+  // Loading states
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const adminData = localStorage.getItem('ajwaHub_admin');
@@ -34,21 +41,35 @@ function Admin_Ratings() {
     if (!adminData || !t) { navigate('/login'); return; }
     setAdmin(JSON.parse(adminData));
     setToken(t);
-    fetchRatings(t);
+    fetchAllData(t);
   }, []);
 
-  const fetchRatings = async (authToken) => {
+  const fetchAllData = async (authToken) => {
     setLoading(true);
     try {
-      const res = await fetch(`${API}/ratings`, {
+      // Fetch Product Ratings
+      const ratingsRes = await fetch(`${API}/ratings`, {
         headers: { Authorization: `Bearer ${authToken}` }
       });
-      const data = await res.json();
-      if (data.success) {
-        setRatings(data.ratings);
-      }
+      const ratingsData = await ratingsRes.json();
+      if (ratingsData.success) setRatings(ratingsData.ratings);
+
+      // Fetch Website Reviews
+      const reviewsRes = await fetch(`${API}/website-reviews`, {
+        headers: { Authorization: `Bearer ${authToken}` }
+      });
+      const reviewsData = await reviewsRes.json();
+      if (reviewsData.success) setWebsiteReviews(reviewsData.reviews);
+
+      // Fetch Messages
+      const messagesRes = await fetch(`${API}/messages`, {
+        headers: { Authorization: `Bearer ${authToken}` }
+      });
+      const messagesData = await messagesRes.json();
+      if (messagesData.success) setMessages(messagesData.messages);
+
     } catch (err) {
-      console.error(err);
+      console.error('Error fetching admin data:', err);
     }
     setLoading(false);
   };
@@ -56,15 +77,37 @@ function Admin_Ratings() {
   const showMsg = (text) => { setMsg(text); setTimeout(() => setMsg(''), 3000); };
   const authHeaders = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
 
-  const handleDelete = async (id) => {
+  const handleDeleteRating = async (id) => {
     if (!window.confirm('Delete this rating?')) return;
     try {
       const res = await fetch(`${API}/ratings/${id}`, { method: 'DELETE', headers: authHeaders });
       if (res.ok) {
         setRatings(ratings.filter(r => r._id !== id));
-        showMsg('🗑️ Deleted');
+        showMsg('🗑️ Deleted Product Rating');
       }
-    } catch { showMsg('❌ Error deleting'); }
+    } catch { showMsg('❌ Error deleting rating'); }
+  };
+
+  const handleDeleteWebsiteReview = async (id) => {
+    if (!window.confirm('Delete this website review?')) return;
+    try {
+      const res = await fetch(`${API}/website-reviews/${id}`, { method: 'DELETE', headers: authHeaders });
+      if (res.ok) {
+        setWebsiteReviews(websiteReviews.filter(r => r._id !== id));
+        showMsg('🗑️ Deleted Website Review');
+      }
+    } catch { showMsg('❌ Error deleting website review'); }
+  };
+
+  const handleDeleteMessage = async (id) => {
+    if (!window.confirm('Delete this message?')) return;
+    try {
+      const res = await fetch(`${API}/messages/${id}`, { method: 'DELETE', headers: authHeaders });
+      if (res.ok) {
+        setMessages(messages.filter(m => m._id !== id));
+        showMsg('🗑️ Deleted Message');
+      }
+    } catch { showMsg('❌ Error deleting message'); }
   };
 
   const renderStars = (count) => {
@@ -99,84 +142,239 @@ function Admin_Ratings() {
       <div className="dashboard-main">
         <header className="topbar">
           <button className="topbar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>{sidebarOpen ? '◀' : '▶'}</button>
-          <h1 className="topbar-title">🌟 Product Ratings</h1>
+          <h1 className="topbar-title">💌 Feedback, Ratings & Messages</h1>
           <div className="topbar-right">{admin && <span className="topbar-admin">👤 {admin.name}</span>}</div>
         </header>
 
         <div className="dashboard-content">
           {msg && <div className="ap-msg">{msg}</div>}
 
-          <div style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
-            <div style={{ background: '#1f2937', padding: '20px', borderRadius: '12px', flex: 1, border: '1px solid #374151' }}>
-              <h3 style={{ color: '#9ca3af', fontSize: '14px', marginBottom: '5px' }}>Total Ratings</h3>
-              <div style={{ color: '#fff', fontSize: '28px', fontWeight: 'bold' }}>{ratings.length}</div>
-            </div>
-            <div style={{ background: '#1f2937', padding: '20px', borderRadius: '12px', flex: 1, border: '1px solid #374151' }}>
-              <h3 style={{ color: '#9ca3af', fontSize: '14px', marginBottom: '5px' }}>Average Score</h3>
-              <div style={{ color: '#fff', fontSize: '28px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                {ratings.length > 0 
-                  ? (ratings.reduce((a, b) => a + b.rating, 0) / ratings.length).toFixed(1) 
-                  : '0.0'}
-                <span style={{ color: '#fbbf24', fontSize: '22px' }}>★</span>
-              </div>
-            </div>
+          {/* Unified Navigation Tabs */}
+          <div style={{ display: 'flex', gap: '15px', marginBottom: '25px', background: '#111827', padding: '6px', borderRadius: '12px', width: 'fit-content', border: '1px solid #374151' }}>
+            <button 
+              style={{ background: activeTab === 'product' ? '#c5a059' : 'transparent', color: activeTab === 'product' ? '#000' : '#d1d5db', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.3s' }}
+              onClick={() => setActiveTab('product')}
+            >
+              🌟 Product Ratings ({ratings.length})
+            </button>
+            <button 
+              style={{ background: activeTab === 'website' ? '#c5a059' : 'transparent', color: activeTab === 'website' ? '#000' : '#d1d5db', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.3s' }}
+              onClick={() => setActiveTab('website')}
+            >
+              🌐 Website Feedback ({websiteReviews.length})
+            </button>
+            <button 
+              style={{ background: activeTab === 'messages' ? '#c5a059' : 'transparent', color: activeTab === 'messages' ? '#000' : '#d1d5db', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.3s' }}
+              onClick={() => setActiveTab('messages')}
+            >
+              📩 Contact Messages ({messages.length})
+            </button>
           </div>
 
-          <div style={{ background: '#1f2937', borderRadius: '12px', padding: '20px', border: '1px solid #374151' }}>
-            <h2 style={{ color: '#fff', marginBottom: '20px', fontSize: '18px' }}>Recent Customer Ratings</h2>
+          {/* Stats Section based on active tab */}
+          <div style={{ display: 'flex', gap: '20px', marginBottom: '25px' }}>
+            {activeTab === 'product' && (
+              <>
+                <div style={{ background: '#1f2937', padding: '20px', borderRadius: '12px', flex: 1, border: '1px solid #374151' }}>
+                  <h3 style={{ color: '#9ca3af', fontSize: '14px', marginBottom: '5px' }}>Total Ratings</h3>
+                  <div style={{ color: '#fff', fontSize: '28px', fontWeight: 'bold' }}>{ratings.length}</div>
+                </div>
+                <div style={{ background: '#1f2937', padding: '20px', borderRadius: '12px', flex: 1, border: '1px solid #374151' }}>
+                  <h3 style={{ color: '#9ca3af', fontSize: '14px', marginBottom: '5px' }}>Average Product Score</h3>
+                  <div style={{ color: '#fff', fontSize: '28px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {ratings.length > 0 
+                      ? (ratings.reduce((a, b) => a + b.rating, 0) / ratings.length).toFixed(1) 
+                      : '0.0'}
+                    <span style={{ color: '#fbbf24', fontSize: '22px' }}>★</span>
+                  </div>
+                </div>
+              </>
+            )}
 
-            {loading ? (
-              <div className="panel-loading">Loading...</div>
-            ) : ratings.length === 0 ? (
-              <div style={{ color: '#9ca3af', textAlign: 'center', padding: '40px 0' }}>No product ratings found yet.</div>
-            ) : (
-              <div style={{ overflowX: 'auto' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', color: '#e5e7eb' }}>
-                  <thead>
-                    <tr style={{ borderBottom: '1px solid #374151', textAlign: 'left' }}>
-                      <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Date</th>
-                      <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Product</th>
-                      <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Rating</th>
-                      <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Review Text</th>
-                      <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {ratings.map(rating => (
-                      <tr key={rating._id} style={{ borderBottom: '1px solid #374151' }}>
-                        <td style={{ padding: '16px 12px', color: '#9ca3af' }}>
-                          {new Date(rating.createdAt).toLocaleDateString()}
-                        </td>
-                        <td style={{ padding: '16px 12px', fontWeight: '600', color: '#fff' }}>
-                          {rating.productName || rating.productId || 'General'}
-                        </td>
-                        <td style={{ padding: '16px 12px' }}>
-                          <div style={{ display: 'flex', gap: '2px' }}>
-                            {renderStars(rating.rating)}
-                          </div>
-                        </td>
-                        <td style={{ padding: '16px 12px', maxWidth: '250px' }}>
-                          {rating.reviewText ? (
-                            <span style={{ color: '#d1d5db' }}>{rating.reviewText}</span>
-                          ) : (
-                            <span style={{ color: '#6b7280', fontStyle: 'italic' }}>No written review</span>
-                          )}
-                        </td>
-                        <td style={{ padding: '16px 12px' }}>
-                          <button 
-                            style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s' }}
-                            onClick={() => handleDelete(rating._id)}
-                            onMouseOver={e => e.target.style.background = 'rgba(239, 68, 68, 0.2)'}
-                            onMouseOut={e => e.target.style.background = 'rgba(239, 68, 68, 0.1)'}
-                          >
-                            🗑️ Delete
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+            {activeTab === 'website' && (
+              <>
+                <div style={{ background: '#1f2937', padding: '20px', borderRadius: '12px', flex: 1, border: '1px solid #374151' }}>
+                  <h3 style={{ color: '#9ca3af', fontSize: '14px', marginBottom: '5px' }}>Total Website Feedbacks</h3>
+                  <div style={{ color: '#fff', fontSize: '28px', fontWeight: 'bold' }}>{websiteReviews.length}</div>
+                </div>
+                <div style={{ background: '#1f2937', padding: '20px', borderRadius: '12px', flex: 1, border: '1px solid #374151' }}>
+                  <h3 style={{ color: '#9ca3af', fontSize: '14px', marginBottom: '5px' }}>Average Shopping Experience</h3>
+                  <div style={{ color: '#fff', fontSize: '28px', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    {websiteReviews.length > 0 
+                      ? (websiteReviews.reduce((a, b) => a + b.rating, 0) / websiteReviews.length).toFixed(1) 
+                      : '0.0'}
+                    <span style={{ color: '#fbbf24', fontSize: '22px' }}>★</span>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {activeTab === 'messages' && (
+              <div style={{ background: '#1f2937', padding: '20px', borderRadius: '12px', flex: 1, border: '1px solid #374151' }}>
+                <h3 style={{ color: '#9ca3af', fontSize: '14px', marginBottom: '5px' }}>Total Inquiries Received</h3>
+                <div style={{ color: '#fff', fontSize: '28px', fontWeight: 'bold' }}>{messages.length}</div>
               </div>
+            )}
+          </div>
+
+          {/* Unified Container */}
+          <div style={{ background: '#1f2937', borderRadius: '12px', padding: '20px', border: '1px solid #374151' }}>
+            {activeTab === 'product' && (
+              <>
+                <h2 style={{ color: '#fff', marginBottom: '20px', fontSize: '18px' }}>🌟 Recent Product Ratings</h2>
+                {loading ? (
+                  <div className="panel-loading">Loading...</div>
+                ) : ratings.length === 0 ? (
+                  <div style={{ color: '#9ca3af', textAlign: 'center', padding: '40px 0' }}>No product ratings found yet.</div>
+                ) : (
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', color: '#e5e7eb' }}>
+                      <thead>
+                        <tr style={{ borderBottom: '1px solid #374151', textAlign: 'left' }}>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Date</th>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Product</th>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Rating</th>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Review Text</th>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {ratings.map(rating => (
+                          <tr key={rating._id} style={{ borderBottom: '1px solid #374151' }}>
+                            <td style={{ padding: '16px 12px', color: '#9ca3af' }}>
+                              {new Date(rating.createdAt).toLocaleDateString()}
+                            </td>
+                            <td style={{ padding: '16px 12px', fontWeight: '600', color: '#fff' }}>
+                              {rating.productName || rating.productId || 'General'}
+                            </td>
+                            <td style={{ padding: '16px 12px' }}>
+                              <div style={{ display: 'flex', gap: '2px' }}>
+                                {renderStars(rating.rating)}
+                              </div>
+                            </td>
+                            <td style={{ padding: '16px 12px', maxWidth: '250px' }}>
+                              {rating.reviewText ? (
+                                <span style={{ color: '#d1d5db' }}>{rating.reviewText}</span>
+                              ) : (
+                                <span style={{ color: '#6b7280', fontStyle: 'italic' }}>No written review</span>
+                              )}
+                            </td>
+                            <td style={{ padding: '16px 12px' }}>
+                              <button 
+                                style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s' }}
+                                onClick={() => handleDeleteRating(rating._id)}
+                              >
+                                🗑️ Delete
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
+            )}
+
+            {activeTab === 'website' && (
+              <>
+                <h2 style={{ color: '#fff', marginBottom: '20px', fontSize: '18px' }}>🌐 Recent Website Feedback</h2>
+                {loading ? (
+                  <div className="panel-loading">Loading...</div>
+                ) : websiteReviews.length === 0 ? (
+                  <div style={{ color: '#9ca3af', textAlign: 'center', padding: '40px 0' }}>No website feedbacks found yet.</div>
+                ) : (
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', color: '#e5e7eb' }}>
+                      <thead>
+                        <tr style={{ borderBottom: '1px solid #374151', textAlign: 'left' }}>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Date</th>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Experience Rating</th>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Suggestions & Feedback</th>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {websiteReviews.map(review => (
+                          <tr key={review._id} style={{ borderBottom: '1px solid #374151' }}>
+                            <td style={{ padding: '16px 12px', color: '#9ca3af' }}>
+                              {new Date(review.createdAt).toLocaleDateString()}
+                            </td>
+                            <td style={{ padding: '16px 12px' }}>
+                              <div style={{ display: 'flex', gap: '2px' }}>
+                                {renderStars(review.rating)}
+                              </div>
+                            </td>
+                            <td style={{ padding: '16px 12px', maxWidth: '350px' }}>
+                              <span style={{ color: '#d1d5db' }}>{review.reviewText}</span>
+                            </td>
+                            <td style={{ padding: '16px 12px' }}>
+                              <button 
+                                style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s' }}
+                                onClick={() => handleDeleteWebsiteReview(review._id)}
+                              >
+                                🗑️ Delete
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
+            )}
+
+            {activeTab === 'messages' && (
+              <>
+                <h2 style={{ color: '#fff', marginBottom: '20px', fontSize: '18px' }}>📩 Contact Messages & Inquiries</h2>
+                {loading ? (
+                  <div className="panel-loading">Loading...</div>
+                ) : messages.length === 0 ? (
+                  <div style={{ color: '#9ca3af', textAlign: 'center', padding: '40px 0' }}>No contact messages found yet.</div>
+                ) : (
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', color: '#e5e7eb' }}>
+                      <thead>
+                        <tr style={{ borderBottom: '1px solid #374151', textAlign: 'left' }}>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Date</th>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Customer Details</th>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Subject</th>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Message</th>
+                          <th style={{ padding: '12px', color: '#9ca3af', fontWeight: '500' }}>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {messages.map(msg => (
+                          <tr key={msg._id} style={{ borderBottom: '1px solid #374151' }}>
+                            <td style={{ padding: '16px 12px', color: '#9ca3af', verticalAlign: 'top' }}>
+                              {new Date(msg.createdAt).toLocaleDateString()}
+                            </td>
+                            <td style={{ padding: '16px 12px', verticalAlign: 'top' }}>
+                              <div style={{ fontWeight: '600', color: '#fff' }}>{msg.name}</div>
+                              <div style={{ fontSize: '12px', color: '#9ca3af' }}>{msg.email}</div>
+                            </td>
+                            <td style={{ padding: '16px 12px', fontWeight: '600', color: '#c5a059', verticalAlign: 'top' }}>
+                              {msg.subject}
+                            </td>
+                            <td style={{ padding: '16px 12px', maxWidth: '300px', color: '#d1d5db', verticalAlign: 'top', whiteSpace: 'pre-wrap' }}>
+                              {msg.message}
+                            </td>
+                            <td style={{ padding: '16px 12px', verticalAlign: 'top' }}>
+                              <button 
+                                style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', transition: 'all 0.2s' }}
+                                onClick={() => handleDeleteMessage(msg._id)}
+                              >
+                                🗑️ Delete
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>
