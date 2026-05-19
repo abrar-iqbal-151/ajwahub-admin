@@ -44,6 +44,21 @@ body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
   display: flex;
   flex-direction: column;
   gap: 6px;
+  overflow-y: auto;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-nav::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.15);
+  border-radius: 4px;
+}
+.sidebar-nav::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.3);
 }
 
 .sidebar-item {
