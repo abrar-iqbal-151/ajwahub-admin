@@ -1,244 +1,212 @@
+/* ── MESSAGE TOAST ── */
 .ap-msg { 
-  background: #fdfaf3; 
-  border: 1px solid #c5a059; 
-  color: #5c4b37; 
+  background: rgba(197, 160, 89, 0.1); 
+  border: 1px solid rgba(197, 160, 89, 0.4); 
+  color: #c5a059; 
   padding: 12px 20px; 
   border-radius: 10px; 
   margin-bottom: 20px; 
   font-weight: 600; 
-  box-shadow: 0 4px 12px rgba(197, 160, 89, 0.1);
+  box-shadow: 0 4px 12px rgba(197, 160, 89, 0.15);
+  text-align: center;
 }
 
+/* ── UPLOAD LABELS ── */
 .ap-upload-label {
-  display: inline-flex; align-items: center; gap: 6px;
-  background: #fdfaf3; color: #c5a059;
-  border: 1px solid #c5a059;
-  padding: 10px 14px; border-radius: 8px;
-  cursor: pointer; font-size: 13px; font-weight: 600;
-  transition: all 0.2s; width: 100%; justify-content: center;
+  display: inline-flex; 
+  align-items: center; 
+  gap: 6px;
+  background: rgba(197, 160, 89, 0.1) !important; 
+  color: #c5a059 !important;
+  border: 1px solid rgba(197, 160, 89, 0.3) !important;
+  padding: 8px 14px; 
+  border-radius: 8px;
+  cursor: pointer; 
+  font-size: 12px; 
+  font-weight: 600;
+  transition: all 0.2s ease; 
+  width: auto; 
+  justify-content: center;
 }
 .ap-upload-label:hover { 
-  background: #c5a059; 
-  color: #fff;
+  background: #c5a059 !important; 
+  color: #090d16 !important;
+  border-color: #c5a059 !important;
 }
 
+/* ── ADD NEW PRODUCT FORM ── */
 .ap-add-form {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  background: #0e1626;
+  border: 1px solid rgba(197, 160, 89, 0.2);
+  border-radius: 16px;
   padding: 24px;
   margin-bottom: 24px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 .ap-add-form h3 { 
-  font-size: 1.2rem; 
-  font-weight: 600; 
-  color: #1a1a1a !important; 
+  font-size: 1.25rem; 
+  font-weight: 700; 
+  color: #c5a059 !important; 
   margin-bottom: 20px;
   font-family: 'Playfair Display', serif;
+  letter-spacing: 0.5px;
 }
-.ap-add-grid { max-width: 100%; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
 
+/* ── TOOLBAR ── */
 .ap-toolbar { 
   display: flex; 
   align-items: center; 
   justify-content: space-between; 
   margin-bottom: 24px; 
   gap: 15px;
-  background: #ffffff;
-  padding: 15px 20px;
-  border-radius: 12px;
-  border: 1px solid #e5e7eb;
+  background: #0e1626;
+  padding: 16px 20px;
+  border-radius: 14px;
+  border: 1px solid rgba(197, 160, 89, 0.15);
 }
-.ap-count { color: #8d7558 !important; font-size: 14px; font-weight: 500; }
+.ap-toolbar .search-input {
+  background: #090d16;
+  border: 1px solid rgba(197, 160, 89, 0.2);
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 13px;
+  outline: none;
+  width: 280px;
+  transition: all 0.2s ease;
+}
+.ap-toolbar .search-input:focus {
+  border-color: #c5a059;
+  box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.15);
+}
+.ap-count { 
+  color: #c5a059 !important; 
+  font-size: 14px; 
+  font-weight: 600; 
+  letter-spacing: 0.5px;
+}
 
-.ap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+/* ── BOUTIQUE PRODUCTS GRID ── */
+.ap-grid { 
+  display: grid; 
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
+  gap: 24px; 
+}
 
 .ap-card { 
-  background: #ffffff; 
-  border: 1px solid #e5e7eb; 
-  border-radius: 12px; 
-  padding: 15px;
-  transition: all 0.3s ease;
+  background: #0e1626; 
+  border: 1px solid rgba(197, 160, 89, 0.15); 
+  border-radius: 16px; 
+  padding: 18px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
 }
 .ap-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transform: translateY(-4px);
+  border-color: rgba(197, 160, 89, 0.4);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
 }
 
 .ap-img { 
   width: 100%; 
   height: 200px; 
   object-fit: cover; 
-  border-radius: 8px; 
+  border-radius: 10px; 
   margin-bottom: 15px; 
   display: block; 
-  background: #f8f8f8;
+  background: #090d16;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .ap-view h4 { 
-  font-size: 1.2rem; 
-  color: #1a1a1a !important; 
+  font-size: 1.15rem; 
+  color: #ffffff !important; 
   margin-bottom: 8px; 
   font-family: 'Playfair Display', serif;
-  font-weight: 500;
+  font-weight: 600;
 }
-.ap-meta { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-.ap-price { color: #1a1a1a !important; font-weight: 600; font-size: 1.1rem; }
-.ap-discount { color: #c5a059 !important; font-size: 13px; font-weight: 600; }
-.ap-stock.in { color: #059669 !important; font-size: 13px; font-weight: 500; }
-.ap-stock.out { color: #dc2626 !important; font-size: 13px; font-weight: 500; }
-.ap-rating { display: flex; align-items: center; gap: 4px; margin-bottom: 15px; color: #6b7280 !important; font-size: 13px; }
+.ap-meta { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 6px; 
+  margin-bottom: 12px; 
+}
+.ap-price { 
+  color: #ffffff !important; 
+  font-weight: 700; 
+  font-size: 1.1rem; 
+}
+.ap-discount { 
+  color: #c5a059 !important; 
+  font-size: 13px; 
+  font-weight: 600; 
+}
+.ap-stock.in { 
+  color: #10b981 !important; 
+  font-size: 13px; 
+  font-weight: 600; 
+}
+.ap-stock.out { 
+  color: #f43f5e !important; 
+  font-size: 13px; 
+  font-weight: 600; 
+}
+.ap-rating { 
+  display: flex; 
+  align-items: center; 
+  gap: 4px; 
+  margin-bottom: 16px; 
+  color: #94a3b8 !important; 
+  font-size: 13px; 
+}
 
 .ap-edit-btn { 
-  background: #1a1a1a; 
-  color: #fff; 
-  border: none;
+  background: #090d16; 
+  color: #c5a059; 
+  border: 1px solid rgba(197, 160, 89, 0.3);
   padding: 10px 16px; 
-  border-radius: 6px; 
+  border-radius: 8px; 
   cursor: pointer; 
   font-size: 13px; 
   font-weight: 600; 
   width: 100%; 
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 .ap-edit-btn:hover { 
-  background: #333;
+  background: #c5a059;
+  color: #090d16;
+  border-color: #c5a059;
 }
 
-.ap-edit { display: flex; flex-direction: column; gap: 12px; }
-.ap-edit-flex { display: flex; gap: 24px; min-height: 400px; }
-.ap-edit-left { flex: 1; display: flex; flex-direction: column; gap: 15px; }
-.ap-edit-right { flex: 1.2; display: flex; flex-direction: column; gap: 15px; }
-
-@media (max-width: 768px) {
-  .ap-edit-flex { flex-direction: column; }
-}
-
-.ap-edit label, .ap-add-form label { 
-  font-size: 12px; 
-  color: #1a1a1a !important; 
-  font-weight: 700; 
-  text-transform: uppercase; 
-  letter-spacing: 0.5px; 
-  margin-bottom: -5px; 
-  display: block;
-}
-
-.ap-edit input, .ap-edit textarea, .ap-edit select,
-.ap-add-form input, .ap-add-form textarea, .ap-add-form select { 
-  background: #ffffff; 
-  border: 1px solid #c5a059; 
-  color: #1a1a1a !important; 
-  padding: 10px 12px; 
-  border-radius: 8px; 
-  font-size: 14px; 
-  width: 100%; 
-  outline: none; 
-  resize: vertical;
-}
-
-.ap-edit input::placeholder, .ap-add-form input::placeholder {
-  color: #94a3b8;
-}
-
-.ap-view-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-}
-.ap-view-header h4 { margin: 0; }
-.ap-arabic { color: #c5a059; font-family: 'Playfair Display', serif; font-size: 1.4rem; }
-
-.ap-storage-preview {
-  font-size: 12px;
-  color: #6b7280;
-  line-height: 1.4;
-  margin-bottom: 12px;
-  font-style: italic;
-  padding: 8px;
-  background: #fdfaf3;
-  border-radius: 6px;
-}
-
-.ap-stock-label { 
-  display: flex; 
-  align-items: center; 
-  gap: 10px; 
-  font-size: 14px !important; 
-  color: #1a1a1a !important; 
-  text-transform: none !important; 
-  letter-spacing: 0 !important; 
-  cursor: pointer;
-  background: #fdfaf3;
-  border: 1px solid #c5a059;
-  border-radius: 8px;
-  padding: 12px;
-}
-.ap-stock-label input[type="checkbox"] { 
-  width: 18px; 
-  height: 18px;
-  accent-color: #c5a059; 
-  cursor: pointer;
-}
-
-.ap-btns { display: flex; gap: 10px; margin-top: 10px; }
-.ap-save { 
-  background: #1a1a1a; 
-  color: #fff; 
-  border: none; 
-  padding: 12px 16px; 
-  border-radius: 8px; 
-  cursor: pointer; 
-  font-weight: 600; 
-  font-size: 14px; 
-  flex: 1; 
-  transition: all 0.2s;
-}
-.ap-save:hover { background: #333; }
-.ap-cancel { 
-  background: #fff; 
-  color: #4b5563; 
-  border: 1px solid #e5e7eb; 
-  padding: 12px 16px; 
-  border-radius: 8px; 
-  cursor: pointer; 
-  font-size: 14px; 
-  flex: 1;
-}
-.ap-cancel:hover { background: #f9fafb; }
-
-/* Modal Overlay & Container for Product Editing */
+/* ── MODAL LAYOUT & COLOR FIXES ── */
 .ap-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(4, 6, 10, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
   padding: 20px;
-  animation: apFadeIn 0.3s ease-out;
+  animation: apFadeIn 0.25s ease-out;
 }
 
 .ap-modal-container {
-  background: #ffffff;
+  background: #0e1626;
   border-radius: 24px;
   width: 100%;
   max-width: 900px;
   max-height: 90vh;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border: 1px solid rgba(197, 160, 89, 0.2);
+  border: 1px solid rgba(197, 160, 89, 0.3);
   animation: apSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -248,41 +216,212 @@
   align-items: center;
   padding: 20px 24px;
   border-bottom: 1px solid rgba(197, 160, 89, 0.15);
-  background: #fdfaf3;
+  background: #0b111e;
 }
 
 .ap-modal-header h3 {
   margin: 0;
   font-size: 1.3rem;
   font-weight: 700;
-  color: #1a1a1a;
+  color: #c5a059;
   font-family: 'Playfair Display', serif;
+  letter-spacing: 0.5px;
 }
 
 .ap-modal-close {
-  background: none;
-  border: none;
-  font-size: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 18px;
   cursor: pointer;
-  color: #6b7280;
-  transition: color 0.2s;
-  padding: 4px;
+  color: #94a3b8;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s ease;
 }
-
 .ap-modal-close:hover {
-  color: #dc2626;
+  background: rgba(244, 63, 94, 0.1);
+  color: #f43f5e;
+  border-color: rgba(244, 63, 94, 0.2);
 }
 
-/* Modal Body Scroll */
 .ap-modal-container .ap-edit-flex {
   padding: 24px;
   overflow-y: auto;
   flex: 1;
 }
 
+/* ── FORM ELEMENTS (MODAL & ADD FORM) ── */
+.ap-modal-container label, 
+.ap-add-form label { 
+  font-size: 11px; 
+  color: #c5a059 !important; 
+  font-weight: 700; 
+  text-transform: uppercase; 
+  letter-spacing: 0.7px; 
+  margin-top: 15px;
+  margin-bottom: 6px; 
+  display: block;
+}
+
+.ap-modal-container input, 
+.ap-modal-container textarea, 
+.ap-modal-container select,
+.ap-add-form input, 
+.ap-add-form textarea, 
+.ap-add-form select { 
+  background: #090d16; 
+  border: 1px solid rgba(197, 160, 89, 0.25); 
+  color: #ffffff !important; 
+  padding: 10px 14px; 
+  border-radius: 8px; 
+  font-size: 14px; 
+  width: 100%; 
+  outline: none; 
+  transition: all 0.2s ease;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.ap-modal-container input:focus, 
+.ap-modal-container textarea:focus, 
+.ap-modal-container select:focus,
+.ap-add-form input:focus, 
+.ap-add-form textarea:focus, 
+.ap-add-form select:focus {
+  border-color: #c5a059;
+  box-shadow: 0 0 0 2px rgba(197, 160, 89, 0.15), inset 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+.ap-modal-container input::placeholder, 
+.ap-add-form input::placeholder {
+  color: #4b5563;
+}
+
+/* ── WEIGHTS MANAGER ── */
+.ap-weights-manager {
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px; 
+  background: #090d16 !important; 
+  padding: 14px; 
+  border-radius: 10px; 
+  border: 1px solid rgba(197, 160, 89, 0.2) !important;
+  margin-top: 6px;
+}
+.ap-weights-manager input {
+  background: #0e1626 !important;
+  border-color: rgba(197, 160, 89, 0.15) !important;
+}
+.ap-add-weight-btn {
+  background: rgba(197, 160, 89, 0.1) !important; 
+  color: #c5a059 !important; 
+  border: 1px solid rgba(197, 160, 89, 0.2) !important; 
+  border-radius: 8px; 
+  padding: 8px; 
+  cursor: pointer; 
+  font-size: 12px; 
+  font-weight: 600;
+  margin-top: 5px;
+  transition: all 0.2s ease;
+}
+.ap-add-weight-btn:hover {
+  background: #c5a059 !important;
+  color: #090d16 !important;
+}
+
+/* ── STOCK CHECKBOX ── */
+.ap-stock-label { 
+  display: flex; 
+  align-items: center; 
+  gap: 10px; 
+  font-size: 13px !important; 
+  color: #ffffff !important; 
+  text-transform: none !important; 
+  letter-spacing: 0 !important; 
+  cursor: pointer;
+  background: #090d16 !important;
+  border: 1px solid rgba(197, 160, 89, 0.2) !important;
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 15px !important;
+}
+.ap-stock-label input[type="checkbox"] { 
+  width: 18px; 
+  height: 18px;
+  accent-color: #c5a059; 
+  cursor: pointer;
+  box-shadow: none;
+}
+
+/* ── BUTTONS ── */
+.ap-btns { 
+  display: flex; 
+  gap: 12px; 
+  margin-top: 24px; 
+}
+.ap-save { 
+  background: linear-gradient(135deg, #c5a059, #b8860b) !important; 
+  color: #ffffff !important; 
+  border: none; 
+  padding: 12px 18px; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  font-weight: 700; 
+  font-size: 14px; 
+  flex: 1; 
+  box-shadow: 0 4px 15px rgba(197, 160, 89, 0.2);
+  transition: all 0.2s ease;
+}
+.ap-save:hover { 
+  opacity: 0.95; 
+  transform: translateY(-1px);
+}
+.ap-cancel { 
+  background: rgba(255, 255, 255, 0.05) !important; 
+  color: #94a3b8 !important; 
+  border: 1px solid rgba(255, 255, 255, 0.1) !important; 
+  padding: 12px 18px; 
+  border-radius: 8px; 
+  cursor: pointer; 
+  font-weight: 600;
+  font-size: 14px; 
+  flex: 1;
+  transition: all 0.2s ease;
+}
+.ap-cancel:hover { 
+  background: rgba(255, 255, 255, 0.1) !important; 
+  color: #ffffff !important;
+}
+
+/* ── FLEX GRID & RESPONSIVENESS ── */
+.ap-edit-flex { 
+  display: flex; 
+  gap: 24px; 
+  min-height: 400px; 
+}
+.ap-edit-left { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px; 
+}
+.ap-edit-right { 
+  flex: 1.2; 
+  display: flex; 
+  flex-direction: column; 
+  gap: 12px; 
+}
+
+@media (max-width: 768px) {
+  .ap-edit-flex { flex-direction: column; }
+  .ap-toolbar { flex-direction: column; align-items: stretch; }
+  .ap-toolbar .search-input { width: 100%; }
+}
+
+/* ── ANIMATIONS ── */
 @keyframes apFadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -291,4 +430,19 @@
 @keyframes apSlideUp {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+
+/* Custom Scrollbar for Modal content */
+.ap-modal-container .ap-edit-flex::-webkit-scrollbar {
+  width: 6px;
+}
+.ap-modal-container .ap-edit-flex::-webkit-scrollbar-track {
+  background: transparent;
+}
+.ap-modal-container .ap-edit-flex::-webkit-scrollbar-thumb {
+  background: rgba(197, 160, 89, 0.25);
+  border-radius: 4px;
+}
+.ap-modal-container .ap-edit-flex::-webkit-scrollbar-thumb:hover {
+  background: rgba(197, 160, 89, 0.45);
 }
