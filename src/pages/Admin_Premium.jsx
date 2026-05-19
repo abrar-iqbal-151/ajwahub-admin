@@ -146,6 +146,15 @@ function Admin_Premium() {
             </button>
           </div>
 
+          <div className="da-video-specs-note" style={{ borderColor: '#c5a059', background: '#fdfaf3', margin: '15px 0 20px 0', borderLeft: '4px solid #c5a059', padding: '12px 15px', borderRadius: '8px', borderTop: '1px solid rgba(197, 160, 89, 0.2)', borderRight: '1px solid rgba(197, 160, 89, 0.2)', borderBottom: '1px solid rgba(197, 160, 89, 0.2)', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)' }}>
+            <strong style={{ color: '#8d7558', display: 'block', fontSize: '14px', marginBottom: '8px' }}>📸 Recommended Product Image Specs:</strong>
+            <ul style={{ listStyle: 'none', display: 'flex', gap: '20px', flexWrap: 'wrap', padding: 0, margin: 0 }}>
+              <li style={{ fontSize: '12px', color: '#4b5563' }}><span style={{ color: '#111827', fontWeight: '600' }}>Resolution:</span> 1200x1200 (Square 1:1)</li>
+              <li style={{ fontSize: '12px', color: '#4b5563' }}><span style={{ color: '#111827', fontWeight: '600' }}>Format:</span> WebP or JPG</li>
+              <li style={{ fontSize: '12px', color: '#4b5563' }}><span style={{ color: '#111827', fontWeight: '600' }}>Size:</span> Under 400KB</li>
+            </ul>
+          </div>
+
           {showForm && (
             <div className="ap-add-form">
               <h3>{editId ? '✏️ Edit Product' : '➕ Add Premium Product'}</h3>

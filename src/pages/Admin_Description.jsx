@@ -381,8 +381,8 @@ function Description_Admin() {
           <div className="da-section">
             <h2 className="da-section-title">✨ Feature Section (Why Choose AjwaHub)</h2>
 
-            <div className="da-video-specs-note" style={{ borderColor: '#fb923c', background: 'rgba(251,146,60,0.05)' }}>
-              <strong style={{ color: '#fb923c' }}>📸 Recommended Image Specs:</strong>
+            <div className="da-video-specs-note" style={{ borderColor: '#fb923c', background: '#fdf7f2', borderTop: '1px solid rgba(251,146,60,0.2)', borderRight: '1px solid rgba(251,146,60,0.2)', borderBottom: '1px solid rgba(251,146,60,0.2)' }}>
+              <strong style={{ color: '#c2410c' }}>📸 Recommended Image Specs:</strong>
               <ul>
                 <li><span>Resolution:</span> 800x800 (Square 1:1 Ratio)</li>
                 <li><span>Quality:</span> High Resolution (clear and sharp)</li>
@@ -440,7 +440,7 @@ function Description_Admin() {
                     <div className="da-card-info">
                       <div className="da-card-badge">Why Choose AjwaHub</div>
                       <h3>{feature.title}</h3>
-                      <p style={{ color: '#9ca3af', fontSize: '14px', lineHeight: '1.6', marginBottom: '20px' }}>{feature.description}</p>
+                      <p style={{ color: '#374151', fontSize: '14px', lineHeight: '1.6', marginBottom: '20px' }}>{feature.description}</p>
                       
                       <h4 style={{ color: '#fb923c', fontSize: '13px', textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '0.5px' }}>🖼️ Product Images (P1 - P4):</h4>
                       <div className="da-feature-img-grid">
@@ -472,19 +472,20 @@ function Description_Admin() {
             </div>
           </div>
         )}
+ 
         {activeTab === 'ai' && !loading && aiSection && (
           <div className="da-section">
             <h2 className="da-section-title">🤖 AI Powered Wellness Section</h2>
-
-            <div className="da-video-specs-note" style={{ borderColor: '#8b5cf6', background: 'rgba(139,92,246,0.05)' }}>
-              <strong style={{ color: '#8b5cf6' }}>🎬 AI Video Recommendation:</strong>
+ 
+            <div className="da-video-specs-note" style={{ borderColor: '#8b5cf6', background: '#f5f3ff', borderTop: '1px solid rgba(139, 92, 246, 0.2)', borderRight: '1px solid rgba(139, 92, 246, 0.2)', borderBottom: '1px solid rgba(139, 92, 246, 0.2)' }}>
+              <strong style={{ color: '#6d28d9' }}>🎬 AI Video Recommendation:</strong>
               <ul>
                 <li><span>Resolution:</span> 1920x1080 (16:9 Landscape)</li>
                 <li><span>Style:</span> High-tech / Futuristic / Health themed</li>
                 <li><span>Format:</span> MP4</li>
               </ul>
             </div>
-
+ 
             <div className="da-cards">
               <div className="da-card">
                 {editAiSection ? (
@@ -511,7 +512,7 @@ function Description_Admin() {
                         }}
                       />
                     </label>
-
+ 
                     <label style={{ marginTop: '20px' }}>AI Features (Icons & Text)</label>
                     {editAiSection.features.map((f, i) => (
                       <div key={i} className="da-ai-feature-edit" style={{ background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '12px', marginBottom: '15px' }}>
@@ -522,7 +523,7 @@ function Description_Admin() {
                         <textarea rows={2} placeholder="Feature Description" value={f.text} onChange={e => updateAiFeature(i, 'text', e.target.value)} />
                       </div>
                     ))}
-
+ 
                     <div className="da-form-btns">
                       <button className="da-save-btn da-ai-save-btn" onClick={saveAiSection}>💾 Save AI Section</button>
                       <button className="da-cancel-btn" onClick={() => setEditAiSection(null)}>Cancel</button>
@@ -531,9 +532,9 @@ function Description_Admin() {
                 ) : (
                   <div className="da-card-view">
                     <div className="da-card-info">
-                      <div className="da-card-badge" style={{ background: 'rgba(139, 92, 246, 0.2)', color: '#a78bfa', borderColor: 'rgba(139, 92, 246, 0.4)' }}>{aiSection.badge}</div>
-                      <h3 style={{ fontSize: '24px', margin: '10px 0' }}>{aiSection.title}</h3>
-                      <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: '1.7', marginBottom: '25px' }}>{aiSection.description}</p>
+                      <div className="da-card-badge" style={{ background: '#f5f3ff', color: '#6d28d9', borderColor: '#ddd6fe' }}>{aiSection.badge}</div>
+                      <h3 style={{ fontSize: '24px', margin: '10px 0', color: '#000000' }}>{aiSection.title}</h3>
+                      <p style={{ color: '#4b5563', fontSize: '15px', lineHeight: '1.7', marginBottom: '25px' }}>{aiSection.description}</p>
                       
                       <div className="da-ai-video-container">
                         <div className="da-ai-video-overlay-badge">Live Preview</div>
@@ -541,23 +542,23 @@ function Description_Admin() {
                           <source src={aiSection.video} type="video/mp4" />
                         </video>
                       </div>
-
+ 
                       <div className="da-ai-features-preview">
                         {aiSection.features.map((f, i) => (
                           <div key={i} className="da-ai-feature-preview-card">
                             <span className="da-ai-preview-icon">{f.icon}</span>
-                            <h4 style={{ color: '#fff', fontSize: '15px', fontWeight: '700', marginBottom: '6px' }}>{f.title}</h4>
-                            <p style={{ color: '#94a3b8', fontSize: '13px', lineHeight: '1.5', margin: 0 }}>{f.text}</p>
+                            <h4 style={{ color: '#111827', fontSize: '15px', fontWeight: '700', marginBottom: '6px' }}>{f.title}</h4>
+                            <p style={{ color: '#4b5563', fontSize: '13px', lineHeight: '1.5', margin: 0 }}>{f.text}</p>
                           </div>
                         ))}
                       </div>
                     </div>
                     <div className="da-edit-btn-wrap" style={{ marginTop: '25px' }}>
-                      <button className="da-edit-btn" style={{ borderColor: 'rgba(139, 92, 246, 0.4)', color: '#a78bfa', background: 'rgba(139, 92, 246, 0.1)' }} onClick={() => setEditAiSection({ ...aiSection })}>✏️ Edit AI Section</button>
+                      <button className="da-edit-btn" style={{ borderColor: 'rgba(139, 92, 246, 0.3)', color: '#6d28d9', background: 'rgba(139, 92, 246, 0.05)' }} onClick={() => setEditAiSection({ ...aiSection })}>✏️ Edit AI Section</button>
                     </div>
                   </div>
                 )}
-
+ 
               </div>
             </div>
           </div>
@@ -847,8 +848,8 @@ function Description_Admin() {
           <div className="da-section">
             <h2 className="da-section-title">🗺️ Delivery Map Section</h2>
 
-            <div className="da-video-specs-note" style={{ borderColor: '#60a5fa', background: 'rgba(96,165,250,0.05)' }}>
-              <strong style={{ color: '#60a5fa' }}>📸 Recommended Map Image Specs:</strong>
+            <div className="da-video-specs-note" style={{ borderColor: '#3b82f6', background: '#eff6ff', borderTop: '1px solid rgba(59, 130, 246, 0.2)', borderRight: '1px solid rgba(59, 130, 246, 0.2)', borderBottom: '1px solid rgba(59, 130, 246, 0.2)' }}>
+              <strong style={{ color: '#1d4ed8' }}>📸 Recommended Map Image Specs:</strong>
               <ul>
                 <li><span>Resolution:</span> 1200x800 (Landscape 3:2 Ratio)</li>
                 <li><span>Clarity:</span> High Resolution (text must be readable)</li>
@@ -894,7 +895,7 @@ function Description_Admin() {
                     <div style={{ marginTop: '16px' }}>
                       <img src={deliveryMap.mapImage} alt="Delivery Map" style={{ width: '100%', maxWidth: '600px', height: 'auto', borderRadius: '12px', border: '2px solid rgba(251,146,60,0.3)' }} onError={e => e.target.src='/dates.png'} />
                     </div>
-                    <p style={{ color: '#94a3b8', marginTop: '12px', fontSize: '14px' }}>🗺️ {deliveryMap.mapImage}</p>
+                    <p style={{ color: '#4b5563', marginTop: '12px', fontSize: '14px' }}>🗺️ {deliveryMap.mapImage}</p>
                     <div className="da-edit-btn-wrap" style={{ marginTop: '16px' }}>
                       <button className="da-edit-btn" onClick={() => setEditDeliveryMap({ ...deliveryMap })}>✏️ Edit</button>
                     </div>
@@ -909,8 +910,8 @@ function Description_Admin() {
           <div className="da-section">
             <h2 className="da-section-title">🌱 About Section (How Our Dates Are Grown)</h2>
 
-            <div className="da-video-specs-note" style={{ borderColor: '#22c55e', background: 'rgba(34,197,94,0.05)' }}>
-              <strong style={{ color: '#22c55e' }}>📸 Recommended Slideshow Image Specs:</strong>
+            <div className="da-video-specs-note" style={{ borderColor: '#22c55e', background: '#f0fdf4', borderTop: '1px solid rgba(34, 197, 94, 0.2)', borderRight: '1px solid rgba(34, 197, 94, 0.2)', borderBottom: '1px solid rgba(34, 197, 94, 0.2)' }}>
+              <strong style={{ color: '#15803d' }}>📸 Recommended Slideshow Image Specs:</strong>
               <ul>
                 <li><span>Resolution:</span> 1200x800 (Landscape 3:2 Ratio)</li>
                 <li><span>Aesthetic:</span> High-quality farm/process photography</li>

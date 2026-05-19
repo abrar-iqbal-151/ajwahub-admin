@@ -416,7 +416,7 @@ function Admin_Payment() {
                               <div className="apm-addr-row"><span>👤</span><span>{order.cardHolder || 'N/A'}</span></div>
                               <div className="apm-addr-row"><span>📅</span><span>Expiry: {order.expiryDate || 'N/A'}</span></div>
                             </div>
-                            <div style={{ marginTop: '10px', padding: '10px 14px', background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: '10px', fontSize: '13px', color: '#fbbf24' }}>
+                            <div style={{ marginTop: '10px', padding: '10px 14px', background: 'rgba(245,158,11,0.1)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: '10px', fontSize: '13px', color: '#d97706' }}>
                               ⚠️ Verify card payment manually then approve below
                             </div>
                           </>
@@ -431,8 +431,8 @@ function Admin_Payment() {
                       {/* STEP 1: PAYMENT APPROVAL */}
                       {order.status === 'Pending Approval' && (
                         <div style={{ marginBottom: '16px', padding: '14px 16px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.3)', borderRadius: '12px' }}>
-                          <p style={{ fontSize: '13px', fontWeight: '700', color: '#fbbf24', marginBottom: '10px' }}>⏳ Step 1: Verify & Approve Payment</p>
-                          <p style={{ fontSize: '12px', color: '#d4cccc', marginBottom: '12px' }}>
+                          <p style={{ fontSize: '13px', fontWeight: '700', color: '#d97706', marginBottom: '10px' }}>⏳ Step 1: Verify & Approve Payment</p>
+                          <p style={{ fontSize: '12px', color: '#4b5563', marginBottom: '12px' }}>
                             {order.paymentMethod === 'card' ? '💳 Card payment — verify card details above then approve' : '📸 Check screenshot above then approve'}
                           </p>
                           <div style={{ display: 'flex', gap: '10px' }}>
@@ -453,7 +453,7 @@ function Admin_Payment() {
                       {/* STEP 2: ORDER FLOW — only after approved */}
                       {order.status !== 'Pending Approval' && (
                         <>
-                          <p style={{ fontSize: '12px', color: '#d4cccc', marginBottom: '10px' }}>📦 Step 2: Update Order Progress</p>
+                          <p style={{ fontSize: '12px', color: '#4b5563', marginBottom: '10px' }}>📦 Step 2: Update Order Progress</p>
                           <div className="apm-status-btns">
                             {[
                               { label: '🏢 Warehouse', status: 'Approved', tracking: 'warehouse' },
