@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import ReactCrop, { centerCrop, makeAspectCrop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 import '../css/Admin_Description.css';
 import '../css/AdminPanel.css';
 
@@ -28,6 +30,93 @@ function Description_Admin() {
   const [admin, setAdmin] = useState(null);
   const [activeTab, setActiveTab] = useState('heroes');
 
+  // Image Cropping States
+  const [cropImageSrc, setCropImageSrc] = useState(null);
+  const [cropActive, setCropActive] = useState(false);
+
+  const [crop, setCrop] = useState();
+  const [completedCrop, setCompletedCrop] = useState(null);
+  const [onCropSave, setOnCropSave] = useState(null);
+  const imgRef = useRef(null);
+
+  const onImageLoad = (e) => {
+    const { width, height } = e.currentTarget;
+    const initialCrop = {
+      unit: '%',
+      width: 90,
+      height: 90,
+      x: 5,
+      y: 5
+    };
+    setCrop(initialCrop);
+  };
+
+  const executeCrop = async () => {
+    if (!cropImageSrc || !imgRef.current) return;
+    try {
+      const image = imgRef.current;
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      const rc = completedCrop || crop || { unit: '%', width: 100, height: 100, x: 0, y: 0 };
+
+      let cropX, cropY, cropW, cropH;
+
+      if (rc.unit === '%') {
+        cropX = (rc.x / 100) * image.naturalWidth;
+        cropY = (rc.y / 100) * image.naturalHeight;
+        cropW = (rc.width / 100) * image.naturalWidth;
+        cropH = (rc.height / 100) * image.naturalHeight;
+      } else {
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+        cropX = rc.x * scaleX;
+        cropY = rc.y * scaleY;
+        cropW = rc.width * scaleX;
+        cropH = rc.height * scaleY;
+      }
+
+      if (!cropW || !cropH) {
+        cropX = 0;
+        cropY = 0;
+        cropW = image.naturalWidth;
+        cropH = image.naturalHeight;
+      }
+
+      canvas.width = Math.round(cropW);
+      canvas.height = Math.round(cropH);
+
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+
+      ctx.drawImage(
+        image,
+        Math.round(cropX),
+        Math.round(cropY),
+        Math.round(cropW),
+        Math.round(cropH),
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      const croppedBlob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.98));
+      if (croppedBlob && onCropSave) {
+        await onCropSave(croppedBlob);
+      }
+      setCropActive(false);
+      setCropImageSrc(null);
+      setCompletedCrop(null);
+    } catch (e) {
+      console.error(e);
+      showMsg("❌ Crop error");
+    }
+  };
+
+
+
   const handleLogout = () => {
     localStorage.removeItem('ajwaHub_admin');
     localStorage.removeItem('ajwaHub_adminToken');
@@ -46,7 +135,7 @@ function Description_Admin() {
   const [editProduct, setEditProduct] = useState(null);
   const [aiSection, setAiSection] = useState(null);
   const [editAiSection, setEditAiSection] = useState(null);
-  const [newProduct, setNewProduct] = useState({ name: '', arabicName: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', description: '', discount: '', category: 'dates', storageNote: '', weights: [] });
+  const [newProduct, setNewProduct] = useState({ name: '', arabicName: '', price: 4300, weight: '1kg', rating: 4.5, stock: true, image: '', detailImage: '', description: '', discount: '', category: 'dates', storageNote: '', weights: [] });
 
   const [showAddProduct, setShowAddProduct] = useState(false);
   const [reviews, setReviews] = useState([]);
@@ -150,7 +239,7 @@ function Description_Admin() {
       body: JSON.stringify({ 
         name: product.name, 
         arabicName: product.arabicName,
-        price: product.price, 
+        price: product.price || 4300, 
         discount: product.discount, 
         stock: product.stock, 
         description: product.description, 
@@ -165,13 +254,13 @@ function Description_Admin() {
   };
 
   const addProduct = async () => {
-    if (!newProduct.name || !newProduct.price) return showMsg('⚠️ Name aur Price required hai');
+    if (!newProduct.name) return showMsg('⚠️ Name required hai');
     const res = await fetch(`${API}/content/product`, {
       method: 'POST', headers: authHeaders,
-      body: JSON.stringify({ ...newProduct, price: Number(newProduct.price) })
+      body: JSON.stringify({ ...newProduct, price: 4300 })
     });
     const data = await res.json();
-    if (res.ok) { setProducts([...products, data.product]); setNewProduct({ name: '', arabicName: '', price: '', weight: '1kg', rating: 4.5, stock: true, image: '', detailImage: '', description: '', discount: '', category: 'dates', storageNote: '', weights: [] }); setShowAddProduct(false); showMsg('✅ Product added!'); }
+    if (res.ok) { setProducts([...products, data.product]); setNewProduct({ name: '', arabicName: '', price: 4300, weight: '1kg', rating: 4.5, stock: true, image: '', detailImage: '', description: '', discount: '', category: 'dates', storageNote: '', weights: [] }); setShowAddProduct(false); showMsg('✅ Product added!'); }
     else showMsg('❌ Failed to add');
   };
 
@@ -401,6 +490,7 @@ function Description_Admin() {
                     <textarea rows={4} value={editFeature.description} onChange={e => setEditFeature({ ...editFeature, description: e.target.value })} />
                     
                     <label>Product Images (P1, P2, P3, P4)</label>
+                    
                     {(editFeature.images || []).map((img, i) => (
                       <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
                         <label className="da-upload-label" style={{ flex: 1, margin: 0 }}>
@@ -408,13 +498,39 @@ function Description_Admin() {
                           <input type="file" accept="image/*" style={{ display: 'none' }}
                             onChange={async e => {
                               const file = e.target.files[0]; if (!file) return;
+                              showMsg("⌛ Uploading original image...");
                               const formData = new FormData(); formData.append('file', file);
                               const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
                               const data = await res.json();
-                              if (res.ok) updateFeatureImage(i, data.url || data.path);
+                              if (res.ok) {
+                                updateFeatureImage(i, data.url || data.path);
+                                showMsg("✅ Image uploaded! Click '📐 Adjust' to crop.");
+                              } else {
+                                showMsg("❌ Upload failed");
+                              }
                             }}
                           />
                         </label>
+                        {img && (
+                          <button 
+                            type="button"
+                            className="da-save-btn" 
+                            style={{ width: 'auto', padding: '6px 12px', background: '#3b82f6', margin: 0 }}
+                            onClick={() => {
+                              setCropImageSrc(img);
+                              setOnCropSave(() => async (croppedBlob) => {
+                                const croppedFile = new File([croppedBlob], 'cropped.jpeg', { type: 'image/jpeg' });
+                                const formData = new FormData(); formData.append('file', croppedFile);
+                                const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                                const data = await res.json();
+                                if (res.ok) updateFeatureImage(i, data.url || data.path);
+                              });
+                              setCropActive(true);
+                            }}
+                          >
+                            📐 Adjust
+                          </button>
+                        )}
                         {img && <img src={img} alt={`P${i+1}`} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }} onError={e => e.target.style.display='none'} />}
                         <button className="da-delete-btn" style={{ padding: '6px 12px' }} onClick={() => removeFeatureImage(i)}>🗑️</button>
                       </div>
@@ -625,10 +741,48 @@ function Description_Admin() {
                         </div>
                       )}
                     </div>
-                    <label>Main Catalog Image URL</label>
-                    <input placeholder="e.g. /Product 1.png" value={newProduct.image} onChange={e => setNewProduct({ ...newProduct, image: e.target.value })} />
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '8px', marginBottom: '20px', alignItems: 'center' }}>
+                      <label className="da-upload-label" style={{ flex: 1, margin: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                        📁 {newProduct.image ? 'Change Catalog Image' : 'Choose Catalog Image'}
+                        <input type="file" accept="image/*" style={{ display: 'none' }}
+                          onChange={async e => {
+                            const file = e.target.files[0]; if (!file) return;
+                            showMsg("⌛ Uploading catalog image...");
+                            const formData = new FormData(); formData.append('file', file);
+                            const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                            const data = await res.json();
+                            if (res.ok) {
+                              setNewProduct({ ...newProduct, image: data.url || data.path });
+                              showMsg("✅ Catalog image uploaded!");
+                            } else {
+                              showMsg("❌ Upload failed");
+                            }
+                          }}
+                        />
+                      </label>
+                      {newProduct.image && (
+                        <button 
+                          type="button"
+                          className="da-save-btn" 
+                          style={{ width: 'auto', padding: '10px 16px', background: '#3b82f6', margin: 0 }}
+                          onClick={() => {
+                            setCropImageSrc(newProduct.image);
+                            setOnCropSave(() => async (croppedBlob) => {
+                              const croppedFile = new File([croppedBlob], 'cropped.jpeg', { type: 'image/jpeg' });
+                              const formData = new FormData(); formData.append('file', croppedFile);
+                              const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                              const data = await res.json();
+                              if (res.ok) setNewProduct({ ...newProduct, image: data.url || data.path });
+                            });
+                            setCropActive(true);
+                          }}
+                        >
+                          📐 Adjust
+                        </button>
+                      )}
+                    </div>
 
-                    <div className="da-image-preview-box" style={{ marginTop: '20px' }}>
+                    <div className="da-image-preview-box">
                       {newProduct.detailImage ? (
                         <img src={newProduct.detailImage} alt="preview" />
                       ) : (
@@ -638,8 +792,46 @@ function Description_Admin() {
                         </div>
                       )}
                     </div>
-                    <label>Detail View Image URL</label>
-                    <input placeholder="Detail View Image" value={newProduct.detailImage || ''} onChange={e => setNewProduct({ ...newProduct, detailImage: e.target.value })} />
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '8px', alignItems: 'center' }}>
+                      <label className="da-upload-label" style={{ flex: 1, margin: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                        📁 {newProduct.detailImage ? 'Change Detail Image' : 'Choose Detail Image'}
+                        <input type="file" accept="image/*" style={{ display: 'none' }}
+                          onChange={async e => {
+                            const file = e.target.files[0]; if (!file) return;
+                            showMsg("⌛ Uploading detail image...");
+                            const formData = new FormData(); formData.append('file', file);
+                            const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                            const data = await res.json();
+                            if (res.ok) {
+                              setNewProduct({ ...newProduct, detailImage: data.url || data.path });
+                              showMsg("✅ Detail image uploaded!");
+                            } else {
+                              showMsg("❌ Upload failed");
+                            }
+                          }}
+                        />
+                      </label>
+                      {newProduct.detailImage && (
+                        <button 
+                          type="button"
+                          className="da-save-btn" 
+                          style={{ width: 'auto', padding: '10px 16px', background: '#3b82f6', margin: 0 }}
+                          onClick={() => {
+                            setCropImageSrc(newProduct.detailImage);
+                            setOnCropSave(() => async (croppedBlob) => {
+                              const croppedFile = new File([croppedBlob], 'cropped.jpeg', { type: 'image/jpeg' });
+                              const formData = new FormData(); formData.append('file', croppedFile);
+                              const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                              const data = await res.json();
+                              if (res.ok) setNewProduct({ ...newProduct, detailImage: data.url || data.path });
+                            });
+                            setCropActive(true);
+                          }}
+                        >
+                          📐 Adjust
+                        </button>
+                      )}
+                    </div>
                   </div>
 
                   <div className="da-edit-right">
@@ -649,13 +841,16 @@ function Description_Admin() {
                     <label>Arabic Name</label>
                     <input placeholder="عجوة بني" style={{ textAlign: 'right', fontSize: '1.2rem' }} value={newProduct.arabicName} onChange={e => setNewProduct({ ...newProduct, arabicName: e.target.value })} />
 
-                    <label>Price (PKR)</label>
-                    <input type="number" placeholder="e.g. 1200" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: e.target.value })} />
-                    
                     <label>Storage Note</label>
                     <textarea rows={3} placeholder="Storage advice..." value={newProduct.storageNote} onChange={e => setNewProduct({ ...newProduct, storageNote: e.target.value })} />
 
                     <label>Weights & Savings</label>
+                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px' }}>
+                      <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '500g Mini Box', savings: '' }] })}>+ 500g Mini Box</button>
+                      <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '1kg Special Box', savings: '' }] })}>+ 1kg Special Box</button>
+                      <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '2kg Briefcase Box', savings: '(Save Rs 500)' }] })}>+ 2kg Briefcase Box</button>
+                      <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '5kg Family Carton', savings: '(Save Rs 1500)' }] })}>+ 5kg Family Carton</button>
+                    </div>
                     <div className="da-weights-editor">
                       {(newProduct.weights || []).map((w, idx) => (
                         <div key={idx} className="da-weight-row">
@@ -670,7 +865,7 @@ function Description_Admin() {
                           <button onClick={() => setNewProduct({ ...newProduct, weights: newProduct.weights.filter((_, i) => i !== idx) })}>✕</button>
                         </div>
                       ))}
-                      <button className="da-add-btn" onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '', savings: '' }] })}>+ Add Weight Option</button>
+                      <button className="da-add-btn" onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '', savings: '' }] })}>+ Add Custom Option</button>
                     </div>
 
                     <label>Rating (1-5)</label>
@@ -702,10 +897,48 @@ function Description_Admin() {
                           <div className="da-image-preview-box">
                             <img src={editProduct.image} alt="preview" />
                           </div>
-                          <label>Main Catalog Image URL</label>
-                          <input value={editProduct.image} onChange={e => setEditProduct({ ...editProduct, image: e.target.value })} />
+                          <div style={{ display: 'flex', gap: '8px', marginTop: '8px', marginBottom: '20px', alignItems: 'center' }}>
+                            <label className="da-upload-label" style={{ flex: 1, margin: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                              📁 {editProduct.image ? 'Change Catalog Image' : 'Choose Catalog Image'}
+                              <input type="file" accept="image/*" style={{ display: 'none' }}
+                                onChange={async e => {
+                                  const file = e.target.files[0]; if (!file) return;
+                                  showMsg("⌛ Uploading catalog image...");
+                                  const formData = new FormData(); formData.append('file', file);
+                                  const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                                  const data = await res.json();
+                                  if (res.ok) {
+                                    setEditProduct({ ...editProduct, image: data.url || data.path });
+                                    showMsg("✅ Catalog image uploaded!");
+                                  } else {
+                                    showMsg("❌ Upload failed");
+                                  }
+                                }}
+                              />
+                            </label>
+                            {editProduct.image && (
+                              <button 
+                                type="button"
+                                className="da-save-btn" 
+                                style={{ width: 'auto', padding: '10px 16px', background: '#3b82f6', margin: 0 }}
+                                onClick={() => {
+                                  setCropImageSrc(editProduct.image);
+                                  setOnCropSave(() => async (croppedBlob) => {
+                                    const croppedFile = new File([croppedBlob], 'cropped.jpeg', { type: 'image/jpeg' });
+                                    const formData = new FormData(); formData.append('file', croppedFile);
+                                    const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                                    const data = await res.json();
+                                    if (res.ok) setEditProduct({ ...editProduct, image: data.url || data.path });
+                                  });
+                                  setCropActive(true);
+                                }}
+                              >
+                                📐 Adjust
+                              </button>
+                            )}
+                          </div>
 
-                          <div className="da-image-preview-box" style={{ marginTop: '20px' }}>
+                          <div className="da-image-preview-box">
                             {editProduct.detailImage ? (
                               <img src={editProduct.detailImage} alt="detail preview" />
                             ) : (
@@ -715,8 +948,46 @@ function Description_Admin() {
                               </div>
                             )}
                           </div>
-                          <label>Detail View Image URL</label>
-                          <input value={editProduct.detailImage || ''} onChange={e => setEditProduct({ ...editProduct, detailImage: e.target.value })} />
+                          <div style={{ display: 'flex', gap: '8px', marginTop: '8px', alignItems: 'center' }}>
+                            <label className="da-upload-label" style={{ flex: 1, margin: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                              📁 {editProduct.detailImage ? 'Change Detail Image' : 'Choose Detail Image'}
+                              <input type="file" accept="image/*" style={{ display: 'none' }}
+                                onChange={async e => {
+                                  const file = e.target.files[0]; if (!file) return;
+                                  showMsg("⌛ Uploading detail image...");
+                                  const formData = new FormData(); formData.append('file', file);
+                                  const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                                  const data = await res.json();
+                                  if (res.ok) {
+                                    setEditProduct({ ...editProduct, detailImage: data.url || data.path });
+                                    showMsg("✅ Detail image uploaded!");
+                                  } else {
+                                    showMsg("❌ Upload failed");
+                                  }
+                                }}
+                              />
+                            </label>
+                            {editProduct.detailImage && (
+                              <button 
+                                type="button"
+                                className="da-save-btn" 
+                                style={{ width: 'auto', padding: '10px 16px', background: '#3b82f6', margin: 0 }}
+                                onClick={() => {
+                                  setCropImageSrc(editProduct.detailImage);
+                                  setOnCropSave(() => async (croppedBlob) => {
+                                    const croppedFile = new File([croppedBlob], 'cropped.jpeg', { type: 'image/jpeg' });
+                                    const formData = new FormData(); formData.append('file', croppedFile);
+                                    const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                                    const data = await res.json();
+                                    if (res.ok) setEditProduct({ ...editProduct, detailImage: data.url || data.path });
+                                  });
+                                  setCropActive(true);
+                                }}
+                              >
+                                📐 Adjust
+                              </button>
+                            )}
+                          </div>
                         </div>
 
                         <div className="da-edit-right">
@@ -724,12 +995,16 @@ function Description_Admin() {
                           <input value={editProduct.name} onChange={e => setEditProduct({ ...editProduct, name: e.target.value })} />
                           <label>Arabic Name</label>
                           <input style={{ textAlign: 'right', fontSize: '1.2rem' }} value={editProduct.arabicName} onChange={e => setEditProduct({ ...editProduct, arabicName: e.target.value })} />
-                          <label>Price (PKR)</label>
-                          <input type="number" value={editProduct.price} onChange={e => setEditProduct({ ...editProduct, price: Number(e.target.value) })} />
                           <label>Storage Note</label>
                           <textarea rows={3} value={editProduct.storageNote} onChange={e => setEditProduct({ ...editProduct, storageNote: e.target.value })} />
                           
                           <label>Weights & Savings</label>
+                          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px' }}>
+                             <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '500g Mini Box', savings: '' }] })}>+ 500g Mini Box</button>
+                             <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '1kg Special Box', savings: '' }] })}>+ 1kg Special Box</button>
+                             <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '2kg Briefcase Box', savings: '(Save Rs 500)' }] })}>+ 2kg Briefcase Box</button>
+                             <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '5kg Family Carton', savings: '(Save Rs 1500)' }] })}>+ 5kg Family Carton</button>
+                          </div>
                           <div className="da-weights-editor">
                             {(editProduct.weights || []).map((w, idx) => (
                               <div key={idx} className="da-weight-row">
@@ -871,13 +1146,39 @@ function Description_Admin() {
                       <input type="file" accept="image/*" style={{ display: 'none' }}
                         onChange={async e => {
                           const file = e.target.files[0]; if (!file) return;
+                          showMsg("⌛ Uploading original map...");
                           const formData = new FormData(); formData.append('file', file);
                           const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
                           const data = await res.json();
-                          if (res.ok) setEditDeliveryMap({ ...editDeliveryMap, mapImage: data.url || data.path });
+                          if (res.ok) {
+                            setEditDeliveryMap({ ...editDeliveryMap, mapImage: data.url || data.path });
+                            showMsg("✅ Map uploaded! Click '📐 Adjust Map' to crop.");
+                          } else {
+                            showMsg("❌ Upload failed");
+                          }
                         }}
                       />
                     </label>
+                    {editDeliveryMap.mapImage && (
+                      <button 
+                        type="button"
+                        className="da-save-btn" 
+                        style={{ width: 'auto', padding: '6px 12px', background: '#3b82f6', marginTop: '8px' }}
+                        onClick={() => {
+                          setCropImageSrc(editDeliveryMap.mapImage);
+                          setOnCropSave(() => async (croppedBlob) => {
+                            const croppedFile = new File([croppedBlob], 'cropped.jpeg', { type: 'image/jpeg' });
+                            const formData = new FormData(); formData.append('file', croppedFile);
+                            const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                            const data = await res.json();
+                            if (res.ok) setEditDeliveryMap({ ...editDeliveryMap, mapImage: data.url || data.path });
+                          });
+                          setCropActive(true);
+                        }}
+                      >
+                        📐 Adjust Map
+                      </button>
+                    )}
                     {editDeliveryMap.mapImage && (
                       <div style={{ marginTop: '12px' }}>
                         <p className="da-preview-label">Preview:</p>
@@ -963,6 +1264,7 @@ function Description_Admin() {
                           <input type="file" accept="image/*" style={{ display: 'none' }}
                             onChange={async e => {
                               const file = e.target.files[0]; if (!file) return;
+                              showMsg("⌛ Uploading original slide...");
                               const formData = new FormData(); formData.append('file', file);
                               const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
                               const data = await res.json();
@@ -970,10 +1272,37 @@ function Description_Admin() {
                                 const updated = [...editAbout.images];
                                 updated[i] = data.url || data.path;
                                 setEditAbout({ ...editAbout, images: updated });
+                                showMsg("✅ Slide uploaded! Click '📐 Adjust' to crop.");
+                              } else {
+                                showMsg("❌ Upload failed");
                               }
                             }}
                           />
                         </label>
+                        {img && (
+                          <button 
+                            type="button"
+                            className="da-save-btn" 
+                            style={{ width: 'auto', padding: '6px 12px', background: '#3b82f6', margin: 0 }}
+                            onClick={() => {
+                              setCropImageSrc(img);
+                              setOnCropSave(() => async (croppedBlob) => {
+                                const croppedFile = new File([croppedBlob], 'cropped.jpeg', { type: 'image/jpeg' });
+                                const formData = new FormData(); formData.append('file', croppedFile);
+                                const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                                const data = await res.json();
+                                if (res.ok) {
+                                  const updated = [...editAbout.images];
+                                  updated[i] = data.url || data.path;
+                                  setEditAbout({ ...editAbout, images: updated });
+                                }
+                              });
+                              setCropActive(true);
+                            }}
+                          >
+                            📐 Adjust
+                          </button>
+                        )}
                         {img && <img src={img} alt={`slide${i}`} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }} onError={e => e.target.style.display='none'} />}
                         <button className="da-delete-btn" style={{ padding: '6px 12px' }}
                           onClick={() => setEditAbout({ ...editAbout, images: editAbout.images.filter((_, j) => j !== i) })}>
@@ -1048,6 +1377,165 @@ function Description_Admin() {
             </label>
           </div>
         )}
+
+        {cropActive && cropImageSrc && (
+          <div style={{
+            position: 'fixed',
+            top: 0, left: 0, right: 0, bottom: 0,
+            background: 'rgba(0,0,0,0.8)',
+            zIndex: 9999,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '20px'
+          }}>
+            <div style={{
+              background: '#ffffff',
+              borderRadius: '16px',
+              padding: '24px',
+              width: '100%',
+              maxWidth: '650px',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px',
+              maxHeight: '90vh',
+              overflowY: 'auto'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <h3 style={{ margin: 0, color: '#1a1a1a', fontSize: '18px', fontWeight: '700' }}>✂️ Crop Image</h3>
+                <button 
+                  onClick={() => { setCropActive(false); setCropImageSrc(null); setCompletedCrop(null); }}
+                  style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#6b7280' }}
+                >✕</button>
+              </div>
+
+              <div style={{ 
+                position: 'relative', 
+                width: '100%', 
+                maxHeight: '400px', 
+                background: '#f3f4f6', 
+                borderRadius: '10px', 
+                overflow: 'auto',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '10px'
+              }}>
+                <ReactCrop
+                  crop={crop}
+                  onChange={(c) => setCrop(c)}
+                  onComplete={(c) => setCompletedCrop(c)}
+                  aspect={undefined}
+                  style={{ maxWidth: '100%' }}
+                >
+                  <img
+                    ref={imgRef}
+                    src={cropImageSrc}
+                    alt="Crop source"
+                    onLoad={onImageLoad}
+                    style={{ maxHeight: '350px', objectFit: 'contain', width: 'auto', maxWidth: '100%' }}
+                    crossOrigin="anonymous"
+                    draggable={false}
+                  />
+                  {/* Custom edge/side handles */}
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '14px',
+                    height: '6px',
+                    backgroundColor: '#ffffff',
+                    border: '1.5px solid #4b5563',
+                    borderRadius: '2px',
+                    pointerEvents: 'none',
+                    zIndex: 1000
+                  }} />
+                  <div style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    left: '50%',
+                    transform: 'translate(-50%, 50%)',
+                    width: '14px',
+                    height: '6px',
+                    backgroundColor: '#ffffff',
+                    border: '1.5px solid #4b5563',
+                    borderRadius: '2px',
+                    pointerEvents: 'none',
+                    zIndex: 1000
+                  }} />
+                  <div style={{
+                    position: 'absolute',
+                    top: '50%',
+                    right: 0,
+                    transform: 'translate(50%, -50%)',
+                    width: '6px',
+                    height: '14px',
+                    backgroundColor: '#ffffff',
+                    border: '1.5px solid #4b5563',
+                    borderRadius: '2px',
+                    pointerEvents: 'none',
+                    zIndex: 1000
+                  }} />
+                  <div style={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: 0,
+                    transform: 'translate(-50%, -50%)',
+                    width: '6px',
+                    height: '14px',
+                    backgroundColor: '#ffffff',
+                    border: '1.5px solid #4b5563',
+                    borderRadius: '2px',
+                    pointerEvents: 'none',
+                    zIndex: 1000
+                  }} />
+                </ReactCrop>
+              </div>
+
+              <div style={{ fontSize: '12px', color: '#6b7280', textAlign: 'center' }}>
+                💡 Mouse pointer se image par crop area ke corners ya side center indicators ko drag kar ke select karein.
+              </div>
+
+              <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
+                <button 
+                  onClick={executeCrop}
+                  style={{
+                    flex: 1,
+                    padding: '12px',
+                    background: 'linear-gradient(135deg, #c5a059, #b8860b)',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '10px',
+                    fontWeight: '700',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(197, 160, 89, 0.2)'
+                  }}
+                >
+                  Apply Crop & Save
+                </button>
+                <button 
+                  onClick={() => { setCropActive(false); setCropImageSrc(null); setCompletedCrop(null); }}
+                  style={{
+                    padding: '12px 20px',
+                    background: '#f3f4f6',
+                    color: '#4b5563',
+                    border: 'none',
+                    borderRadius: '10px',
+                    fontWeight: '600',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+
+
           </div>
         </div>
       </div>
