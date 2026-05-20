@@ -427,8 +427,27 @@ function Description_Admin() {
                       <input value={editHero.title} onChange={e => setEditHero({ ...editHero, title: e.target.value })} />
                       <label>Text</label>
                       <textarea rows={4} value={editHero.text} onChange={e => setEditHero({ ...editHero, text: e.target.value })} />
-                      <label>Video Path</label>
-                      <input value={editHero.video} onChange={e => setEditHero({ ...editHero, video: e.target.value })} />
+                      <label>Video Path / Upload</label>
+                      <input value={editHero.video} onChange={e => setEditHero({ ...editHero, video: e.target.value })} placeholder="Enter video URL or upload below" />
+                      
+                      <label className="da-upload-label" style={{ marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                        📤 Upload Video
+                        <input type="file" accept="video/*" style={{ display: 'none' }}
+                          onChange={async e => {
+                            const file = e.target.files[0]; if (!file) return;
+                            showMsg("⌛ Uploading video, please wait...");
+                            const formData = new FormData(); formData.append('file', file);
+                            const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+                            const data = await res.json();
+                            if (res.ok) {
+                              setEditHero({ ...editHero, video: data.url || data.path });
+                              showMsg("✅ Video uploaded successfully!");
+                            } else {
+                              showMsg("❌ Video upload failed");
+                            }
+                          }}
+                        />
+                      </label>
                       {editHero.video && (
                         <div className="da-video-preview">
                           <p className="da-preview-label">Preview:</p>
