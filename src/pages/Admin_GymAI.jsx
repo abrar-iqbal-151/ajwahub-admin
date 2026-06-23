@@ -17,6 +17,7 @@ const menuItems = [
   { icon: '📦', label: 'Gift Boxes', path: '/admin-gift-boxes' },
   { icon: '💳', label: 'Payments', path: '/admin-payments' },
   { icon: '🎥', label: 'GymAI Videos', path: '/admin-gymai' },
+  { icon: '📦', label: 'Inventory', path: '/admin-inventory' },
 ];
 
 const emptyVideo = { title: '', description: '', url: '', thumbnail: '', category: 'health' };

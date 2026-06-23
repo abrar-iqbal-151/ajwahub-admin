@@ -16,6 +16,7 @@ const menuItems = [
   { icon: '🎁', label: 'Gift Orders', path: '/admin-gift-orders' },
   { icon: '📦', label: 'Gift Boxes', path: '/admin-gift-boxes' },
   { icon: '💳', label: 'Payments', path: '/admin-payments' },
+  { icon: '📦', label: 'Inventory', path: '/admin-inventory' },
 ];
 
 const empty = { name: '', description: '', price: '', originalPrice: '', image: '', category: 'dates', badge: 'Premium', stock: true, rating: 4.5, weight: '1kg', featured: false };
