@@ -17,6 +17,7 @@ const menuItems = [
   { icon: '📦', label: 'Gift Boxes', path: '/admin-gift-boxes' },
   { icon: '💳', label: 'Payments', path: '/admin-payments' },
   { icon: '🎥', label: 'GymAI Videos', path: '/admin-gymai' },
+  { icon: '📦', label: 'Inventory', path: '/admin-inventory' },
 ];
 
 function AdminPanel() {
@@ -164,8 +165,6 @@ function AdminPanel() {
             {inviteLink && <p className="invite-note">⚠️ This link expires in 24 hours. Share it only with trusted people.</p>}
           </div>
 
-
-
         </div>
       </div>
     </div>
@@ -173,4 +172,3 @@ function AdminPanel() {
 }
 
 export default AdminPanel;
-
