@@ -45,20 +45,32 @@ function Admin_Inventory() {
   };
 
   const handleUpdate = async (product) => {
-    setSavingId(product._id);
+    // Determine auto-stock status before saving
+    let payload = { ...product };
+    if (payload.autoStockManagement) {
+      if (payload.totalStockKg <= payload.thresholdKg) {
+        payload.stock = false;
+      } else {
+        payload.stock = true;
+      }
+    }
+
+    setSavingId(payload._id);
     const tok = localStorage.getItem('ajwaHub_adminToken');
     try {
-      const endpointId = product.id && product._collection === 'shop-products' ? product.id : product._id;
-      const res = await fetch(`${API}/${product._collection}/${endpointId}`, {
+      const endpointId = payload.id && payload._collection === 'shop-products' ? payload.id : payload._id;
+      const res = await fetch(`${API}/${payload._collection}/${endpointId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${tok}`
         },
-        body: JSON.stringify(product)
+        body: JSON.stringify(payload)
       });
       
       if (res.ok) {
+        // Update local state to reflect the new stock status
+        setProducts(products.map(p => p._id === payload._id ? { ...p, stock: payload.stock } : p));
         alert('Stock settings updated successfully! ✅');
       } else {
         alert('Failed to update. ❌');
