@@ -7,6 +7,7 @@ const API = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api`;
 
 const menuItems = [
   { icon: '🏠', label: 'Dashboard', path: '/panel' },
+  { icon: '📊', label: 'Analytics', path: '/admin-analytics' },
   { icon: '👥', label: 'Users', path: '/panel/users' },
   { icon: '🎬', label: 'Description Editor', path: '/description' },
   { icon: '🏡', label: 'Home Editor', path: '/home-editor' },

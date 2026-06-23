@@ -15,6 +15,7 @@ import Admin_Payment from './pages/Admin_Payment';
 import Admin_GymAI from './pages/Admin_GymAI';
 import Admin_Ratings from './pages/Admin_Ratings';
 import Admin_Inventory from './pages/Admin_Inventory';
+import Admin_Analytics from './pages/Admin_Analytics';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
       <Route path="/admin-payments" element={<Admin_Payment />} />
       <Route path="/admin-gymai" element={<Admin_GymAI />} />
       <Route path="/admin-inventory" element={<Admin_Inventory />} />
+      <Route path="/admin-analytics" element={<Admin_Analytics />} />
     </Routes>
   );
 }
