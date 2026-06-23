@@ -76,9 +76,12 @@ function Admin_Analytics() {
   const todayOrders = allOrders.filter(o => isToday(o.createdAt || o.orderDate));
   const monthOrders = allOrders.filter(o => isThisMonth(o.createdAt || o.orderDate));
 
-  const todayRevenue = todayOrders.reduce((sum, o) => sum + (o.total || o.totalPrice || o.amount || 0), 0);
-  const monthRevenue = monthOrders.reduce((sum, o) => sum + (o.total || o.totalPrice || o.amount || 0), 0);
-  const totalRevenue = allOrders.reduce((sum, o) => sum + (o.total || o.totalPrice || o.amount || 0), 0);
+  // Only count revenue for completed or approved orders (exclude Cancelled and Pending Approval)
+  const isValidRevenue = (o) => o.status === 'Paid' || o.status === 'Approved' || o.status === 'Delivered';
+
+  const todayRevenue = todayOrders.filter(isValidRevenue).reduce((sum, o) => sum + (o.total || o.totalPrice || o.amount || 0), 0);
+  const monthRevenue = monthOrders.filter(isValidRevenue).reduce((sum, o) => sum + (o.total || o.totalPrice || o.amount || 0), 0);
+  const totalRevenue = allOrders.filter(isValidRevenue).reduce((sum, o) => sum + (o.total || o.totalPrice || o.amount || 0), 0);
 
   // Users Calculation
   const newUsersToday = users.filter(u => isToday(u.createdAt)).length;
