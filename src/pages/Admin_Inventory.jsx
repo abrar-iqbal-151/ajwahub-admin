@@ -21,9 +21,22 @@ function Admin_Inventory() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API}/shop-products`);
-      const data = await res.json();
-      setProducts(data.products || []);
+      // Fetch all three collections
+      const [shopRes, premiumRes, giftRes] = await Promise.all([
+        fetch(`${API}/shop-products`),
+        fetch(`${API}/premium-products`),
+        fetch(`${API}/gift-boxes`)
+      ]);
+      const shopData = await shopRes.json();
+      const premiumData = await premiumRes.json();
+      const giftData = await giftRes.json();
+
+      const combined = [
+        ...(shopData.products || []).map(p => ({ ...p, _collection: 'shop-products', _displayTag: 'Shop Product' })),
+        ...(premiumData.products || []).map(p => ({ ...p, _collection: 'premium-products', _displayTag: 'Premium Product' })),
+        ...(giftData.boxes || []).map(p => ({ ...p, _collection: 'gift-boxes', _displayTag: 'Gift Box' }))
+      ];
+      setProducts(combined);
     } catch (err) {
       console.error(err);
     }
@@ -31,11 +44,11 @@ function Admin_Inventory() {
   };
 
   const handleUpdate = async (product) => {
-    setSavingId(product.id);
+    setSavingId(product._id);
     const tok = localStorage.getItem('ajwaHub_adminToken');
     try {
-      // Send the updated stock management fields along with existing fields
-      const res = await fetch(`${API}/shop-products/${product.id}`, {
+      const endpointId = product.id && product._collection === 'shop-products' ? product.id : product._id;
+      const res = await fetch(`${API}/${product._collection}/${endpointId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -57,7 +70,7 @@ function Admin_Inventory() {
   };
 
   const handleChange = (id, field, value) => {
-    setProducts(products.map(p => p.id === id ? { ...p, [field]: value } : p));
+    setProducts(products.map(p => p._id === id ? { ...p, [field]: value } : p));
   };
 
   return (
@@ -78,7 +91,7 @@ function Admin_Inventory() {
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px' }}>
           {products.map(product => (
-            <div key={product.id} style={{
+            <div key={product._id} style={{
               background: 'white',
               borderRadius: '15px',
               padding: '20px',
@@ -90,6 +103,7 @@ function Admin_Inventory() {
                 <img src={product.image} alt={product.name} style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '10px', background: '#f5f5f5' }} />
                 <div>
                   <h3 style={{ margin: '0 0 5px 0', fontSize: '18px', color: '#333' }}>{product.name}</h3>
+                  <div style={{ marginBottom: '8px', fontSize: '12px', color: '#888' }}>{product._displayTag}</div>
                   <span style={{ 
                     padding: '4px 10px', 
                     borderRadius: '20px', 
@@ -108,7 +122,7 @@ function Admin_Inventory() {
                   <input 
                     type="checkbox" 
                     checked={product.autoStockManagement || false}
-                    onChange={(e) => handleChange(product.id, 'autoStockManagement', e.target.checked)}
+                    onChange={(e) => handleChange(product._id, 'autoStockManagement', e.target.checked)}
                     style={{ width: '18px', height: '18px', accentColor: '#4CAF50' }}
                   />
                   Enable Auto-Stock Management
@@ -121,7 +135,7 @@ function Admin_Inventory() {
                       <input 
                         type="number" 
                         value={product.totalStockKg || 0}
-                        onChange={(e) => handleChange(product.id, 'totalStockKg', Number(e.target.value))}
+                        onChange={(e) => handleChange(product._id, 'totalStockKg', Number(e.target.value))}
                         style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '14px' }}
                       />
                     </div>
@@ -130,7 +144,7 @@ function Admin_Inventory() {
                       <input 
                         type="number" 
                         value={product.thresholdKg || 0}
-                        onChange={(e) => handleChange(product.id, 'thresholdKg', Number(e.target.value))}
+                        onChange={(e) => handleChange(product._id, 'thresholdKg', Number(e.target.value))}
                         style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #ddd', fontSize: '14px' }}
                       />
                     </div>
@@ -140,7 +154,7 @@ function Admin_Inventory() {
 
               <button 
                 onClick={() => handleUpdate(product)}
-                disabled={savingId === product.id}
+                disabled={savingId === product._id}
                 style={{
                   width: '100%',
                   padding: '12px',
@@ -150,12 +164,12 @@ function Admin_Inventory() {
                   borderRadius: '8px',
                   fontSize: '15px',
                   fontWeight: 'bold',
-                  cursor: savingId === product.id ? 'not-allowed' : 'pointer',
-                  opacity: savingId === product.id ? 0.7 : 1,
+                  cursor: savingId === product._id ? 'not-allowed' : 'pointer',
+                  opacity: savingId === product._id ? 0.7 : 1,
                   transition: 'background 0.2s'
                 }}
               >
-                {savingId === product.id ? 'Saving...' : '💾 Save Settings'}
+                {savingId === product._id ? 'Saving...' : '💾 Save Settings'}
               </button>
             </div>
           ))}
