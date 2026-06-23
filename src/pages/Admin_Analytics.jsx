@@ -113,8 +113,8 @@ function Admin_Analytics() {
         </div>
       </aside>
 
-      <div className="dashboard-main" style={{ background: '#f3f4f6', minHeight: '100vh', color: '#111827' }}>
-        <header className="topbar" style={{ background: '#ffffff', borderBottom: '1px solid #e5e7eb', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+      <div className="dashboard-main">
+        <header className="topbar">
           <button className="topbar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)} style={{ color: '#c5a059' }}>{sidebarOpen ? '◀' : '▶'}</button>
           <h1 className="topbar-title" style={{ color: '#c5a059', letterSpacing: '1px' }}>📊 Analytics & Reports</h1>
           <div className="topbar-right">
