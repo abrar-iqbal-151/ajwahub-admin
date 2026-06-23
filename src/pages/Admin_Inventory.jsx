@@ -94,8 +94,8 @@ function Admin_Inventory() {
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
         <div>
-          <h1 style={{ fontSize: '28px', color: '#1a1a1a', marginBottom: '10px' }}>Inventory & Auto-Stock Management 📦</h1>
-          <p style={{ color: '#666', fontSize: '15px' }}>Configure automatic out-of-stock logic. Set the total stock in Kg and the threshold at which the system will automatically mark the product as Out of Stock.</p>
+          <h1 style={{ fontSize: '28px', color: 'white', marginBottom: '10px' }}>Inventory & Auto-Stock Management 📦</h1>
+          <p style={{ color: 'white', fontSize: '15px' }}>Configure automatic out-of-stock logic. Set the total stock in Kg and the threshold at which the system will automatically mark the product as Out of Stock.</p>
         </div>
       </div>
 
