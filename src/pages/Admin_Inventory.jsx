@@ -9,6 +9,7 @@ function Admin_Inventory() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [savingId, setSavingId] = useState(null);
+  const [activeTab, setActiveTab] = useState('shop-products');
 
   useEffect(() => {
     const adminData = localStorage.getItem('ajwaHub_admin');
@@ -86,11 +87,32 @@ function Admin_Inventory() {
         </div>
       </div>
 
+      <div style={{ display: 'flex', gap: '15px', marginBottom: '25px', background: '#ffffff', padding: '6px', borderRadius: '12px', width: 'fit-content', border: '1px solid rgba(0, 0, 0, 0.1)', boxShadow: '0 4px 10px rgba(0, 0, 0, 0.05)' }}>
+        <button 
+          style={{ background: activeTab === 'shop-products' ? '#dc2626' : 'transparent', color: activeTab === 'shop-products' ? '#fff' : '#4b5563', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.3s' }}
+          onClick={() => setActiveTab('shop-products')}
+        >
+          🛍️ Shop Products ({products.filter(p => p._collection === 'shop-products').length})
+        </button>
+        <button 
+          style={{ background: activeTab === 'premium-products' ? '#dc2626' : 'transparent', color: activeTab === 'premium-products' ? '#fff' : '#4b5563', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.3s' }}
+          onClick={() => setActiveTab('premium-products')}
+        >
+          👑 Premium Products ({products.filter(p => p._collection === 'premium-products').length})
+        </button>
+        <button 
+          style={{ background: activeTab === 'gift-boxes' ? '#dc2626' : 'transparent', color: activeTab === 'gift-boxes' ? '#fff' : '#4b5563', border: 'none', padding: '10px 20px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', transition: 'all 0.3s' }}
+          onClick={() => setActiveTab('gift-boxes')}
+        >
+          🎁 Gift Boxes ({products.filter(p => p._collection === 'gift-boxes').length})
+        </button>
+      </div>
+
       {loading ? (
         <p style={{ textAlign: 'center', fontSize: '18px', color: '#666' }}>Loading products...</p>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '20px' }}>
-          {products.map(product => (
+          {products.filter(p => p._collection === activeTab).map(product => (
             <div key={product._id} style={{
               background: 'white',
               borderRadius: '15px',
