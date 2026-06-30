@@ -174,6 +174,19 @@ function Admin_Product() {
     else showMsg('❌ Failed to update');
   };
 
+  const deleteProduct = async (id) => {
+    if (!window.confirm("Are you sure you want to completely remove this product?")) return;
+    const res = await fetch(`${API}/shop-products/${id}`, {
+      method: 'DELETE', headers: authHeaders
+    });
+    if (res.ok) {
+      showMsg('✅ Product removed!');
+      fetchProducts();
+    } else {
+      showMsg('❌ Failed to remove');
+    }
+  };
+
   const addProduct = async () => {
     if (!newProduct.name) return showMsg('⚠️ Name required hai');
     const res = await fetch(`${API}/shop-products`, {
@@ -518,7 +531,15 @@ function Admin_Product() {
                       <span className={`ap-stock ${product.stock ? 'in' : 'out'}`}>{product.stock ? '● In Stock' : '○ Out of Stock'}</span>
                     </div>
                     <div className="ap-rating">{renderStars(product.rating)} <span>({product.rating})</span></div>
-                    <button className="ap-edit-btn" onClick={() => setEditProduct({ ...product })}>✏️ Edit Product</button>
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+                      <button className="ap-edit-btn" style={{ flex: 1 }} onClick={() => setEditProduct({ ...product })}>✏️ Edit</button>
+                      <button 
+                        style={{ flex: 1, padding: '8px', color: '#dc2626', background: '#fee2e2', border: '1px solid rgba(220, 38, 38, 0.2)', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s' }} 
+                        onClick={() => deleteProduct(product._id || product.id)}
+                        onMouseOver={(e) => e.target.style.background = '#fecaca'}
+                        onMouseOut={(e) => e.target.style.background = '#fee2e2'}
+                      >🗑️ Remove</button>
+                    </div>
                   </div>
                 </div>
               ))}
