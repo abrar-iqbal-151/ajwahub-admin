@@ -112,25 +112,44 @@ function BoxForm({ box, onChange, onSave, onCancel, isNew, onUpload }) {
 
 
 // ── Products Panel for each gift box ──
-function BoxProductsPanel({ box, allProducts, token, onMsg }) {
+function BoxProductsPanel({ box, token, onMsg }) {
   const [open, setOpen] = useState(false);
   const [boxProducts, setBoxProducts] = useState(box.products || []);
-  const [search, setSearch] = useState('');
   const [saving, setSaving] = useState(false);
+  
+  // Custom item state
+  const [itemName, setItemName] = useState('');
+  const [itemImage, setItemImage] = useState('');
 
-  const isAdded = (pid) => boxProducts.some(p => (p._id || p.id) === (pid._id || pid.id));
-
-  const toggleProduct = (product) => {
-    const id = product._id || product.id;
-    if (isAdded(product)) {
-      setBoxProducts(prev => prev.filter(p => (p._id || p.id) !== id));
-    } else {
-      if (boxProducts.length >= box.maxItems) {
-        onMsg(`⚠️ Max ${box.maxItems} items allowed!`);
-        return;
-      }
-      setBoxProducts(prev => [...prev, product]);
+  const uploadItemImage = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    try {
+      const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+      const data = await res.json();
+      if (res.ok) setItemImage(data.path);
+    } catch {
+      onMsg('❌ Upload failed');
     }
+  };
+
+  const addItem = () => {
+    if (!itemName || !itemImage) {
+      onMsg('⚠️ Name aur Image dono zaruri hain!');
+      return;
+    }
+    if (boxProducts.length >= box.maxItems) {
+      onMsg(`⚠️ Max ${box.maxItems} items allowed!`);
+      return;
+    }
+    const newItem = { id: Date.now().toString(), name: itemName, image: itemImage };
+    setBoxProducts(prev => [...prev, newItem]);
+    setItemName('');
+    setItemImage('');
+  };
+
+  const removeItem = (id) => {
+    setBoxProducts(prev => prev.filter(p => p.id !== id));
   };
 
   const saveProducts = async () => {
@@ -141,15 +160,11 @@ function BoxProductsPanel({ box, allProducts, token, onMsg }) {
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
         body: JSON.stringify({ ...box, products: boxProducts, price: Number(box.price), maxItems: Number(box.maxItems) })
       });
-      if (res.ok) onMsg('✅ Products saved!');
+      if (res.ok) onMsg('✅ Products saved in database!');
       else onMsg('❌ Save failed');
     } catch { onMsg('❌ Network error'); }
     setSaving(false);
   };
-
-  const filtered = allProducts.filter(p =>
-    p.name?.toLowerCase().includes(search.toLowerCase())
-  );
 
   return (
     <div style={{ marginTop: '10px' }}>
@@ -162,7 +177,7 @@ function BoxProductsPanel({ box, allProducts, token, onMsg }) {
           justifyContent: 'space-between', alignItems: 'center', transition: 'all 0.2s'
         }}
       >
-        <span>🛒 Products ({boxProducts.length}/{box.maxItems})</span>
+        <span>🛒 Box Items ({boxProducts.length}/{box.maxItems})</span>
         <span>{open ? '▲' : '▼'}</span>
       </button>
 
@@ -170,93 +185,84 @@ function BoxProductsPanel({ box, allProducts, token, onMsg }) {
         <div style={{
           marginTop: '8px', background: 'rgba(10,8,5,0.95)',
           border: '1px solid rgba(197,160,89,0.2)', borderRadius: '12px',
-          padding: '12px', display: 'flex', flexDirection: 'column', gap: '10px'
+          padding: '12px', display: 'flex', flexDirection: 'column', gap: '15px'
         }}>
-          {boxProducts.length > 0 && (
-            <div>
-              <p style={{ fontSize: '10px', color: '#c5a059', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>
-                Selected ({boxProducts.length})
-              </p>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                {boxProducts.map((p, i) => (
-                  <div key={i} style={{ position: 'relative', width: '52px' }}>
-                    <img
-                      src={p.image} alt={p.name}
-                      style={{ width: '52px', height: '52px', objectFit: 'cover', borderRadius: '8px', border: '2px solid #c5a059' }}
-                      onError={e => e.target.style.display = 'none'}
-                    />
-                    <button
-                      onClick={() => toggleProduct(p)}
-                      style={{
-                        position: 'absolute', top: '-4px', right: '-4px', width: '16px', height: '16px',
-                        background: '#dc2626', color: '#fff', border: 'none', borderRadius: '50%',
-                        fontSize: '9px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900'
-                      }}
-                    >✕</button>
-                    <p style={{ fontSize: '9px', color: '#ccc', textAlign: 'center', marginTop: '2px', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>{p.name}</p>
+          
+          {/* List of currently added items */}
+          <div>
+            <p style={{ fontSize: '10px', color: '#c5a059', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>
+              Items in Box ({boxProducts.length} / {box.maxItems})
+            </p>
+            {boxProducts.length === 0 ? (
+              <p style={{ fontSize: '11px', color: '#6b7280', fontStyle: 'italic', margin: 0 }}>No items added yet.</p>
+            ) : (
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                {boxProducts.map((p) => (
+                  <div key={p.id} style={{ position: 'relative', width: '60px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                    <div style={{ position: 'relative', width: '60px', height: '60px' }}>
+                      <img
+                        src={p.image.startsWith('/') ? `http://localhost:5173${p.image}` : p.image} alt={p.name}
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px', border: '2px solid #c5a059' }}
+                        onError={e => e.target.style.display = 'none'}
+                      />
+                      <button
+                        onClick={() => removeItem(p.id)}
+                        style={{
+                          position: 'absolute', top: '-6px', right: '-6px', width: '20px', height: '20px',
+                          background: '#dc2626', color: '#fff', border: 'none', borderRadius: '50%',
+                          fontSize: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '900', boxShadow: '0 2px 5px rgba(0,0,0,0.5)'
+                        }}
+                      >✕</button>
+                    </div>
+                    <p style={{ fontSize: '9px', color: '#e2e8f0', textAlign: 'center', margin: 0, width: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }} title={p.name}>{p.name}</p>
                   </div>
                 ))}
+              </div>
+            )}
+          </div>
+
+          {/* Add New Item Form */}
+          {boxProducts.length < box.maxItems && (
+            <div style={{ background: 'rgba(197, 160, 89, 0.05)', padding: '12px', borderRadius: '10px', border: '1px dashed rgba(197, 160, 89, 0.3)' }}>
+              <p style={{ fontSize: '11px', color: '#c5a059', fontWeight: 'bold', marginBottom: '8px' }}>➕ Add New Item</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <input
+                  placeholder="Item Name (e.g. Ajwa Dates)"
+                  value={itemName}
+                  onChange={e => setItemName(e.target.value)}
+                  style={{ background: '#1e293b', border: '1px solid #334155', borderRadius: '6px', padding: '8px 10px', color: '#fff', fontSize: '11px', outline: 'none' }}
+                />
+                <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                  <input
+                    placeholder="Image URL or Upload 👉"
+                    value={itemImage}
+                    onChange={e => setItemImage(e.target.value)}
+                    style={{ flex: 1, background: '#1e293b', border: '1px solid #334155', borderRadius: '6px', padding: '8px 10px', color: '#fff', fontSize: '11px', outline: 'none' }}
+                  />
+                  <label style={{ background: '#334155', padding: '8px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px' }} title="Upload Image">
+                    📤
+                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { if (e.target.files[0]) uploadItemImage(e.target.files[0]); }} />
+                  </label>
+                </div>
+                <button
+                  onClick={addItem}
+                  style={{ background: 'rgba(197, 160, 89, 0.2)', color: '#c5a059', border: '1px solid rgba(197, 160, 89, 0.4)', padding: '8px', borderRadius: '6px', fontWeight: 'bold', fontSize: '11px', cursor: 'pointer', marginTop: '4px' }}
+                >
+                  Add Item to Box
+                </button>
               </div>
             </div>
           )}
 
-          <input
-            placeholder="🔍 Search products..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            style={{
-              background: 'rgba(197,160,89,0.06)', border: '1px solid rgba(197,160,89,0.25)',
-              borderRadius: '8px', padding: '7px 12px', color: '#fff', fontSize: '12px', outline: 'none', width: '100%'
-            }}
-          />
-
-          <div style={{ maxHeight: '220px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            {filtered.length === 0 ? (
-              <p style={{ color: '#6b7280', fontSize: '12px', textAlign: 'center', padding: '16px' }}>No products found</p>
-            ) : filtered.map(p => {
-              const added = isAdded(p);
-              return (
-                <div
-                  key={p._id || p.id}
-                  onClick={() => toggleProduct(p)}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: '10px',
-                    padding: '8px 10px', borderRadius: '10px', cursor: 'pointer',
-                    background: added ? 'rgba(197,160,89,0.12)' : 'rgba(255,255,255,0.03)',
-                    border: `1px solid ${added ? 'rgba(197,160,89,0.5)' : 'rgba(255,255,255,0.08)'}`,
-                    transition: 'all 0.15s'
-                  }}
-                >
-                  <img
-                    src={p.image} alt={p.name}
-                    style={{ width: '38px', height: '38px', objectFit: 'cover', borderRadius: '7px', flexShrink: 0, border: '1px solid rgba(197,160,89,0.2)' }}
-                    onError={e => e.target.style.display = 'none'}
-                  />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: '12px', fontWeight: '600', color: '#f1f5f9', margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</p>
-                    <p style={{ fontSize: '11px', color: '#c5a059', margin: 0, fontWeight: '700' }}>PKR {Number(p.price).toLocaleString()}</p>
-                  </div>
-                  <span style={{
-                    width: '22px', height: '22px', borderRadius: '50%', flexShrink: 0,
-                    background: added ? '#c5a059' : 'rgba(255,255,255,0.08)',
-                    color: added ? '#000' : '#6b7280',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '12px', fontWeight: '900'
-                  }}>{added ? '✓' : '+'}</span>
-                </div>
-              );
-            })}
-          </div>
-
           <button
             onClick={saveProducts} disabled={saving}
             style={{
-              padding: '9px', background: 'linear-gradient(135deg, #c5a059, #b8860b)',
-              border: 'none', borderRadius: '10px', color: '#fff', fontWeight: '700',
-              fontSize: '13px', cursor: 'pointer', opacity: saving ? 0.6 : 1
+              padding: '10px', background: 'linear-gradient(135deg, #c5a059, #b8860b)',
+              border: 'none', borderRadius: '8px', color: '#fff', fontWeight: '700',
+              fontSize: '12px', cursor: 'pointer', opacity: saving ? 0.6 : 1, marginTop: '5px'
             }}
           >
-            {saving ? 'Saving...' : '💾 Save Products'}
+            {saving ? 'Saving...' : '💾 Save Items to Database'}
           </button>
         </div>
       )}
