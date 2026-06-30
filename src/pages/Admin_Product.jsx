@@ -256,45 +256,33 @@ function Admin_Product() {
           {msg && <div className="ap-msg">{msg}</div>}
 
           {products.length === 0 && !loading && (
-            <div style={{ background: '#111827', border: '1px solid rgba(220,38,38,0.3)', borderRadius: '14px', padding: '30px', textAlign: 'center', marginBottom: '20px' }}>
-              <p style={{ color: '#9ca3af', marginBottom: '16px' }}>Database mein koi product nahi. Initialize karo.</p>
-              <button className="ap-save" style={{ width: 'auto', padding: '10px 24px' }} onClick={initializeData}>🚀 Initialize Products</button>
+            <div className="ap-style-1">
+              <p className="ap-style-2">Database mein koi product nahi. Initialize karo.</p>
+              <button className="ap-save ap-style-3"  onClick={initializeData}>🚀 Initialize Products</button>
             </div>
           )}
 
           <div className="ap-toolbar">
             <input className="search-input" placeholder="🔍 Search products..." value={search} onChange={e => setSearch(e.target.value)} />
-            <div className="da-video-specs-note" style={{ 
-              borderColor: '#c5a059', 
-              background: '#ffffff', 
-              margin: '15px 0', 
-              width: '100%', 
-              padding: '16px', 
-              borderRadius: '16px', 
-              border: '1px solid rgba(197, 160, 89, 0.3)',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '18px' }}>📸</span>
-                <strong style={{ color: '#1a1a1a', fontSize: '14px', letterSpacing: '0.5px' }}>RECOMMENDED IMAGE SPECIFICATIONS</strong>
+            <div className="da-video-specs-note ap-style-4" >
+              <div className="ap-style-5">
+                <span className="ap-style-6">📸</span>
+                <strong className="ap-style-7">RECOMMENDED IMAGE SPECIFICATIONS</strong>
               </div>
               
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
-                <div style={{ background: '#fdfaf3', padding: '10px', borderRadius: '10px', border: '1px solid rgba(197, 160, 89, 0.1)' }}>
-                  <p style={{ color: '#c5a059', fontSize: '11px', fontWeight: '800', marginBottom: '4px' }}>MAIN CATALOG IMAGE</p>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '12px', color: '#4b5563' }}>
+              <div className="ap-style-8">
+                <div className="ap-style-9">
+                  <p className="ap-style-10">MAIN CATALOG IMAGE</p>
+                  <ul className="ap-style-11">
                     <li>• Resolution: 1200 x 1200</li>
                     <li>• Format: WebP / JPG</li>
                     <li>• Size: Under 400KB</li>
                   </ul>
                 </div>
 
-                <div style={{ background: '#fdfaf3', padding: '10px', borderRadius: '10px', border: '1px solid rgba(197, 160, 89, 0.1)' }}>
-                  <p style={{ color: '#c5a059', fontSize: '11px', fontWeight: '800', marginBottom: '4px' }}>DETAIL VIEW IMAGE</p>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '12px', color: '#4b5563' }}>
+                <div className="ap-style-12">
+                  <p className="ap-style-13">DETAIL VIEW IMAGE</p>
+                  <ul className="ap-style-14">
                     <li>• Resolution: 1200 x 1200</li>
                     <li>• Style: Premium Lifestyle</li>
                     <li>• Focus: Clear product detail</li>
@@ -303,7 +291,7 @@ function Admin_Product() {
               </div>
             </div>
             <span className="ap-count">{filtered.length} Products</span>
-            <button className="ap-save" style={{ width: 'auto', padding: '8px 18px' }} onClick={() => setShowAddForm(!showAddForm)}>
+            <button className="ap-save ap-style-15"  onClick={() => setShowAddForm(!showAddForm)}>
               {showAddForm ? '✕ Cancel' : '➕ Add Product'}
             </button>
           </div>
@@ -313,46 +301,22 @@ function Admin_Product() {
               <h3>➕ Add New Boutique Product</h3>
               <div className="ap-edit-flex">
                 <div className="ap-edit-left">
-                  <div style={{ 
-                    position: 'relative', 
-                    background: '#fdfaf3', 
-                    borderRadius: '24px', 
-                    height: '350px', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    border: '1px solid rgba(197, 160, 89, 0.2)',
-                    overflow: 'hidden',
-                    padding: '20px',
-                    boxShadow: '0 10px 25px rgba(0,0,0,0.05)'
-                  }}>
+                  <div className="ap-style-16">
                     {/* Spotlight Glow */}
-                    <div style={{ 
-                      position: 'absolute', 
-                      top: 0, left: 0, right: 0, bottom: 0, 
-                      background: 'radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%)',
-                      pointerEvents: 'none'
-                    }} />
+                    <div className="ap-style-17" />
 
                     {newProduct.image ? (
-                      <img src={newProduct.image} alt="preview" style={{ 
-                        maxWidth: '90%', 
-                        maxHeight: '90%', 
-                        objectFit: 'contain',
-                        filter: 'drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15))',
-                        position: 'relative',
-                        zIndex: 1
-                      }} />
+                      <img src={newProduct.image} alt="preview" className="ap-style-18" />
                     ) : (
-                      <div style={{ color: '#ccc', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-                        <span style={{ fontSize: '48px' }}>🖼️</span>
-                        <p style={{ color: '#94a3b8' }}>No image selected</p>
+                      <div className="ap-style-19">
+                        <span className="ap-style-20">🖼️</span>
+                        <p className="ap-style-21">No image selected</p>
                       </div>
                     )}
-                    <div style={{ position: 'absolute', bottom: '10px', right: '10px', display: 'flex', gap: '6px', zIndex: 10 }}>
-                      <label className="ap-upload-label" style={{ width: 'auto', background: 'rgba(255,255,255,0.9)', margin: 0, padding: '6px 12px', fontSize: '12px' }}>
+                    <div className="ap-style-22">
+                      <label className="ap-upload-label ap-style-23" >
                       📤 Upload Image
-                      <input type="file" accept="image/*" style={{ display: 'none' }}
+                      <input type="file" accept="image/*" className="ap-style-24"
                         onChange={async e => {
                           const file = e.target.files[0];
                           if (!file) return;
@@ -367,7 +331,7 @@ function Admin_Product() {
                     {newProduct.image && (
                       <button
                         type="button"
-                        style={{ background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', padding: '6px 12px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+                        className="ap-style-25"
                         onClick={() => {
                           setCropImageSrc(newProduct.image);
                           setOnCropSave(() => async (croppedBlob) => {
@@ -388,34 +352,22 @@ function Admin_Product() {
                   <label>Image URL (Main Catalog)</label>
                   <input placeholder="e.g. /Product 1.png" value={newProduct.image} onChange={e => setNewProduct({ ...newProduct, image: e.target.value })} />
 
-                  <div style={{ marginTop: '20px' }}>
+                  <div className="ap-style-26">
                     <label>Detail View Image (Opens on click)</label>
-                    <div style={{ 
-                      position: 'relative', 
-                      background: '#fdfaf3', 
-                      borderRadius: '24px', 
-                      height: '200px', 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center', 
-                      border: '1px solid rgba(197, 160, 89, 0.2)',
-                      overflow: 'hidden',
-                      padding: '10px',
-                      marginTop: '8px'
-                    }}>
-                      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                    <div className="ap-style-27">
+                      <div className="ap-style-28" />
                       {newProduct.detailImage ? (
-                        <img src={newProduct.detailImage} alt="detail preview" style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'contain', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.1))', position: 'relative', zIndex: 1 }} />
+                        <img src={newProduct.detailImage} alt="detail preview" className="ap-style-29" />
                       ) : (
-                        <div style={{ color: '#ccc', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-                          <span style={{ fontSize: '32px' }}>🖼️</span>
-                          <p style={{ fontSize: '10px', color: '#94a3b8' }}>No detail image</p>
+                        <div className="ap-style-30">
+                          <span className="ap-style-31">🖼️</span>
+                          <p className="ap-style-32">No detail image</p>
                         </div>
                       )}
-                      <div style={{ position: 'absolute', bottom: '10px', right: '10px', display: 'flex', gap: '6px', zIndex: 10 }}>
-                        <label className="ap-upload-label" style={{ width: 'auto', background: 'rgba(255,255,255,0.9)', margin: 0, padding: '6px 12px', fontSize: '12px' }}>
+                      <div className="ap-style-33">
+                        <label className="ap-upload-label ap-style-34" >
                         📤 Upload Detail
-                        <input type="file" accept="image/*" style={{ display: 'none' }}
+                        <input type="file" accept="image/*" className="ap-style-35"
                           onChange={async e => {
                             const file = e.target.files[0];
                             if (!file) return;
@@ -430,7 +382,7 @@ function Admin_Product() {
                       {newProduct.detailImage && (
                         <button
                           type="button"
-                          style={{ background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', padding: '6px 12px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+                          className="ap-style-36"
                           onClick={() => {
                             setCropImageSrc(newProduct.detailImage);
                             setOnCropSave(() => async (croppedBlob) => {
@@ -448,7 +400,7 @@ function Admin_Product() {
                       )}
                     </div>
                     </div>
-                    <input placeholder="Detail Image URL" style={{ marginTop: '8px' }} value={newProduct.detailImage} onChange={e => setNewProduct({ ...newProduct, detailImage: e.target.value })} />
+                    <input placeholder="Detail Image URL" className="ap-style-37" value={newProduct.detailImage} onChange={e => setNewProduct({ ...newProduct, detailImage: e.target.value })} />
                   </div>
                 </div>
 
@@ -457,7 +409,7 @@ function Admin_Product() {
                   <input placeholder="Product name" value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
 
                   <label>Arabic Name</label>
-                  <input placeholder="عجوة" style={{ textAlign: 'right', fontSize: '18px' }} value={newProduct.arabicName} onChange={e => setNewProduct({ ...newProduct, arabicName: e.target.value })} />
+                  <input placeholder="عجوة" className="ap-style-38" value={newProduct.arabicName} onChange={e => setNewProduct({ ...newProduct, arabicName: e.target.value })} />
 
                   <label>Category</label>
                   <select value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
@@ -469,35 +421,35 @@ function Admin_Product() {
                   <textarea rows={2} placeholder="Storage advice..." value={newProduct.storageNote} onChange={e => setNewProduct({ ...newProduct, storageNote: e.target.value })} />
 
                   <label>Weight Options & Savings</label>
-                  <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px', marginTop: '6px' }}>
-                    <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '500g Mini Box', savings: '' }] })}>+ 500g Mini Box</button>
-                    <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '1kg Special Box', savings: '' }] })}>+ 1kg Special Box</button>
-                    <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '2kg Briefcase Box', savings: '(Save Rs 500)' }] })}>+ 2kg Briefcase Box</button>
-                    <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '5kg Family Carton', savings: '(Save Rs 1500)' }] })}>+ 5kg Family Carton</button>
+                  <div className="ap-style-39">
+                    <button type="button" className="ap-style-40" onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '500g Mini Box', savings: '' }] })}>+ 500g Mini Box</button>
+                    <button type="button" className="ap-style-41" onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '1kg Special Box', savings: '' }] })}>+ 1kg Special Box</button>
+                    <button type="button" className="ap-style-42" onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '2kg Briefcase Box', savings: '(Save Rs 500)' }] })}>+ 2kg Briefcase Box</button>
+                    <button type="button" className="ap-style-43" onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '5kg Family Carton', savings: '(Save Rs 1500)' }] })}>+ 5kg Family Carton</button>
                   </div>
-                  <div className="ap-weights-manager" style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: '#fdfaf3', padding: '12px', borderRadius: '8px', border: '1px solid #c5a059' }}>
+                  <div className="ap-weights-manager ap-style-44" >
                     {(newProduct.weights || []).map((w, idx) => (
-                      <div key={idx} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      <div key={idx} className="ap-style-45">
                         <input placeholder="e.g. 2kg Box" value={w.label} onChange={e => {
                           const newWeights = [...newProduct.weights];
                           newWeights[idx].label = e.target.value;
                           setNewProduct({ ...newProduct, weights: newWeights });
-                        }} style={{ flex: 2, fontSize: '12px' }} />
+                        }} className="ap-style-46" />
                         <input placeholder="e.g. (Save Rs 500)" value={w.savings} onChange={e => {
                           const newWeights = [...newProduct.weights];
                           newWeights[idx].savings = e.target.value;
                           setNewProduct({ ...newProduct, weights: newWeights });
-                        }} style={{ flex: 1, fontSize: '12px' }} />
+                        }} className="ap-style-47" />
                         <button onClick={() => {
                           const newWeights = newProduct.weights.filter((_, i) => i !== idx);
                           setNewProduct({ ...newProduct, weights: newWeights });
-                        }} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer' }}>✕</button>
+                        }} className="ap-style-48">✕</button>
                       </div>
                     ))}
-                    <button className="ap-add-weight-btn" onClick={() => {
+                    <button className="ap-add-weight-btn ap-style-49" onClick={() => {
                       const newWeights = [...(newProduct.weights || []), { label: '', savings: '' }];
                       setNewProduct({ ...newProduct, weights: newWeights });
-                    }} style={{ background: '#c5a059', color: '#fff', border: 'none', borderRadius: '6px', padding: '6px', cursor: 'pointer', fontSize: '12px', marginTop: '5px' }}>
+                    }} >
                       + Add Weight Option
                     </button>
                   </div>
@@ -507,7 +459,7 @@ function Admin_Product() {
                     In Stock
                   </label>
 
-                  <div className="ap-btns" style={{ marginTop: 'auto' }}>
+                  <div className="ap-btns ap-style-50" >
                     <button className="ap-save" onClick={addProduct}>➕ Add Product</button>
                     <button className="ap-cancel" onClick={() => setShowAddForm(false)}>Cancel</button>
                   </div>
@@ -522,19 +474,19 @@ function Admin_Product() {
                 <div key={product._id} className="ap-card">
                   <div className="ap-view">
                     <img src={product.image} alt={product.name} className="ap-img" onError={e => e.target.style.display = 'none'} />
-                    <div className="ap-view-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                      <h4 style={{ margin: 0 }}>{product.name}</h4>
-                      <h4 className="ap-arabic" style={{ margin: 0, color: '#c5a059', fontFamily: "'Playfair Display', serif" }}>{product.arabicName}</h4>
+                    <div className="ap-view-header ap-style-51" >
+                      <h4 className="ap-style-52">{product.name}</h4>
+                      <h4 className="ap-arabic ap-style-53" >{product.arabicName}</h4>
                     </div>
                     <div className="ap-meta">
                       <span className="ap-price">PKR {product.price.toLocaleString()}</span>
                       <span className={`ap-stock ${product.stock ? 'in' : 'out'}`}>{product.stock ? '● In Stock' : '○ Out of Stock'}</span>
                     </div>
                     <div className="ap-rating">{renderStars(product.rating)} <span>({product.rating})</span></div>
-                    <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-                      <button className="ap-edit-btn" style={{ flex: 1 }} onClick={() => setEditProduct({ ...product })}>✏️ Edit</button>
+                    <div className="ap-style-54">
+                      <button className="ap-edit-btn ap-style-55"  onClick={() => setEditProduct({ ...product })}>✏️ Edit</button>
                       <button 
-                        style={{ flex: 1, padding: '8px', color: '#dc2626', background: '#fee2e2', border: '1px solid rgba(220, 38, 38, 0.2)', borderRadius: '8px', fontWeight: 'bold', fontSize: '13px', cursor: 'pointer', transition: 'all 0.2s' }} 
+                        className="ap-style-56" 
                         onClick={() => deleteProduct(product._id || product.id)}
                         onMouseOver={(e) => e.target.style.background = '#fecaca'}
                         onMouseOut={(e) => e.target.style.background = '#fee2e2'}
@@ -557,42 +509,14 @@ function Admin_Product() {
             </div>
             <div className="ap-edit-flex">
               <div className="ap-edit-left">
-                <div style={{ 
-                  position: 'relative', 
-                  background: '#fdfaf3', 
-                  borderRadius: '24px', 
-                  height: '350px', 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'center', 
-                  border: '1px solid rgba(197, 160, 89, 0.2)',
-                  overflow: 'hidden',
-                  padding: '20px',
-                  boxShadow: '0 10px 25px rgba(0,0,0,0.05)'
-                }}>
-                  <div style={{ 
-                    position: 'absolute', 
-                    top: 0, left: 0, right: 0, bottom: 0, 
-                    background: 'radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%)',
-                    pointerEvents: 'none'
-                  }} />
+                <div className="ap-style-57">
+                  <div className="ap-style-58" />
 
-                  <img src={editProduct.image} alt={editProduct.name} className="ap-img" style={{ 
-                    maxWidth: '90%', 
-                    maxHeight: '90%', 
-                    objectFit: 'contain',
-                    filter: 'drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15))',
-                    position: 'relative',
-                    zIndex: 1,
-                    background: 'transparent',
-                    border: 'none',
-                    height: 'auto',
-                    marginBottom: 0
-                  }} onError={e => e.target.style.display = 'none'} />
-                  <div style={{ position: 'absolute', bottom: '10px', right: '10px', display: 'flex', gap: '6px', zIndex: 10 }}>
-                    <label className="ap-upload-label" style={{ width: 'auto', background: 'rgba(255,255,255,0.9)', margin: 0, padding: '6px 12px', fontSize: '12px' }}>
+                  <img src={editProduct.image} alt={editProduct.name} className="ap-img ap-style-59"  onError={e => e.target.style.display = 'none'} />
+                  <div className="ap-style-60">
+                    <label className="ap-upload-label ap-style-61" >
                       📸 Upload Image
-                      <input type="file" accept="image/*" style={{ display: 'none' }}
+                      <input type="file" accept="image/*" className="ap-style-62"
                         onChange={async e => {
                           const file = e.target.files[0];
                           if (!file) return;
@@ -607,7 +531,7 @@ function Admin_Product() {
                     {editProduct.image && (
                       <button
                         type="button"
-                        style={{ background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', padding: '6px 12px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+                        className="ap-style-63"
                         onClick={() => {
                           setCropImageSrc(editProduct.image);
                           setOnCropSave(() => async (croppedBlob) => {
@@ -628,34 +552,22 @@ function Admin_Product() {
                 <label>Image URL (Main Catalog)</label>
                 <input value={editProduct.image} onChange={e => setEditProduct(prev => ({ ...prev, image: e.target.value }))} />
 
-                <div style={{ marginTop: '20px' }}>
+                <div className="ap-style-64">
                   <label>Detail View Image (Opens on click)</label>
-                  <div style={{ 
-                    position: 'relative', 
-                    background: '#fdfaf3', 
-                    borderRadius: '24px', 
-                    height: '200px', 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    justifyContent: 'center', 
-                    border: '1px solid rgba(197, 160, 89, 0.2)',
-                    overflow: 'hidden',
-                    padding: '10px',
-                    marginTop: '8px'
-                  }}>
-                    <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'radial-gradient(circle at center, rgba(197, 160, 89, 0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
+                  <div className="ap-style-65">
+                    <div className="ap-style-66" />
                     {editProduct.detailImage ? (
-                      <img src={editProduct.detailImage} alt="detail preview" style={{ maxWidth: '90%', maxHeight: '90%', objectFit: 'contain', filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.1))', position: 'relative', zIndex: 1 }} />
+                      <img src={editProduct.detailImage} alt="detail preview" className="ap-style-67" />
                     ) : (
-                      <div style={{ color: '#ccc', textAlign: 'center', position: 'relative', zIndex: 1 }}>
-                        <span style={{ fontSize: '32px' }}>🖼️</span>
-                        <p style={{ fontSize: '10px', color: '#94a3b8' }}>No detail image</p>
+                      <div className="ap-style-68">
+                        <span className="ap-style-69">🖼️</span>
+                        <p className="ap-style-70">No detail image</p>
                       </div>
                     )}
-                    <div style={{ position: 'absolute', bottom: '10px', right: '10px', display: 'flex', gap: '6px', zIndex: 10 }}>
-                      <label className="ap-upload-label" style={{ width: 'auto', background: 'rgba(255,255,255,0.9)', margin: 0, padding: '6px 12px', fontSize: '12px' }}>
+                    <div className="ap-style-71">
+                      <label className="ap-upload-label ap-style-72" >
                         📤 Upload Detail
-                        <input type="file" accept="image/*" style={{ display: 'none' }}
+                        <input type="file" accept="image/*" className="ap-style-73"
                           onChange={async e => {
                             const file = e.target.files[0];
                             if (!file) return;
@@ -670,7 +582,7 @@ function Admin_Product() {
                       {editProduct.detailImage && (
                         <button
                           type="button"
-                          style={{ background: '#3b82f6', color: '#fff', border: 'none', borderRadius: '8px', padding: '6px 12px', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }}
+                          className="ap-style-74"
                           onClick={() => {
                             setCropImageSrc(editProduct.detailImage);
                             setOnCropSave(() => async (croppedBlob) => {
@@ -688,7 +600,7 @@ function Admin_Product() {
                       )}
                     </div>
                   </div>
-                  <input placeholder="Detail Image URL" style={{ marginTop: '8px' }} value={editProduct.detailImage} onChange={e => setEditProduct(prev => ({ ...prev, detailImage: e.target.value }))} />
+                  <input placeholder="Detail Image URL" className="ap-style-75" value={editProduct.detailImage} onChange={e => setEditProduct(prev => ({ ...prev, detailImage: e.target.value }))} />
                 </div>
               </div>
 
@@ -697,7 +609,7 @@ function Admin_Product() {
                 <input value={editProduct.name} onChange={e => setEditProduct(prev => ({ ...prev, name: e.target.value }))} />
 
                 <label>Arabic Name</label>
-                <input style={{ textAlign: 'right', fontSize: '18px' }} value={editProduct.arabicName} onChange={e => setEditProduct(prev => ({ ...prev, arabicName: e.target.value }))} />
+                <input className="ap-style-76" value={editProduct.arabicName} onChange={e => setEditProduct(prev => ({ ...prev, arabicName: e.target.value }))} />
 
                 <label>Category</label>
                 <select value={editProduct.category} onChange={e => setEditProduct(prev => ({ ...prev, category: e.target.value }))}>
@@ -709,40 +621,40 @@ function Admin_Product() {
                 <textarea rows={2} value={editProduct.storageNote} onChange={e => setEditProduct(prev => ({ ...prev, storageNote: e.target.value }))} />
 
                 <label>Weight Options & Savings</label>
-                <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px', marginTop: '6px' }}>
-                  <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setEditProduct(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '500g Mini Box', savings: '' }] }))}>+ 500g Mini Box</button>
-                  <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setEditProduct(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '1kg Special Box', savings: '' }] }))}>+ 1kg Special Box</button>
-                  <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setEditProduct(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '2kg Briefcase Box', savings: '(Save Rs 500)' }] }))}>+ 2kg Briefcase Box</button>
-                  <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setEditProduct(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '5kg Family Carton', savings: '(Save Rs 1500)' }] }))}>+ 5kg Family Carton</button>
+                <div className="ap-style-77">
+                  <button type="button" className="ap-style-78" onClick={() => setEditProduct(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '500g Mini Box', savings: '' }] }))}>+ 500g Mini Box</button>
+                  <button type="button" className="ap-style-79" onClick={() => setEditProduct(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '1kg Special Box', savings: '' }] }))}>+ 1kg Special Box</button>
+                  <button type="button" className="ap-style-80" onClick={() => setEditProduct(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '2kg Briefcase Box', savings: '(Save Rs 500)' }] }))}>+ 2kg Briefcase Box</button>
+                  <button type="button" className="ap-style-81" onClick={() => setEditProduct(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '5kg Family Carton', savings: '(Save Rs 1500)' }] }))}>+ 5kg Family Carton</button>
                 </div>
-                <div className="ap-weights-manager" style={{ display: 'flex', flexDirection: 'column', gap: '8px', background: '#fdfaf3', padding: '12px', borderRadius: '8px', border: '1px solid #c5a059' }}>
+                <div className="ap-weights-manager ap-style-82" >
                   {(editProduct.weights || []).map((w, idx) => (
-                    <div key={idx} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <div key={idx} className="ap-style-83">
                       <input placeholder="e.g. 2kg Box" value={w.label} onChange={e => {
                         setEditProduct(prev => {
                           const newWeights = [...prev.weights];
                           newWeights[idx] = { ...newWeights[idx], label: e.target.value };
                           return { ...prev, weights: newWeights };
                         });
-                      }} style={{ flex: 2, fontSize: '12px' }} />
+                      }} className="ap-style-84" />
                       <input placeholder="e.g. (Save Rs 500)" value={w.savings} onChange={e => {
                         setEditProduct(prev => {
                           const newWeights = [...prev.weights];
                           newWeights[idx] = { ...newWeights[idx], savings: e.target.value };
                           return { ...prev, weights: newWeights };
                         });
-                      }} style={{ flex: 1, fontSize: '12px' }} />
+                      }} className="ap-style-85" />
                       <button onClick={() => {
                         setEditProduct(prev => {
                           const newWeights = prev.weights.filter((_, i) => i !== idx);
                           return { ...prev, weights: newWeights };
                         });
-                      }} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', borderRadius: '4px', padding: '4px 8px', cursor: 'pointer' }}>✕</button>
+                      }} className="ap-style-86">✕</button>
                     </div>
                   ))}
-                  <button className="ap-add-weight-btn" onClick={() => {
+                  <button className="ap-add-weight-btn ap-style-87" onClick={() => {
                     setEditProduct(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '', savings: '' }] }));
-                  }} style={{ background: '#c5a059', color: '#fff', border: 'none', borderRadius: '6px', padding: '6px', cursor: 'pointer', fontSize: '12px', marginTop: '5px' }}>
+                  }} >
                     + Add Weight Option
                   </button>
                 </div>
@@ -752,7 +664,7 @@ function Admin_Product() {
                   In Stock
                 </label>
 
-                <div className="ap-btns" style={{ marginTop: 'auto' }}>
+                <div className="ap-btns ap-style-88" >
                   <button className="ap-save" onClick={() => saveProduct(editProduct)}>💾 Save Changes</button>
                   <button className="ap-cancel" onClick={() => setEditProduct(null)}>Cancel</button>
                 </div>
@@ -763,157 +675,55 @@ function Admin_Product() {
       )}
 
       {cropActive && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0,0,0,0.6)',
-          backdropFilter: 'blur(4px)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 10000,
-          padding: '20px'
-        }}>
-          <div style={{
-            background: '#ffffff',
-            borderRadius: '16px',
-            padding: '24px',
-            width: '100%',
-            maxWidth: '650px',
-            boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '20px',
-            maxHeight: '90vh',
-            overflowY: 'auto'
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <h3 style={{ margin: 0, color: '#1a1a1a', fontSize: '18px', fontWeight: '700' }}>✂️ Crop Image</h3>
+        <div className="ap-style-89">
+          <div className="ap-style-90">
+            <div className="ap-style-91">
+              <h3 className="ap-style-92">✂️ Crop Image</h3>
               <button 
                 onClick={() => { setCropActive(false); setCropImageSrc(null); setCompletedCrop(null); }}
-                style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#6b7280' }}
+                className="ap-style-93"
               >✕</button>
             </div>
 
-            <div style={{ 
-              position: 'relative', 
-              width: '100%', 
-              maxHeight: '400px', 
-              background: '#f3f4f6', 
-              borderRadius: '10px', 
-              overflow: 'auto',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '10px'
-            }}>
+            <div className="ap-style-94">
               <ReactCrop
                 crop={crop}
                 onChange={(c) => setCrop(c)}
                 onComplete={(c) => setCompletedCrop(c)}
                 aspect={undefined}
-                style={{ maxWidth: '100%' }}
+                className="ap-style-95"
               >
                 <img
                   ref={imgRef}
                   src={cropImageSrc}
                   alt="Crop source"
                   onLoad={onImageLoad}
-                  style={{ maxHeight: '350px', objectFit: 'contain', width: 'auto', maxWidth: '100%' }}
+                  className="ap-style-96"
                   crossOrigin="anonymous"
                   draggable={false}
                 />
                 {/* Custom edge/side handles */}
-                <div style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: '14px',
-                  height: '6px',
-                  backgroundColor: '#ffffff',
-                  border: '1.5px solid #4b5563',
-                  borderRadius: '2px',
-                  pointerEvents: 'none',
-                  zIndex: 1000
-                }} />
-                <div style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: '50%',
-                  transform: 'translate(-50%, 50%)',
-                  width: '14px',
-                  height: '6px',
-                  backgroundColor: '#ffffff',
-                  border: '1.5px solid #4b5563',
-                  borderRadius: '2px',
-                  pointerEvents: 'none',
-                  zIndex: 1000
-                }} />
-                <div style={{
-                  position: 'absolute',
-                  top: '50%',
-                  right: 0,
-                  transform: 'translate(50%, -50%)',
-                  width: '6px',
-                  height: '14px',
-                  backgroundColor: '#ffffff',
-                  border: '1.5px solid #4b5563',
-                  borderRadius: '2px',
-                  pointerEvents: 'none',
-                  zIndex: 1000
-                }} />
-                <div style={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: 0,
-                  transform: 'translate(-50%, -50%)',
-                  width: '6px',
-                  height: '14px',
-                  backgroundColor: '#ffffff',
-                  border: '1.5px solid #4b5563',
-                  borderRadius: '2px',
-                  pointerEvents: 'none',
-                  zIndex: 1000
-                }} />
+                <div className="ap-style-97" />
+                <div className="ap-style-98" />
+                <div className="ap-style-99" />
+                <div className="ap-style-100" />
               </ReactCrop>
             </div>
 
-            <div style={{ fontSize: '12px', color: '#6b7280', textAlign: 'center' }}>
+            <div className="ap-style-101">
               💡 Mouse pointer se image par crop area ke corners ya side center indicators ko drag kar ke select karein.
             </div>
 
-            <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
+            <div className="ap-style-102">
               <button 
                 onClick={executeCrop}
-                style={{
-                  flex: 1,
-                  padding: '12px',
-                  background: 'linear-gradient(135deg, #c5a059, #b8860b)',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '10px',
-                  fontWeight: '700',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 12px rgba(197, 160, 89, 0.2)'
-                }}
+                className="ap-style-103"
               >
                 Apply Crop & Save
               </button>
               <button 
                 onClick={() => { setCropActive(false); setCropImageSrc(null); setCompletedCrop(null); }}
-                style={{
-                  padding: '12px 20px',
-                  background: '#f3f4f6',
-                  color: '#4b5563',
-                  border: 'none',
-                  borderRadius: '10px',
-                  fontWeight: '600',
-                  cursor: 'pointer'
-                }}
+                className="ap-style-104"
               >
                 Cancel
               </button>
