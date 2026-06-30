@@ -27,58 +27,84 @@ const emptyBox = { name: '', price: '', image: '', innerImage: '', description: 
 // ── BoxForm outside component ──
 function BoxForm({ box, onChange, onSave, onCancel, isNew, onUpload }) {
   return (
-    <div className="ap-edit">
-      <label>Name</label>
-      <input value={box.name} onChange={e => onChange('name', e.target.value)} placeholder="e.g. Classic Date Box" />
+    <div className="ap-modal-overlay">
+      <div className="ap-modal-container" style={{ maxWidth: '900px' }}>
+        <div className="ap-modal-header">
+          <h3>{isNew ? '➕ Add Gift Box' : '✏️ Edit Gift Box'}</h3>
+          <button className="ap-modal-close" onClick={onCancel}>✕</button>
+        </div>
+        <div className="ap-edit-flex" style={{ display: 'flex', gap: '24px', padding: '20px', flexWrap: 'wrap' }}>
+          
+          <div className="ap-edit-left" style={{ flex: '1', minWidth: '300px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            <div style={{ position: 'relative', background: '#fdfaf3', borderRadius: '16px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(197, 160, 89, 0.2)', overflow: 'hidden', padding: '10px' }}>
+              <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 2, background: 'rgba(0,0,0,0.6)', padding: '2px 8px', borderRadius: '4px', color: '#fff', fontSize: '10px', fontWeight: 'bold' }}>📦 Cover Image</div>
+              {box.image ? (
+                <img src={box.image.startsWith('/') ? `http://localhost:5173${box.image}` : box.image} alt="cover" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', zIndex: 1, filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.15))' }} onError={e => e.target.style.display = 'none'} />
+              ) : (
+                <div style={{ color: '#ccc', textAlign: 'center', zIndex: 1 }}><span style={{ fontSize: '32px' }}>📦</span><p style={{ color: '#94a3b8', fontSize: '12px' }}>No cover image</p></div>
+              )}
+              <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 10 }}>
+                <label className="ap-upload-label" style={{ background: 'rgba(255,255,255,0.9)', margin: 0, padding: '6px 10px', fontSize: '11px', cursor: 'pointer', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                  📤 Upload Cover
+                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files[0]; if (f) onUpload(f, 'image'); }} />
+                </label>
+              </div>
+            </div>
+            
+            <div style={{ position: 'relative', background: '#fdfaf3', borderRadius: '16px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(197, 160, 89, 0.2)', overflow: 'hidden', padding: '10px' }}>
+              <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 2, background: 'rgba(0,0,0,0.6)', padding: '2px 8px', borderRadius: '4px', color: '#fff', fontSize: '10px', fontWeight: 'bold' }}>🍬 Inner Image</div>
+              {box.innerImage ? (
+                <img src={box.innerImage.startsWith('/') ? `http://localhost:5173${box.innerImage}` : box.innerImage} alt="inner" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', zIndex: 1, filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.15))' }} onError={e => e.target.style.display = 'none'} />
+              ) : (
+                <div style={{ color: '#ccc', textAlign: 'center', zIndex: 1 }}><span style={{ fontSize: '32px' }}>🍬</span><p style={{ color: '#94a3b8', fontSize: '12px' }}>No inner image</p></div>
+              )}
+              <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 10 }}>
+                <label className="ap-upload-label" style={{ background: 'rgba(255,255,255,0.9)', margin: 0, padding: '6px 10px', fontSize: '11px', cursor: 'pointer', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                  📤 Upload Inner
+                  <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files[0]; if (f) onUpload(f, 'innerImage'); }} />
+                </label>
+              </div>
+            </div>
+          </div>
 
-      <label>Box Price (PKR)</label>
-      <input type="number" value={box.price} onChange={e => onChange('price', e.target.value)} placeholder="e.g. 1200" />
+          <div className="ap-edit-right" style={{ flex: '1.2', minWidth: '300px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Name</label>
+                <input style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={box.name} onChange={e => onChange('name', e.target.value)} placeholder="e.g. Classic Date Box" />
+              </div>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Max Items</label>
+                <input type="number" min="1" max="10" style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={box.maxItems} onChange={e => onChange('maxItems', e.target.value)} />
+              </div>
+            </div>
 
-      <label>Max Items</label>
-      <input type="number" min="1" max="10" value={box.maxItems} onChange={e => onChange('maxItems', e.target.value)} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Box Price (PKR)</label>
+              <input type="number" style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={box.price} onChange={e => onChange('price', e.target.value)} placeholder="e.g. 1200" />
+            </div>
 
-      <label>Description</label>
-      <textarea rows={2} value={box.description} onChange={e => onChange('description', e.target.value)} placeholder="Short description..." />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Cover Image URL</label>
+              <input style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={box.image || ''} onChange={e => onChange('image', e.target.value)} placeholder="/Gift 1.png" />
+            </div>
 
-      {/* ── Cover Image (outside of box) ── */}
-      <label style={{ color: '#c5a059', fontWeight: '700', marginTop: '6px' }}>📦 Cover Image (Box outside)</label>
-      <input value={box.image || ''} onChange={e => onChange('image', e.target.value)} placeholder="/Gift 1.png" />
-      <label className="ap-upload-label">
-        📤 Upload Cover
-        <input type="file" accept="image/*" style={{ display: 'none' }}
-          onChange={async e => { const f = e.target.files[0]; if (f) onUpload(f, 'image'); }}
-        />
-      </label>
-      {box.image && (
-        <img
-          src={box.image.startsWith('/') ? `http://localhost:5173${box.image}` : box.image}
-          alt="cover preview"
-          style={{ width: '100%', height: '90px', objectFit: 'cover', borderRadius: '8px', marginTop: '4px', border: '1px solid rgba(197,160,89,0.3)' }}
-          onError={e => e.target.style.display = 'none'}
-        />
-      )}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Inner Image URL</label>
+              <input style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={box.innerImage || ''} onChange={e => onChange('innerImage', e.target.value)} placeholder="/Gift 1 Inner.png" />
+            </div>
 
-      {/* ── Inner Image (lid open, dates visible) ── */}
-      <label style={{ color: '#c5a059', fontWeight: '700', marginTop: '6px' }}>🍬 Inner Image (Lid open / contents)</label>
-      <input value={box.innerImage || ''} onChange={e => onChange('innerImage', e.target.value)} placeholder="/Gift 1 Inner.png" />
-      <label className="ap-upload-label">
-        📤 Upload Inner
-        <input type="file" accept="image/*" style={{ display: 'none' }}
-          onChange={async e => { const f = e.target.files[0]; if (f) onUpload(f, 'innerImage'); }}
-        />
-      </label>
-      {box.innerImage && (
-        <img
-          src={box.innerImage.startsWith('/') ? `http://localhost:5173${box.innerImage}` : box.innerImage}
-          alt="inner preview"
-          style={{ width: '100%', height: '90px', objectFit: 'cover', borderRadius: '8px', marginTop: '4px', border: '1px solid rgba(197,160,89,0.3)' }}
-          onError={e => e.target.style.display = 'none'}
-        />
-      )}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Description</label>
+              <textarea rows={3} style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0', resize: 'vertical' }} value={box.description} onChange={e => onChange('description', e.target.value)} placeholder="Short description..." />
+            </div>
 
-      <div className="ap-btns">
-        <button className="ap-save" onClick={onSave}>{isNew ? '➕ Add Box' : '💾 Save'}</button>
-        <button className="ap-cancel" onClick={onCancel}>Cancel</button>
+            <div className="ap-btns" style={{ marginTop: 'auto', paddingTop: '15px' }}>
+              <button className="ap-save" onClick={onSave} style={{ flex: 2, padding: '12px', background: 'linear-gradient(135deg, #c5a059, #b08d4f)' }}>{isNew ? '➕ Create Box' : '💾 Save Changes'}</button>
+              <button className="ap-cancel" onClick={onCancel} style={{ flex: 1, padding: '12px' }}>Cancel</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -146,7 +172,6 @@ function BoxProductsPanel({ box, allProducts, token, onMsg }) {
           border: '1px solid rgba(197,160,89,0.2)', borderRadius: '12px',
           padding: '12px', display: 'flex', flexDirection: 'column', gap: '10px'
         }}>
-          {/* Selected products preview */}
           {boxProducts.length > 0 && (
             <div>
               <p style={{ fontSize: '10px', color: '#c5a059', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '6px' }}>
@@ -175,7 +200,6 @@ function BoxProductsPanel({ box, allProducts, token, onMsg }) {
             </div>
           )}
 
-          {/* Search */}
           <input
             placeholder="🔍 Search products..."
             value={search}
@@ -186,7 +210,6 @@ function BoxProductsPanel({ box, allProducts, token, onMsg }) {
             }}
           />
 
-          {/* Product list */}
           <div style={{ maxHeight: '220px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '6px' }}>
             {filtered.length === 0 ? (
               <p style={{ color: '#6b7280', fontSize: '12px', textAlign: 'center', padding: '16px' }}>No products found</p>
@@ -225,7 +248,6 @@ function BoxProductsPanel({ box, allProducts, token, onMsg }) {
             })}
           </div>
 
-          {/* Save */}
           <button
             onClick={saveProducts} disabled={saving}
             style={{
@@ -381,8 +403,8 @@ function Admin_GiftBoxes() {
           <div className="ap-toolbar">
             <input className="search-input" placeholder="🔍 Search gift boxes..." value={search} onChange={e => setSearch(e.target.value)} />
             <span className="ap-count">{filtered.length} Boxes</span>
-            <button className="ap-save" style={{ width: 'auto', padding: '8px 18px' }} onClick={() => setShowAddForm(!showAddForm)}>
-              {showAddForm ? '✕ Cancel' : '➕ Add Gift Box'}
+            <button className="ap-save" style={{ width: 'auto', padding: '8px 18px' }} onClick={() => setShowAddForm(true)}>
+              ➕ Add Gift Box
             </button>
           </div>
 
@@ -396,61 +418,56 @@ function Admin_GiftBoxes() {
           </div>
 
           {showAddForm && (
-            <div className="ap-add-form">
-              <h3>Add New Gift Box</h3>
-              <div className="ap-add-grid">
-                <BoxForm
-                  box={newBox}
-                  onChange={(field, val) => setNewBox(prev => ({ ...prev, [field]: val }))}
-                  onSave={addBox}
-                  onCancel={() => { setShowAddForm(false); setNewBox(emptyBox); }}
-                  isNew={true}
-                  onUpload={file => uploadImage(file, path => setNewBox(prev => ({ ...prev, image: path })))}
-                />
-              </div>
-            </div>
+            <BoxForm
+              box={newBox}
+              onChange={(field, val) => setNewBox(prev => ({ ...prev, [field]: val }))}
+              onSave={addBox}
+              onCancel={() => { setShowAddForm(false); setNewBox(emptyBox); }}
+              isNew={true}
+              onUpload={file => uploadImage(file, path => setNewBox(prev => ({ ...prev, image: path })))}
+            />
+          )}
+
+          {editBox && (
+            <BoxForm
+              box={editBox}
+              onChange={(field, val) => setEditBox(prev => ({ ...prev, [field]: val }))}
+              onSave={saveBox}
+              onCancel={() => setEditBox(null)}
+              isNew={false}
+              onUpload={file => uploadImage(file, path => setEditBox(prev => ({ ...prev, image: path })))}
+            />
           )}
 
           {loading ? <div className="panel-loading">Loading...</div> : (
             <div className="ap-grid">
               {filtered.map(box => (
                 <div key={box._id} className="ap-card">
-                  {editBox?._id === box._id ? (
-                    <BoxForm
-                      box={editBox}
-                      onChange={(field, val) => setEditBox(prev => ({ ...prev, [field]: val }))}
-                      onSave={saveBox}
-                      onCancel={() => setEditBox(null)}
-                      isNew={false}
-                      onUpload={file => uploadImage(file, path => setEditBox(prev => ({ ...prev, image: path })))}
-                    />
-                  ) : (
-                    <div className="ap-view">
-                      <img src={box.image?.startsWith('/') ? `http://localhost:5173${box.image}` : box.image} alt={box.name} className="ap-img" onError={e => e.target.style.display = 'none'} />
-                      <h4>{box.name}</h4>
-                      <div className="ap-meta">
-                        <span className="ap-price">PKR {Number(box.price).toLocaleString()}</span>
+                  <div className="ap-view">
+                    <img src={box.image?.startsWith('/') ? `http://localhost:5173${box.image}` : box.image} alt={box.name} className="ap-img" onError={e => e.target.style.display = 'none'} />
+                    <h4>{box.name}</h4>
+                    <div className="ap-meta">
+                      <span className="ap-price">PKR {Number(box.price).toLocaleString()}</span>
 
-                        <span style={{ color: '#9ca3af', fontSize: '13px' }}>🎁 {box.maxItems} item{box.maxItems > 1 ? 's' : ''}</span>
-                      </div>
-                      {box.description && (
-                        <p style={{ fontSize: '11px', color: '#6b7280', marginTop: '4px', lineHeight: '1.4' }}>{box.description}</p>
-                      )}
-
-                      {/* Products Manager */}
-                      <BoxProductsPanel
-                        box={box}
-                        allProducts={allProducts}
-                        token={token}
-                        onMsg={showMsg}
-                      />
-
-                      <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
-                        <button className="ap-edit-btn" style={{ flex: 1 }} onClick={() => setEditBox({ ...box })}>✏️ Edit</button>
-                        <button className="ap-cancel" style={{ flex: 'none', padding: '7px 12px' }} onClick={() => deleteBox(box._id)}>🗑️</button>
-                      </div>
+                      <span style={{ color: '#9ca3af', fontSize: '13px' }}>🎁 {box.maxItems} item{box.maxItems > 1 ? 's' : ''}</span>
                     </div>
-                  )}
+                    {box.description && (
+                      <p style={{ fontSize: '11px', color: '#6b7280', marginTop: '4px', lineHeight: '1.4' }}>{box.description}</p>
+                    )}
+
+                    {/* Products Manager */}
+                    <BoxProductsPanel
+                      box={box}
+                      allProducts={allProducts}
+                      token={token}
+                      onMsg={showMsg}
+                    />
+
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
+                      <button className="ap-edit-btn" style={{ flex: 1 }} onClick={() => setEditBox({ ...box })}>✏️ Edit</button>
+                      <button className="ap-cancel" style={{ flex: 'none', padding: '7px 12px' }} onClick={() => deleteBox(box._id)}>🗑️</button>
+                    </div>
+                  </div>
                 </div>
               ))}
               {filtered.length === 0 && (
