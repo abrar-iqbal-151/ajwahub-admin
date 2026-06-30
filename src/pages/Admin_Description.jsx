@@ -432,9 +432,9 @@ function Description_Admin() {
                       <label>Video Path / Upload</label>
                       <input value={editHero.video} onChange={e => setEditHero({ ...editHero, video: e.target.value })} placeholder="Enter video URL or upload below" />
                       
-                      <label className="da-upload-label" style={{ marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                      <label className="da-upload-label ad-style-1" >
                         📤 Upload Video
-                        <input type="file" accept="video/*" style={{ display: 'none' }}
+                        <input type="file" accept="video/*" className="ad-style-2"
                           onChange={async e => {
                             const file = e.target.files[0]; if (!file) return;
                             showMsg("⌛ Uploading video, please wait...");
@@ -491,8 +491,8 @@ function Description_Admin() {
           <div className="da-section">
             <h2 className="da-section-title">✨ Feature Section (Why Choose AjwaHub)</h2>
 
-            <div className="da-video-specs-note" style={{ borderColor: '#fb923c', background: '#fdf7f2', borderTop: '1px solid rgba(251,146,60,0.2)', borderRight: '1px solid rgba(251,146,60,0.2)', borderBottom: '1px solid rgba(251,146,60,0.2)' }}>
-              <strong style={{ color: '#c2410c' }}>📸 Recommended Image Specs:</strong>
+            <div className="da-video-specs-note ad-style-3" >
+              <strong className="ad-style-4">📸 Recommended Image Specs:</strong>
               <ul>
                 <li><span>Resolution:</span> 800x800 (Square 1:1 Ratio)</li>
                 <li><span>Quality:</span> High Resolution (clear and sharp)</li>
@@ -513,10 +513,10 @@ function Description_Admin() {
                     <label>Product Images (P1, P2, P3, P4)</label>
                     
                     {(editFeature.images || []).map((img, i) => (
-                      <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
-                        <label className="da-upload-label" style={{ flex: 1, margin: 0 }}>
+                      <div key={i} className="ad-style-5">
+                        <label className="da-upload-label ad-style-6" >
                           📁 {img ? img.split('/').pop() : 'Choose Image'}
-                          <input type="file" accept="image/*" style={{ display: 'none' }}
+                          <input type="file" accept="image/*" className="ad-style-7"
                             onChange={async e => {
                               const file = e.target.files[0]; if (!file) return;
                               showMsg("⌛ Uploading original image...");
@@ -535,8 +535,8 @@ function Description_Admin() {
                         {img && (
                           <button 
                             type="button"
-                            className="da-save-btn" 
-                            style={{ width: 'auto', padding: '6px 12px', background: '#3b82f6', margin: 0 }}
+                            className="da-save-btn ad-style-8" 
+                            
                             onClick={() => {
                               setCropImageSrc(img);
                               setOnCropSave(() => async (croppedBlob) => {
@@ -552,22 +552,22 @@ function Description_Admin() {
                             📐 Adjust
                           </button>
                         )}
-                        {img && <img src={img} alt={`P${i+1}`} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }} onError={e => e.target.style.display='none'} />}
-                        <button className="da-delete-btn" style={{ padding: '6px 12px' }} onClick={() => removeFeatureImage(i)}>🗑️</button>
+                        {img && <img src={img} alt={`P${i+1}`} className="ad-style-9" onError={e => e.target.style.display='none'} />}
+                        <button className="da-delete-btn ad-style-10"  onClick={() => removeFeatureImage(i)}>🗑️</button>
                       </div>
                     ))}
-                    <button className="da-save-btn" style={{ marginTop: '8px', width: 'auto', padding: '6px 16px' }} onClick={addFeatureImage}>➕ Add Image</button>
+                    <button className="da-save-btn ad-style-11"  onClick={addFeatureImage}>➕ Add Image</button>
                     
-                    <label style={{ marginTop: '16px' }}>Features</label>
+                    <label className="ad-style-12">Features</label>
                     {editFeature.features.map((item, i) => (
-                      <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-                        <input style={{ width: '60px' }} placeholder="Icon" value={item.icon} onChange={e => updateFeatureItem(i, 'icon', e.target.value)} />
-                        <input style={{ flex: 1 }} placeholder="Feature text" value={item.text} onChange={e => updateFeatureItem(i, 'text', e.target.value)} />
-                        <button className="da-delete-btn" style={{ padding: '6px 12px' }} onClick={() => removeFeatureItem(i)}>🗑️</button>
+                      <div key={i} className="ad-style-13">
+                        <input className="ad-style-14" placeholder="Icon" value={item.icon} onChange={e => updateFeatureItem(i, 'icon', e.target.value)} />
+                        <input className="ad-style-15" placeholder="Feature text" value={item.text} onChange={e => updateFeatureItem(i, 'text', e.target.value)} />
+                        <button className="da-delete-btn ad-style-16"  onClick={() => removeFeatureItem(i)}>🗑️</button>
                       </div>
                     ))}
-                    <button className="da-save-btn" style={{ marginTop: '8px', width: 'auto', padding: '6px 16px' }} onClick={addFeatureItem}>➕ Add Feature</button>
-                    <div className="da-form-btns" style={{ marginTop: '16px' }}>
+                    <button className="da-save-btn ad-style-17"  onClick={addFeatureItem}>➕ Add Feature</button>
+                    <div className="da-form-btns ad-style-18" >
                       <button className="da-save-btn" onClick={saveFeature}>💾 Save</button>
                       <button className="da-cancel-btn" onClick={() => setEditFeature(null)}>Cancel</button>
                     </div>
@@ -577,9 +577,9 @@ function Description_Admin() {
                     <div className="da-card-info">
                       <div className="da-card-badge">Why Choose AjwaHub</div>
                       <h3>{feature.title}</h3>
-                      <p style={{ color: '#374151', fontSize: '14px', lineHeight: '1.6', marginBottom: '20px' }}>{feature.description}</p>
+                      <p className="ad-style-19">{feature.description}</p>
                       
-                      <h4 style={{ color: '#fb923c', fontSize: '13px', textTransform: 'uppercase', marginBottom: '12px', letterSpacing: '0.5px' }}>🖼️ Product Images (P1 - P4):</h4>
+                      <h4 className="ad-style-20">🖼️ Product Images (P1 - P4):</h4>
                       <div className="da-feature-img-grid">
                         {(feature.images || []).map((img, i) => (
                           <div key={i} className="da-feature-img-box">
@@ -589,7 +589,7 @@ function Description_Admin() {
                         ))}
                       </div>
 
-                      <h4 style={{ color: '#fb923c', fontSize: '13px', textTransform: 'uppercase', marginTop: '20px', marginBottom: '12px', letterSpacing: '0.5px' }}>✅ Key Features:</h4>
+                      <h4 className="ad-style-21">✅ Key Features:</h4>
                       <div className="da-feature-list">
                         {(feature.features || []).map((f, i) => (
                           <div key={i} className="da-feature-item-view">
@@ -614,8 +614,8 @@ function Description_Admin() {
           <div className="da-section">
             <h2 className="da-section-title">🤖 AI Powered Wellness Section</h2>
  
-            <div className="da-video-specs-note" style={{ borderColor: '#8b5cf6', background: '#f5f3ff', borderTop: '1px solid rgba(139, 92, 246, 0.2)', borderRight: '1px solid rgba(139, 92, 246, 0.2)', borderBottom: '1px solid rgba(139, 92, 246, 0.2)' }}>
-              <strong style={{ color: '#6d28d9' }}>🎬 AI Video Recommendation:</strong>
+            <div className="da-video-specs-note ad-style-22" >
+              <strong className="ad-style-23">🎬 AI Video Recommendation:</strong>
               <ul>
                 <li><span>Resolution:</span> 1920x1080 (16:9 Landscape)</li>
                 <li><span>Style:</span> High-tech / Futuristic / Health themed</li>
@@ -639,7 +639,7 @@ function Description_Admin() {
                     
                     <label className="da-upload-label">
                       📤 Upload AI Video
-                      <input type="file" accept="video/*" style={{ display: 'none' }}
+                      <input type="file" accept="video/*" className="ad-style-24"
                         onChange={async e => {
                           const file = e.target.files[0]; if (!file) return;
                           const formData = new FormData(); formData.append('file', file);
@@ -650,12 +650,12 @@ function Description_Admin() {
                       />
                     </label>
  
-                    <label style={{ marginTop: '20px' }}>AI Features (Icons & Text)</label>
+                    <label className="ad-style-25">AI Features (Icons & Text)</label>
                     {editAiSection.features.map((f, i) => (
-                      <div key={i} className="da-ai-feature-edit" style={{ background: 'rgba(0,0,0,0.2)', padding: '15px', borderRadius: '12px', marginBottom: '15px' }}>
-                        <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
-                          <input style={{ width: '60px' }} placeholder="Icon" value={f.icon} onChange={e => updateAiFeature(i, 'icon', e.target.value)} />
-                          <input style={{ flex: 1 }} placeholder="Feature Title" value={f.title} onChange={e => updateAiFeature(i, 'title', e.target.value)} />
+                      <div key={i} className="da-ai-feature-edit ad-style-26" >
+                        <div className="ad-style-27">
+                          <input className="ad-style-28" placeholder="Icon" value={f.icon} onChange={e => updateAiFeature(i, 'icon', e.target.value)} />
+                          <input className="ad-style-29" placeholder="Feature Title" value={f.title} onChange={e => updateAiFeature(i, 'title', e.target.value)} />
                         </div>
                         <textarea rows={2} placeholder="Feature Description" value={f.text} onChange={e => updateAiFeature(i, 'text', e.target.value)} />
                       </div>
@@ -669,9 +669,9 @@ function Description_Admin() {
                 ) : (
                   <div className="da-card-view">
                     <div className="da-card-info">
-                      <div className="da-card-badge" style={{ background: '#f5f3ff', color: '#6d28d9', borderColor: '#ddd6fe' }}>{aiSection.badge}</div>
-                      <h3 style={{ fontSize: '24px', margin: '10px 0', color: '#000000' }}>{aiSection.title}</h3>
-                      <p style={{ color: '#4b5563', fontSize: '15px', lineHeight: '1.7', marginBottom: '25px' }}>{aiSection.description}</p>
+                      <div className="da-card-badge ad-style-30" >{aiSection.badge}</div>
+                      <h3 className="ad-style-31">{aiSection.title}</h3>
+                      <p className="ad-style-32">{aiSection.description}</p>
                       
                       <div className="da-ai-video-container">
                         <div className="da-ai-video-overlay-badge">Live Preview</div>
@@ -684,14 +684,14 @@ function Description_Admin() {
                         {aiSection.features.map((f, i) => (
                           <div key={i} className="da-ai-feature-preview-card">
                             <span className="da-ai-preview-icon">{f.icon}</span>
-                            <h4 style={{ color: '#111827', fontSize: '15px', fontWeight: '700', marginBottom: '6px' }}>{f.title}</h4>
-                            <p style={{ color: '#4b5563', fontSize: '13px', lineHeight: '1.5', margin: 0 }}>{f.text}</p>
+                            <h4 className="ad-style-33">{f.title}</h4>
+                            <p className="ad-style-34">{f.text}</p>
                           </div>
                         ))}
                       </div>
                     </div>
-                    <div className="da-edit-btn-wrap" style={{ marginTop: '25px' }}>
-                      <button className="da-edit-btn" style={{ borderColor: 'rgba(139, 92, 246, 0.3)', color: '#6d28d9', background: 'rgba(139, 92, 246, 0.05)' }} onClick={() => setEditAiSection({ ...aiSection })}>✏️ Edit AI Section</button>
+                    <div className="da-edit-btn-wrap ad-style-35" >
+                      <button className="da-edit-btn ad-style-36"  onClick={() => setEditAiSection({ ...aiSection })}>✏️ Edit AI Section</button>
                     </div>
                   </div>
                 )}
@@ -705,34 +705,22 @@ function Description_Admin() {
           <div className="da-section">
             <h2 className="da-section-title">🛍️ Premium Collection Products</h2>
 
-            <div className="da-video-specs-note" style={{ 
-              borderColor: '#c5a059', 
-              background: '#ffffff', 
-              margin: '15px 0', 
-              width: '100%', 
-              padding: '16px', 
-              borderRadius: '16px', 
-              border: '1px solid rgba(197, 160, 89, 0.3)',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px'
-            }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '18px' }}>📸</span>
-                <strong style={{ color: '#1a1a1a', fontSize: '14px', letterSpacing: '0.5px' }}>RECOMMENDED IMAGE SPECIFICATIONS</strong>
+            <div className="da-video-specs-note ad-style-37" >
+              <div className="ad-style-38">
+                <span className="ad-style-39">📸</span>
+                <strong className="ad-style-40">RECOMMENDED IMAGE SPECIFICATIONS</strong>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px' }}>
-                <div style={{ background: '#fdfaf3', padding: '10px', borderRadius: '10px', border: '1px solid rgba(197, 160, 89, 0.1)' }}>
-                  <p style={{ color: '#c5a059', fontSize: '11px', fontWeight: '800', marginBottom: '4px' }}>MAIN CATALOG IMAGE</p>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '12px', color: '#4b5563' }}>
+              <div className="ad-style-41">
+                <div className="ad-style-42">
+                  <p className="ad-style-43">MAIN CATALOG IMAGE</p>
+                  <ul className="ad-style-44">
                     <li>• Resolution: 1200 x 1200</li>
                     <li>• Format: WebP / JPG</li>
                   </ul>
                 </div>
-                <div style={{ background: '#fdfaf3', padding: '10px', borderRadius: '10px', border: '1px solid rgba(197, 160, 89, 0.1)' }}>
-                  <p style={{ color: '#c5a059', fontSize: '11px', fontWeight: '800', marginBottom: '4px' }}>DETAIL VIEW IMAGE</p>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '12px', color: '#4b5563' }}>
+                <div className="ad-style-45">
+                  <p className="ad-style-46">DETAIL VIEW IMAGE</p>
+                  <ul className="ad-style-47">
                     <li>• Resolution: 1200 x 1200</li>
                     <li>• Style: Premium Lifestyle</li>
                   </ul>
@@ -740,16 +728,16 @@ function Description_Admin() {
               </div>
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h2 className="da-section-title" style={{ margin: 0 }}>🛍️ Products ({products.length})</h2>
-              <button className="da-save-btn" style={{ width: 'auto', padding: '8px 18px' }} onClick={() => setShowAddProduct(!showAddProduct)}>
+            <div className="ad-style-48">
+              <h2 className="da-section-title ad-style-49" >🛍️ Products ({products.length})</h2>
+              <button className="da-save-btn ad-style-50"  onClick={() => setShowAddProduct(!showAddProduct)}>
                 {showAddProduct ? '✕ Cancel' : '➕ Add Product'}
               </button>
             </div>
 
             {showAddProduct && (
-              <div className="da-add-product" style={{ background: '#ffffff', borderRadius: '16px', border: '1px solid #c5a059', padding: '30px', marginBottom: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
-                <h3 className="da-section-title" style={{ fontSize: '1.2rem', marginBottom: '25px' }}>➕ Add New Boutique Product</h3>
+              <div className="da-add-product ad-style-51" >
+                <h3 className="da-section-title ad-style-52" >➕ Add New Boutique Product</h3>
                 <div className="da-product-edit-flex">
                   <div className="da-edit-left">
                     <div className="da-image-preview-box">
@@ -762,10 +750,10 @@ function Description_Admin() {
                         </div>
                       )}
                     </div>
-                    <div style={{ display: 'flex', gap: '8px', marginTop: '8px', marginBottom: '20px', alignItems: 'center' }}>
-                      <label className="da-upload-label" style={{ flex: 1, margin: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                    <div className="ad-style-53">
+                      <label className="da-upload-label ad-style-54" >
                         📁 {newProduct.image ? 'Change Catalog Image' : 'Choose Catalog Image'}
-                        <input type="file" accept="image/*" style={{ display: 'none' }}
+                        <input type="file" accept="image/*" className="ad-style-55"
                           onChange={async e => {
                             const file = e.target.files[0]; if (!file) return;
                             showMsg("⌛ Uploading catalog image...");
@@ -784,8 +772,8 @@ function Description_Admin() {
                       {newProduct.image && (
                         <button 
                           type="button"
-                          className="da-save-btn" 
-                          style={{ width: 'auto', padding: '10px 16px', background: '#3b82f6', margin: 0 }}
+                          className="da-save-btn ad-style-56" 
+                          
                           onClick={() => {
                             setCropImageSrc(newProduct.image);
                             setOnCropSave(() => async (croppedBlob) => {
@@ -813,10 +801,10 @@ function Description_Admin() {
                         </div>
                       )}
                     </div>
-                    <div style={{ display: 'flex', gap: '8px', marginTop: '8px', alignItems: 'center' }}>
-                      <label className="da-upload-label" style={{ flex: 1, margin: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                    <div className="ad-style-57">
+                      <label className="da-upload-label ad-style-58" >
                         📁 {newProduct.detailImage ? 'Change Detail Image' : 'Choose Detail Image'}
-                        <input type="file" accept="image/*" style={{ display: 'none' }}
+                        <input type="file" accept="image/*" className="ad-style-59"
                           onChange={async e => {
                             const file = e.target.files[0]; if (!file) return;
                             showMsg("⌛ Uploading detail image...");
@@ -835,8 +823,8 @@ function Description_Admin() {
                       {newProduct.detailImage && (
                         <button 
                           type="button"
-                          className="da-save-btn" 
-                          style={{ width: 'auto', padding: '10px 16px', background: '#3b82f6', margin: 0 }}
+                          className="da-save-btn ad-style-60" 
+                          
                           onClick={() => {
                             setCropImageSrc(newProduct.detailImage);
                             setOnCropSave(() => async (croppedBlob) => {
@@ -860,17 +848,17 @@ function Description_Admin() {
                     <input placeholder="Product name" value={newProduct.name} onChange={e => setNewProduct({ ...newProduct, name: e.target.value })} />
                   
                     <label>Arabic Name</label>
-                    <input placeholder="عجوة بني" style={{ textAlign: 'right', fontSize: '1.2rem' }} value={newProduct.arabicName} onChange={e => setNewProduct({ ...newProduct, arabicName: e.target.value })} />
+                    <input placeholder="عجوة بني" className="ad-style-61" value={newProduct.arabicName} onChange={e => setNewProduct({ ...newProduct, arabicName: e.target.value })} />
 
                     <label>Storage Note</label>
                     <textarea rows={3} placeholder="Storage advice..." value={newProduct.storageNote} onChange={e => setNewProduct({ ...newProduct, storageNote: e.target.value })} />
 
                     <label>Weights & Savings</label>
-                    <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px' }}>
-                      <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '500g Mini Box', savings: '' }] })}>+ 500g Mini Box</button>
-                      <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '1kg Special Box', savings: '' }] })}>+ 1kg Special Box</button>
-                      <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '2kg Briefcase Box', savings: '(Save Rs 500)' }] })}>+ 2kg Briefcase Box</button>
-                      <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '5kg Family Carton', savings: '(Save Rs 1500)' }] })}>+ 5kg Family Carton</button>
+                    <div className="ad-style-62">
+                      <button type="button" className="ad-style-63" onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '500g Mini Box', savings: '' }] })}>+ 500g Mini Box</button>
+                      <button type="button" className="ad-style-64" onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '1kg Special Box', savings: '' }] })}>+ 1kg Special Box</button>
+                      <button type="button" className="ad-style-65" onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '2kg Briefcase Box', savings: '(Save Rs 500)' }] })}>+ 2kg Briefcase Box</button>
+                      <button type="button" className="ad-style-66" onClick={() => setNewProduct({ ...newProduct, weights: [...(newProduct.weights || []), { label: '5kg Family Carton', savings: '(Save Rs 1500)' }] })}>+ 5kg Family Carton</button>
                     </div>
                     <div className="da-weights-editor">
                       {(newProduct.weights || []).map((w, idx) => (
@@ -902,7 +890,7 @@ function Description_Admin() {
                       <input type="checkbox" checked={newProduct.stock} onChange={e => setNewProduct({ ...newProduct, stock: e.target.checked })} /> In Stock
                     </label>
                     
-                    <button className="da-save-btn" style={{ marginTop: '20px' }} onClick={addProduct}>➕ Add Product</button>
+                    <button className="da-save-btn ad-style-67"  onClick={addProduct}>➕ Add Product</button>
                   </div>
                 </div>
               </div>
@@ -918,10 +906,10 @@ function Description_Admin() {
                           <div className="da-image-preview-box">
                             <img src={editProduct.image} alt="preview" />
                           </div>
-                          <div style={{ display: 'flex', gap: '8px', marginTop: '8px', marginBottom: '20px', alignItems: 'center' }}>
-                            <label className="da-upload-label" style={{ flex: 1, margin: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                          <div className="ad-style-68">
+                            <label className="da-upload-label ad-style-69" >
                               📁 {editProduct.image ? 'Change Catalog Image' : 'Choose Catalog Image'}
-                              <input type="file" accept="image/*" style={{ display: 'none' }}
+                              <input type="file" accept="image/*" className="ad-style-70"
                                 onChange={async e => {
                                   const file = e.target.files[0]; if (!file) return;
                                   showMsg("⌛ Uploading catalog image...");
@@ -940,8 +928,8 @@ function Description_Admin() {
                             {editProduct.image && (
                               <button 
                                 type="button"
-                                className="da-save-btn" 
-                                style={{ width: 'auto', padding: '10px 16px', background: '#3b82f6', margin: 0 }}
+                                className="da-save-btn ad-style-71" 
+                                
                                 onClick={() => {
                                   setCropImageSrc(editProduct.image);
                                   setOnCropSave(() => async (croppedBlob) => {
@@ -969,10 +957,10 @@ function Description_Admin() {
                               </div>
                             )}
                           </div>
-                          <div style={{ display: 'flex', gap: '8px', marginTop: '8px', alignItems: 'center' }}>
-                            <label className="da-upload-label" style={{ flex: 1, margin: 0, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                          <div className="ad-style-72">
+                            <label className="da-upload-label ad-style-73" >
                               📁 {editProduct.detailImage ? 'Change Detail Image' : 'Choose Detail Image'}
-                              <input type="file" accept="image/*" style={{ display: 'none' }}
+                              <input type="file" accept="image/*" className="ad-style-74"
                                 onChange={async e => {
                                   const file = e.target.files[0]; if (!file) return;
                                   showMsg("⌛ Uploading detail image...");
@@ -991,8 +979,8 @@ function Description_Admin() {
                             {editProduct.detailImage && (
                               <button 
                                 type="button"
-                                className="da-save-btn" 
-                                style={{ width: 'auto', padding: '10px 16px', background: '#3b82f6', margin: 0 }}
+                                className="da-save-btn ad-style-75" 
+                                
                                 onClick={() => {
                                   setCropImageSrc(editProduct.detailImage);
                                   setOnCropSave(() => async (croppedBlob) => {
@@ -1015,16 +1003,16 @@ function Description_Admin() {
                           <label>Name</label>
                           <input value={editProduct.name} onChange={e => setEditProduct({ ...editProduct, name: e.target.value })} />
                           <label>Arabic Name</label>
-                          <input style={{ textAlign: 'right', fontSize: '1.2rem' }} value={editProduct.arabicName} onChange={e => setEditProduct({ ...editProduct, arabicName: e.target.value })} />
+                          <input className="ad-style-76" value={editProduct.arabicName} onChange={e => setEditProduct({ ...editProduct, arabicName: e.target.value })} />
                           <label>Storage Note</label>
                           <textarea rows={3} value={editProduct.storageNote} onChange={e => setEditProduct({ ...editProduct, storageNote: e.target.value })} />
                           
                           <label>Weights & Savings</label>
-                          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '10px' }}>
-                             <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '500g Mini Box', savings: '' }] })}>+ 500g Mini Box</button>
-                             <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '1kg Special Box', savings: '' }] })}>+ 1kg Special Box</button>
-                             <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '2kg Briefcase Box', savings: '(Save Rs 500)' }] })}>+ 2kg Briefcase Box</button>
-                             <button type="button" style={{ background: '#c5a059', color: '#ffffff', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 'bold', cursor: 'pointer' }} onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '5kg Family Carton', savings: '(Save Rs 1500)' }] })}>+ 5kg Family Carton</button>
+                          <div className="ad-style-77">
+                             <button type="button" className="ad-style-78" onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '500g Mini Box', savings: '' }] })}>+ 500g Mini Box</button>
+                             <button type="button" className="ad-style-79" onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '1kg Special Box', savings: '' }] })}>+ 1kg Special Box</button>
+                             <button type="button" className="ad-style-80" onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '2kg Briefcase Box', savings: '(Save Rs 500)' }] })}>+ 2kg Briefcase Box</button>
+                             <button type="button" className="ad-style-81" onClick={() => setEditProduct({ ...editProduct, weights: [...(editProduct.weights || []), { label: '5kg Family Carton', savings: '(Save Rs 1500)' }] })}>+ 5kg Family Carton</button>
                           </div>
                           <div className="da-weights-editor">
                             {(editProduct.weights || []).map((w, idx) => (
@@ -1050,7 +1038,7 @@ function Description_Admin() {
                           <label>Description</label>
                           <textarea rows={3} value={editProduct.description} onChange={e => setEditProduct({ ...editProduct, description: e.target.value })} />
                           
-                          <div className="da-form-btns" style={{ marginTop: '20px' }}>
+                          <div className="da-form-btns ad-style-82" >
                             <button className="da-save-btn" onClick={() => saveProduct(editProduct)}>💾 Save</button>
                             <button className="da-cancel-btn" onClick={() => setEditProduct(null)}>Cancel</button>
                           </div>
@@ -1144,8 +1132,8 @@ function Description_Admin() {
           <div className="da-section">
             <h2 className="da-section-title">🗺️ Delivery Map Section</h2>
 
-            <div className="da-video-specs-note" style={{ borderColor: '#3b82f6', background: '#eff6ff', borderTop: '1px solid rgba(59, 130, 246, 0.2)', borderRight: '1px solid rgba(59, 130, 246, 0.2)', borderBottom: '1px solid rgba(59, 130, 246, 0.2)' }}>
-              <strong style={{ color: '#1d4ed8' }}>📸 Recommended Map Image Specs:</strong>
+            <div className="da-video-specs-note ad-style-83" >
+              <strong className="ad-style-84">📸 Recommended Map Image Specs:</strong>
               <ul>
                 <li><span>Resolution:</span> 1200x800 (Landscape 3:2 Ratio)</li>
                 <li><span>Clarity:</span> High Resolution (text must be readable)</li>
@@ -1164,7 +1152,7 @@ function Description_Admin() {
                     <input placeholder="e.g. /pakistan-delivery-map.png" value={editDeliveryMap.mapImage} onChange={e => setEditDeliveryMap({ ...editDeliveryMap, mapImage: e.target.value })} />
                     <label className="da-upload-label">
                       📤 Upload Map Image
-                      <input type="file" accept="image/*" style={{ display: 'none' }}
+                      <input type="file" accept="image/*" className="ad-style-85"
                         onChange={async e => {
                           const file = e.target.files[0]; if (!file) return;
                           showMsg("⌛ Uploading original map...");
@@ -1183,8 +1171,8 @@ function Description_Admin() {
                     {editDeliveryMap.mapImage && (
                       <button 
                         type="button"
-                        className="da-save-btn" 
-                        style={{ width: 'auto', padding: '6px 12px', background: '#3b82f6', marginTop: '8px' }}
+                        className="da-save-btn ad-style-86" 
+                        
                         onClick={() => {
                           setCropImageSrc(editDeliveryMap.mapImage);
                           setOnCropSave(() => async (croppedBlob) => {
@@ -1201,12 +1189,12 @@ function Description_Admin() {
                       </button>
                     )}
                     {editDeliveryMap.mapImage && (
-                      <div style={{ marginTop: '12px' }}>
+                      <div className="ad-style-87">
                         <p className="da-preview-label">Preview:</p>
-                        <img src={editDeliveryMap.mapImage} alt="Map Preview" style={{ width: '100%', maxWidth: '500px', height: 'auto', borderRadius: '12px', border: '2px solid rgba(251,146,60,0.3)' }} onError={e => e.target.src='/dates.png'} />
+                        <img src={editDeliveryMap.mapImage} alt="Map Preview" className="ad-style-88" onError={e => e.target.src='/dates.png'} />
                       </div>
                     )}
-                    <div className="da-form-btns" style={{ marginTop: '16px' }}>
+                    <div className="da-form-btns ad-style-89" >
                       <button className="da-save-btn" onClick={saveDeliveryMap}>💾 Save</button>
                       <button className="da-cancel-btn" onClick={() => setEditDeliveryMap(null)}>Cancel</button>
                     </div>
@@ -1214,11 +1202,11 @@ function Description_Admin() {
                 ) : (
                   <div className="da-card-view">
                     <h3>{deliveryMap.title}</h3>
-                    <div style={{ marginTop: '16px' }}>
-                      <img src={deliveryMap.mapImage} alt="Delivery Map" style={{ width: '100%', maxWidth: '600px', height: 'auto', borderRadius: '12px', border: '2px solid rgba(251,146,60,0.3)' }} onError={e => e.target.src='/dates.png'} />
+                    <div className="ad-style-90">
+                      <img src={deliveryMap.mapImage} alt="Delivery Map" className="ad-style-91" onError={e => e.target.src='/dates.png'} />
                     </div>
-                    <p style={{ color: '#4b5563', marginTop: '12px', fontSize: '14px' }}>🗺️ {deliveryMap.mapImage}</p>
-                    <div className="da-edit-btn-wrap" style={{ marginTop: '16px' }}>
+                    <p className="ad-style-92">🗺️ {deliveryMap.mapImage}</p>
+                    <div className="da-edit-btn-wrap ad-style-93" >
                       <button className="da-edit-btn" onClick={() => setEditDeliveryMap({ ...deliveryMap })}>✏️ Edit</button>
                     </div>
                   </div>
@@ -1232,8 +1220,8 @@ function Description_Admin() {
           <div className="da-section">
             <h2 className="da-section-title">🌱 About Section (How Our Dates Are Grown)</h2>
 
-            <div className="da-video-specs-note" style={{ borderColor: '#22c55e', background: '#f0fdf4', borderTop: '1px solid rgba(34, 197, 94, 0.2)', borderRight: '1px solid rgba(34, 197, 94, 0.2)', borderBottom: '1px solid rgba(34, 197, 94, 0.2)' }}>
-              <strong style={{ color: '#15803d' }}>📸 Recommended Slideshow Image Specs:</strong>
+            <div className="da-video-specs-note ad-style-94" >
+              <strong className="ad-style-95">📸 Recommended Slideshow Image Specs:</strong>
               <ul>
                 <li><span>Resolution:</span> 1200x800 (Landscape 3:2 Ratio)</li>
                 <li><span>Aesthetic:</span> High-quality farm/process photography</li>
@@ -1251,38 +1239,38 @@ function Description_Admin() {
 
                     <label>Paragraphs</label>
                     {editAbout.paragraphs.map((para, i) => (
-                      <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
-                        <textarea rows={3} style={{ flex: 1 }} value={para}
+                      <div key={i} className="ad-style-96">
+                        <textarea rows={3} className="ad-style-97" value={para}
                           onChange={e => {
                             const updated = [...editAbout.paragraphs];
                             updated[i] = e.target.value;
                             setEditAbout({ ...editAbout, paragraphs: updated });
                           }}
                         />
-                        <button className="da-delete-btn" style={{ padding: '6px 12px', alignSelf: 'flex-start' }}
+                        <button className="da-delete-btn ad-style-98" 
                           onClick={() => setEditAbout({ ...editAbout, paragraphs: editAbout.paragraphs.filter((_, j) => j !== i) })}>
                           🗑️
                         </button>
                       </div>
                     ))}
-                    <button className="da-save-btn" style={{ width: 'auto', padding: '6px 16px', marginBottom: '16px' }}
+                    <button className="da-save-btn ad-style-99" 
                       onClick={() => setEditAbout({ ...editAbout, paragraphs: [...editAbout.paragraphs, ''] })}>
                       ➕ Add Paragraph
                     </button>
 
                     <label>Slideshow Images (4 recommended)</label>
                     {editAbout.images.map((img, i) => (
-                      <div key={i} style={{ display: 'flex', gap: '8px', marginBottom: '8px', alignItems: 'center' }}>
-                        <input style={{ flex: 1 }} placeholder="Image URL e.g. /Product 1.png" value={img}
+                      <div key={i} className="ad-style-100">
+                        <input className="ad-style-101" placeholder="Image URL e.g. /Product 1.png" value={img}
                           onChange={e => {
                             const updated = [...editAbout.images];
                             updated[i] = e.target.value;
                             setEditAbout({ ...editAbout, images: updated });
                           }}
                         />
-                        <label className="da-upload-label" style={{ margin: 0, padding: '6px 10px', fontSize: '12px' }}>
+                        <label className="da-upload-label ad-style-102" >
                           📤
-                          <input type="file" accept="image/*" style={{ display: 'none' }}
+                          <input type="file" accept="image/*" className="ad-style-103"
                             onChange={async e => {
                               const file = e.target.files[0]; if (!file) return;
                               showMsg("⌛ Uploading original slide...");
@@ -1303,8 +1291,8 @@ function Description_Admin() {
                         {img && (
                           <button 
                             type="button"
-                            className="da-save-btn" 
-                            style={{ width: 'auto', padding: '6px 12px', background: '#3b82f6', margin: 0 }}
+                            className="da-save-btn ad-style-104" 
+                            
                             onClick={() => {
                               setCropImageSrc(img);
                               setOnCropSave(() => async (croppedBlob) => {
@@ -1324,14 +1312,14 @@ function Description_Admin() {
                             📐 Adjust
                           </button>
                         )}
-                        {img && <img src={img} alt={`slide${i}`} style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '8px' }} onError={e => e.target.style.display='none'} />}
-                        <button className="da-delete-btn" style={{ padding: '6px 12px' }}
+                        {img && <img src={img} alt={`slide${i}`} className="ad-style-105" onError={e => e.target.style.display='none'} />}
+                        <button className="da-delete-btn ad-style-106" 
                           onClick={() => setEditAbout({ ...editAbout, images: editAbout.images.filter((_, j) => j !== i) })}>
                           🗑️
                         </button>
                       </div>
                     ))}
-                    <button className="da-save-btn" style={{ width: 'auto', padding: '6px 16px', marginBottom: '16px' }}
+                    <button className="da-save-btn ad-style-107" 
                       onClick={() => setEditAbout({ ...editAbout, images: [...editAbout.images, ''] })}>
                       ➕ Add Image
                     </button>
@@ -1344,20 +1332,20 @@ function Description_Admin() {
                 ) : (
                   <div className="da-card-view">
                     <h3>{about.title}</h3>
-                    <div style={{ margin: '12px 0', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    <div className="ad-style-108">
                       {about.paragraphs.map((para, i) => (
-                        <p key={i} style={{ color: '#cbd5e1', fontSize: '14px', lineHeight: '1.6', padding: '10px', background: 'rgba(255,255,255,0.04)', borderRadius: '8px', margin: 0 }}>{para}</p>
+                        <p key={i} className="ad-style-109">{para}</p>
                       ))}
                     </div>
-                    <div style={{ marginTop: '16px' }}>
-                      <h4 style={{ color: '#fb923c', fontSize: '14px', marginBottom: '8px' }}>Slideshow Images:</h4>
-                      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                    <div className="ad-style-110">
+                      <h4 className="ad-style-111">Slideshow Images:</h4>
+                      <div className="ad-style-112">
                         {about.images.map((img, i) => (
-                          <img key={i} src={img} alt={`slide${i+1}`} style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '12px', border: '2px solid rgba(251,146,60,0.3)' }} onError={e => e.target.src='/dates.png'} />
+                          <img key={i} src={img} alt={`slide${i+1}`} className="ad-style-113" onError={e => e.target.src='/dates.png'} />
                         ))}
                       </div>
                     </div>
-                    <div className="da-edit-btn-wrap" style={{ marginTop: '16px' }}>
+                    <div className="da-edit-btn-wrap ad-style-114" >
                       <button className="da-edit-btn" onClick={() => setEditAbout({ ...about })}>✏️ Edit</button>
                     </div>
                   </div>
@@ -1370,15 +1358,15 @@ function Description_Admin() {
         {activeTab === 'payment' && !loading && (
           <div className="da-section">
             <h2 className="da-section-title">💳 Payment Icons</h2>
-            <p style={{color:'#94a3b8', marginBottom:'20px', fontSize:'14px'}}>Footer mein dikhne wale payment icons upload karo (Visa, Mastercard, EasyPaisa, JazzCash etc.)</p>
-            <div style={{display:'flex', flexWrap:'wrap', gap:'16px', marginBottom:'24px'}}>
+            <p className="ad-style-115">Footer mein dikhne wale payment icons upload karo (Visa, Mastercard, EasyPaisa, JazzCash etc.)</p>
+            <div className="ad-style-116">
               {paymentIcons.map((icon, i) => (
-                <div key={i} style={{position:'relative', display:'inline-flex', flexDirection:'column', alignItems:'center', gap:'6px'}}>
-                  <div style={{background:'repeating-conic-gradient(#ccc 0% 25%, #fff 0% 50%) 0 0 / 10px 10px', borderRadius:'8px', padding:'6px'}}>
-                    <img src={icon} alt={`icon-${i}`} style={{height:'40px', width:'auto', objectFit:'contain', display:'block', borderRadius:'4px'}} onError={e => e.target.style.opacity='0.3'} />
+                <div key={i} className="ad-style-117">
+                  <div className="ad-style-118">
+                    <img src={icon} alt={`icon-${i}`} className="ad-style-119" onError={e => e.target.style.opacity='0.3'} />
                   </div>
                   <button onClick={() => savePaymentIcons(paymentIcons.filter((_,j) => j !== i))}
-                    style={{position:'absolute', top:'-8px', right:'-8px', width:'20px', height:'20px', borderRadius:'50%', background:'#ef4444', border:'none', color:'#fff', fontSize:'12px', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    className="ad-style-120">
                     ×
                   </button>
                 </div>
@@ -1386,7 +1374,7 @@ function Description_Admin() {
             </div>
             <label className="da-upload-label">
               📤 Upload Payment Icon
-              <input type="file" accept="image/*" style={{display:'none'}}
+              <input type="file" accept="image/*" className="ad-style-121"
                 onChange={async e => {
                   const file = e.target.files[0]; if (!file) return;
                   const formData = new FormData(); formData.append('file', file);
@@ -1400,153 +1388,55 @@ function Description_Admin() {
         )}
 
         {cropActive && cropImageSrc && (
-          <div style={{
-            position: 'fixed',
-            top: 0, left: 0, right: 0, bottom: 0,
-            background: 'rgba(0,0,0,0.8)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '20px'
-          }}>
-            <div style={{
-              background: '#ffffff',
-              borderRadius: '16px',
-              padding: '24px',
-              width: '100%',
-              maxWidth: '650px',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '20px',
-              maxHeight: '90vh',
-              overflowY: 'auto'
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <h3 style={{ margin: 0, color: '#1a1a1a', fontSize: '18px', fontWeight: '700' }}>✂️ Crop Image</h3>
+          <div className="ad-style-122">
+            <div className="ad-style-123">
+              <div className="ad-style-124">
+                <h3 className="ad-style-125">✂️ Crop Image</h3>
                 <button 
                   onClick={() => { setCropActive(false); setCropImageSrc(null); setCompletedCrop(null); }}
-                  style={{ background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#6b7280' }}
+                  className="ad-style-126"
                 >✕</button>
               </div>
 
-              <div style={{ 
-                position: 'relative', 
-                width: '100%', 
-                maxHeight: '400px', 
-                background: '#f3f4f6', 
-                borderRadius: '10px', 
-                overflow: 'auto',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: '10px'
-              }}>
+              <div className="ad-style-127">
                 <ReactCrop
                   crop={crop}
                   onChange={(c) => setCrop(c)}
                   onComplete={(c) => setCompletedCrop(c)}
                   aspect={undefined}
-                  style={{ maxWidth: '100%' }}
+                  className="ad-style-128"
                 >
                   <img
                     ref={imgRef}
                     src={cropImageSrc}
                     alt="Crop source"
                     onLoad={onImageLoad}
-                    style={{ maxHeight: '350px', objectFit: 'contain', width: 'auto', maxWidth: '100%' }}
+                    className="ad-style-129"
                     crossOrigin="anonymous"
                     draggable={false}
                   />
                   {/* Custom edge/side handles */}
-                  <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: '14px',
-                    height: '6px',
-                    backgroundColor: '#ffffff',
-                    border: '1.5px solid #4b5563',
-                    borderRadius: '2px',
-                    pointerEvents: 'none',
-                    zIndex: 1000
-                  }} />
-                  <div style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: '50%',
-                    transform: 'translate(-50%, 50%)',
-                    width: '14px',
-                    height: '6px',
-                    backgroundColor: '#ffffff',
-                    border: '1.5px solid #4b5563',
-                    borderRadius: '2px',
-                    pointerEvents: 'none',
-                    zIndex: 1000
-                  }} />
-                  <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    right: 0,
-                    transform: 'translate(50%, -50%)',
-                    width: '6px',
-                    height: '14px',
-                    backgroundColor: '#ffffff',
-                    border: '1.5px solid #4b5563',
-                    borderRadius: '2px',
-                    pointerEvents: 'none',
-                    zIndex: 1000
-                  }} />
-                  <div style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: 0,
-                    transform: 'translate(-50%, -50%)',
-                    width: '6px',
-                    height: '14px',
-                    backgroundColor: '#ffffff',
-                    border: '1.5px solid #4b5563',
-                    borderRadius: '2px',
-                    pointerEvents: 'none',
-                    zIndex: 1000
-                  }} />
+                  <div className="ad-style-130" />
+                  <div className="ad-style-131" />
+                  <div className="ad-style-132" />
+                  <div className="ad-style-133" />
                 </ReactCrop>
               </div>
 
-              <div style={{ fontSize: '12px', color: '#6b7280', textAlign: 'center' }}>
+              <div className="ad-style-134">
                 💡 Mouse pointer se image par crop area ke corners ya side center indicators ko drag kar ke select karein.
               </div>
 
-              <div style={{ display: 'flex', gap: '12px', marginTop: '10px' }}>
+              <div className="ad-style-135">
                 <button 
                   onClick={executeCrop}
-                  style={{
-                    flex: 1,
-                    padding: '12px',
-                    background: 'linear-gradient(135deg, #c5a059, #b8860b)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '10px',
-                    fontWeight: '700',
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 12px rgba(197, 160, 89, 0.2)'
-                  }}
+                  className="ad-style-136"
                 >
                   Apply Crop & Save
                 </button>
                 <button 
                   onClick={() => { setCropActive(false); setCropImageSrc(null); setCompletedCrop(null); }}
-                  style={{
-                    padding: '12px 20px',
-                    background: '#f3f4f6',
-                    color: '#4b5563',
-                    border: 'none',
-                    borderRadius: '10px',
-                    fontWeight: '600',
-                    cursor: 'pointer'
-                  }}
+                  className="ad-style-137"
                 >
                   Cancel
                 </button>
