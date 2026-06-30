@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../css/AdminPanel.css';
 import '../css/Admin_Product.css';
+import '../css/Admin_GymAI.css';
 
 const API = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api`;
 
@@ -155,69 +156,69 @@ function Admin_GymAI() {
 
           <div className="ap-toolbar">
             <span className="ap-count">{videos.length} Videos</span>
-            <button className="ap-save" style={{ width: 'auto', padding: '8px 18px' }} onClick={() => setShowForm(!showForm)}>
+            <button className="ap-save gym-ai-style-1"  onClick={() => setShowForm(!showForm)}>
               {showForm ? '✕ Cancel' : '➕ Add Video'}
             </button>
           </div>
 
-          <div className="da-video-specs-note" style={{ borderColor: '#c5a059', background: '#fdfaf3', margin: '15px 0 20px 0', borderLeft: '4px solid #c5a059', padding: '12px 15px', borderRadius: '8px', borderTop: '1px solid rgba(197, 160, 89, 0.2)', borderRight: '1px solid rgba(197, 160, 89, 0.2)', borderBottom: '1px solid rgba(197, 160, 89, 0.2)', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)' }}>
-            <strong style={{ color: '#8d7558', display: 'block', fontSize: '14px', marginBottom: '8px' }}>🎥 Recommended GymAI Video Specs:</strong>
-            <ul style={{ listStyle: 'none', display: 'flex', gap: '20px', flexWrap: 'wrap', padding: 0, margin: 0 }}>
-              <li style={{ fontSize: '12px', color: '#4b5563' }}><span style={{ color: '#111827', fontWeight: '600' }}>Video Format:</span> MP4 (H.264)</li>
-              <li style={{ fontSize: '12px', color: '#4b5563' }}><span style={{ color: '#111827', fontWeight: '600' }}>Video Size:</span> Keep under 15MB</li>
-              <li style={{ fontSize: '12px', color: '#4b5563' }}><span style={{ color: '#111827', fontWeight: '600' }}>Thumbnail:</span> 16:9 Landscape (under 300KB)</li>
+          <div className="da-video-specs-note gym-ai-style-2" >
+            <strong className="gym-ai-style-3">🎥 Recommended GymAI Video Specs:</strong>
+            <ul className="gym-ai-style-4">
+              <li className="gym-ai-style-5"><span className="gym-ai-style-6">Video Format:</span> MP4 (H.264)</li>
+              <li className="gym-ai-style-7"><span className="gym-ai-style-8">Video Size:</span> Keep under 15MB</li>
+              <li className="gym-ai-style-9"><span className="gym-ai-style-10">Thumbnail:</span> 16:9 Landscape (under 300KB)</li>
             </ul>
           </div>
 
           {showForm && (
-            <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '20px', padding: '28px', marginBottom: '24px' }}>
-              <h3 style={{ color: '#f1f5f9', fontSize: '16px', fontWeight: 800, marginBottom: '20px' }}>🎥 Add New Video</h3>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.5px' }}>📝 Title *</label>
-                  <input style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '11px 14px', color: '#f1f5f9', fontSize: '14px', outline: 'none' }}
+            <div className="gym-ai-style-11">
+              <h3 className="gym-ai-style-12">🎥 Add New Video</h3>
+              <div className="gym-ai-style-13">
+                <div className="gym-ai-style-14">
+                  <label className="gym-ai-style-15">📝 Title *</label>
+                  <input className="gym-ai-style-16"
                     value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="e.g. Benefits of Ajwa Dates" />
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🏷️ Category</label>
-                  <select style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '11px 14px', color: '#f1f5f9', fontSize: '14px', outline: 'none' }}
+                <div className="gym-ai-style-17">
+                  <label className="gym-ai-style-18">🏷️ Category</label>
+                  <select className="gym-ai-style-19"
                     value={form.category} onChange={e => setForm(p => ({ ...p, category: e.target.value }))}>
-                    {categories.map(c => <option key={c} value={c} style={{ background: '#111827' }}>{c}</option>)}
+                    {categories.map(c => <option key={c} value={c} className="gym-ai-style-20">{c}</option>)}
                   </select>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', gridColumn: '1/-1' }}>
-                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🔗 Video URL *</label>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <input style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '11px 14px', color: '#f1f5f9', fontSize: '14px', outline: 'none' }}
+                <div className="gym-ai-style-21">
+                  <label className="gym-ai-style-22">🔗 Video URL *</label>
+                  <div className="gym-ai-style-23">
+                    <input className="gym-ai-style-24"
                       value={form.url} onChange={e => setForm(p => ({ ...p, url: e.target.value }))} placeholder="https://youtube.com/watch?v=... ya upload karein" />
                     <label style={{ padding: '11px 16px', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '10px', color: '#f1f5f9', fontSize: '13px', fontWeight: 600, cursor: uploadingVideo ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', opacity: uploadingVideo ? 0.6 : 1 }}>
                       {uploadingVideo ? '⏳ Uploading...' : '📤 Upload'}
-                      <input type="file" accept="video/*" style={{ display: 'none' }} disabled={uploadingVideo}
+                      <input type="file" accept="video/*" className="gym-ai-style-25" disabled={uploadingVideo}
                         onChange={e => e.target.files[0] && uploadVideo(e.target.files[0])} />
                     </label>
                   </div>
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', gridColumn: '1/-1' }}>
-                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.5px' }}>🖼️ Thumbnail</label>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <input style={{ flex: 1, background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '11px 14px', color: '#f1f5f9', fontSize: '14px', outline: 'none' }}
+                <div className="gym-ai-style-26">
+                  <label className="gym-ai-style-27">🖼️ Thumbnail</label>
+                  <div className="gym-ai-style-28">
+                    <input className="gym-ai-style-29"
                       value={form.thumbnail} onChange={e => setForm(p => ({ ...p, thumbnail: e.target.value }))} placeholder="Paste URL ya upload karein..." />
                     <label style={{ padding: '11px 16px', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.15)', borderRadius: '10px', color: '#f1f5f9', fontSize: '13px', fontWeight: 600, cursor: uploading ? 'not-allowed' : 'pointer', whiteSpace: 'nowrap', opacity: uploading ? 0.6 : 1 }}>
                       {uploading ? '⏳ Uploading...' : '📤 Upload'}
-                      <input type="file" accept="image/*" style={{ display: 'none' }} disabled={uploading}
+                      <input type="file" accept="image/*" className="gym-ai-style-30" disabled={uploading}
                         onChange={e => e.target.files[0] && uploadThumbnail(e.target.files[0])} />
                     </label>
                   </div>
-                  {form.thumbnail && <img src={form.thumbnail} alt="preview" style={{ width: '120px', height: '70px', objectFit: 'cover', borderRadius: '8px', marginTop: '6px', border: '1px solid rgba(255,255,255,0.1)' }} onError={e => e.target.style.display='none'} />}
+                  {form.thumbnail && <img src={form.thumbnail} alt="preview" className="gym-ai-style-31" onError={e => e.target.style.display='none'} />}
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', gridColumn: '1/-1' }}>
-                  <label style={{ fontSize: '12px', fontWeight: 700, color: '#9ca3af', textTransform: 'uppercase', letterSpacing: '0.5px' }}>📄 Description</label>
-                  <input style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', padding: '11px 14px', color: '#f1f5f9', fontSize: '14px', outline: 'none' }}
+                <div className="gym-ai-style-32">
+                  <label className="gym-ai-style-33">📄 Description</label>
+                  <input className="gym-ai-style-34"
                     value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} placeholder="Short description about the video..." />
                 </div>
               </div>
               <button onClick={addVideo}
-                style={{ marginTop: '20px', padding: '12px 28px', background: 'linear-gradient(135deg, #dc2626, #b91c1c)', border: 'none', borderRadius: '12px', color: 'white', fontSize: '14px', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 14px rgba(220,38,38,0.3)' }}>
+                className="gym-ai-style-35">
                 💾 Save Video
               </button>
             </div>
@@ -233,16 +234,16 @@ function Admin_GymAI() {
                     <div className="ap-meta">
                       <span className="ap-discount">{video.category}</span>
                     </div>
-                    <p style={{ fontSize: '12px', color: '#6b7280', margin: '6px 0' }}>{video.description}</p>
-                    <a href={video.url} target="_blank" rel="noopener noreferrer" style={{ fontSize: '12px', color: '#818cf8', display: 'block', marginBottom: '8px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <p className="gym-ai-style-36">{video.description}</p>
+                    <a href={video.url} target="_blank" rel="noopener noreferrer" className="gym-ai-style-37">
                       🔗 {video.url}
                     </a>
-                    <button className="ap-cancel" style={{ width: '100%', padding: '7px' }} onClick={() => deleteVideo(video._id)}>🗑️ Delete</button>
+                    <button className="ap-cancel gym-ai-style-38"  onClick={() => deleteVideo(video._id)}>🗑️ Delete</button>
                   </div>
                 </div>
               ))}
               {videos.length === 0 && (
-                <div style={{ color: '#4b5563', textAlign: 'center', padding: '60px', gridColumn: '1/-1' }}>
+                <div className="gym-ai-style-39">
                   Koi video nahi. ➕ Add Video se banao.
                 </div>
               )}

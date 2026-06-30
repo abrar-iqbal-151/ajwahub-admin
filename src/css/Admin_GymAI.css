@@ -1,0 +1,287 @@
+
+/* --- AUTO EXTRACTED STYLES --- */
+
+.gym-ai-style-1 {
+  width: auto;
+  padding: 8px 18px;
+}
+
+.gym-ai-style-2 {
+  border-color: #c5a059;
+  background: #fdfaf3;
+  margin: 15px 0 20px 0;
+  border-left: 4px solid #c5a059;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border-top: 1px solid rgba(197, 160, 89, 0.2);
+  border-right: 1px solid rgba(197, 160, 89, 0.2);
+  border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.gym-ai-style-3 {
+  color: #8d7558;
+  display: block;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.gym-ai-style-4 {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding: 0;
+  margin: 0;
+}
+
+.gym-ai-style-5 {
+  font-size: 12px;
+  color: #4b5563;
+}
+
+.gym-ai-style-6 {
+  color: #111827;
+  font-weight: 600;
+}
+
+.gym-ai-style-7 {
+  font-size: 12px;
+  color: #4b5563;
+}
+
+.gym-ai-style-8 {
+  color: #111827;
+  font-weight: 600;
+}
+
+.gym-ai-style-9 {
+  font-size: 12px;
+  color: #4b5563;
+}
+
+.gym-ai-style-10 {
+  color: #111827;
+  font-weight: 600;
+}
+
+.gym-ai-style-11 {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 28px;
+  margin-bottom: 24px;
+}
+
+.gym-ai-style-12 {
+  color: #f1f5f9;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.gym-ai-style-13 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.gym-ai-style-14 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gym-ai-style-15 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gym-ai-style-16 {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: #f1f5f9;
+  font-size: 14px;
+  outline: none;
+}
+
+.gym-ai-style-17 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.gym-ai-style-18 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gym-ai-style-19 {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: #f1f5f9;
+  font-size: 14px;
+  outline: none;
+}
+
+.gym-ai-style-20 {
+  background: #111827;
+}
+
+.gym-ai-style-21 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  grid-column: 1/-1;
+}
+
+.gym-ai-style-22 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gym-ai-style-23 {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.gym-ai-style-24 {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: #f1f5f9;
+  font-size: 14px;
+  outline: none;
+}
+
+.gym-ai-style-25 {
+  display: none;
+}
+
+.gym-ai-style-26 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  grid-column: 1/-1;
+}
+
+.gym-ai-style-27 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gym-ai-style-28 {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.gym-ai-style-29 {
+  flex: 1;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: #f1f5f9;
+  font-size: 14px;
+  outline: none;
+}
+
+.gym-ai-style-30 {
+  display: none;
+}
+
+.gym-ai-style-31 {
+  width: 120px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: 6px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.gym-ai-style-32 {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  grid-column: 1/-1;
+}
+
+.gym-ai-style-33 {
+  font-size: 12px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.gym-ai-style-34 {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 11px 14px;
+  color: #f1f5f9;
+  font-size: 14px;
+  outline: none;
+}
+
+.gym-ai-style-35 {
+  margin-top: 20px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(220,38,38,0.3);
+}
+
+.gym-ai-style-36 {
+  font-size: 12px;
+  color: #6b7280;
+  margin: 6px 0;
+}
+
+.gym-ai-style-37 {
+  font-size: 12px;
+  color: #818cf8;
+  display: block;
+  margin-bottom: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.gym-ai-style-38 {
+  width: 100%;
+  padding: 7px;
+}
+
+.gym-ai-style-39 {
+  color: #4b5563;
+  text-align: center;
+  padding: 60px;
+  grid-column: 1/-1;
+}
+
