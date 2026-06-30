@@ -32,7 +32,7 @@
 .ah-slider-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 8px; }
 .ah-slider-item { display: flex; flex-direction: column; gap: 8px; background: #f8fafc; border: 1px solid rgba(0, 0, 0, 0.08); border-radius: 10px; padding: 14px; }
 .ah-slider-label { font-size: 13px; font-weight: 700; color: #111827; }
-.ah-slider-preview { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; }
+.ah-slider-preview { width: 100%; aspect-ratio: 1920 / 820; height: auto; object-fit: cover; border-radius: 8px; }
 .ah-slider-item input { background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.12); color: #111827; padding: 7px 10px; border-radius: 6px; font-size: 13px; outline: none; }
 .ah-slider-item input:focus { border-color: #dc2626; }
  
