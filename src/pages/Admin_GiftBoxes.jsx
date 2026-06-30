@@ -200,114 +200,7 @@ function GlobalItemsManager({ items, token, onRefresh, onCancel, onMsg }) {
 }
 
 
-// ── Products Panel for each gift box ──
-function BoxProductsPanel({ box, token, onMsg, globalItems }) {
-  const [open, setOpen] = useState(false);
-  const [boxProducts, setBoxProducts] = useState(box.products || []);
-  const [saving, setSaving] = useState(false);
-  
-  const addItemFromGlobal = (gItem) => {
-    if (boxProducts.some(p => p.globalId === gItem._id)) {
-      onMsg('⚠️ Item already in box!');
-      return;
-    }
-    if (boxProducts.length >= box.maxItems) {
-      onMsg(`⚠️ Max ${box.maxItems} items allowed!`);
-      return;
-    }
-    const newItem = { id: Date.now().toString(), globalId: gItem._id, name: gItem.name, image: gItem.image, price: gItem.price };
-    setBoxProducts(prev => [...prev, newItem]);
-  };
 
-  const removeItem = (id) => {
-    setBoxProducts(prev => prev.filter(p => p.id !== id));
-  };
-
-  const saveProducts = async () => {
-    setSaving(true);
-    try {
-      const res = await fetch(`${API}/gift-boxes/${box._id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ ...box, products: boxProducts, price: Number(box.price), maxItems: Number(box.maxItems) })
-      });
-      if (res.ok) onMsg('✅ Products saved in database!');
-      else onMsg('❌ Save failed');
-    } catch { onMsg('❌ Network error'); }
-    setSaving(false);
-  };
-
-  return (
-    <div style={{ marginTop: '10px' }}>
-      <button
-        onClick={() => setOpen(!open)}
-        className={`agb-panel-btn ${open ? 'open' : 'closed'}`}
-      >
-        <span>🛒 Box Items ({boxProducts.length}/{box.maxItems})</span>
-        <span>{open ? '▲' : '▼'}</span>
-      </button>
-
-      {open && (
-        <div className="agb-panel-content">
-          
-          {/* List of currently added items */}
-          <div>
-            <p className="agb-panel-title">
-              Items in Box ({boxProducts.length} / {box.maxItems})
-            </p>
-            {boxProducts.length === 0 ? (
-              <p className="agb-panel-empty">No items added yet.</p>
-            ) : (
-              <div className="agb-items-grid">
-                {boxProducts.map((p) => (
-                  <div key={p.id} className="agb-item-wrapper">
-                    <div className="agb-item-img-wrap">
-                      <img
-                        src={p.image.startsWith('/') ? `http://localhost:5173${p.image}` : p.image} alt={p.name}
-                        className="agb-item-img"
-                        onError={e => e.target.style.display = 'none'}
-                      />
-                      <button onClick={() => removeItem(p.id)} className="agb-item-remove">✕</button>
-                    </div>
-                    <p className="agb-item-title" title={p.name}>{p.name}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Global Items Selector */}
-          {boxProducts.length < box.maxItems && (
-            <div className="agb-new-item-form">
-              <p className="agb-new-item-title">👇 Click to add from Global Items</p>
-              {globalItems.length === 0 ? (
-                <p className="agb-panel-empty">No global items found. Create them from the top button first.</p>
-              ) : (
-                <div className="agb-items-grid" style={{ maxHeight: '150px', overflowY: 'auto' }}>
-                  {globalItems.map(gItem => (
-                    <div key={gItem._id} className="agb-item-wrapper" style={{ cursor: 'pointer' }} onClick={() => addItemFromGlobal(gItem)}>
-                      <div className="agb-item-img-wrap">
-                        <img src={gItem.image.startsWith('/') ? `http://localhost:5173${gItem.image}` : gItem.image} alt={gItem.name} className="agb-item-img" style={{ border: '2px dashed #4b5563' }} />
-                        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px' }}>
-                          <span style={{ color: 'white', fontSize: '20px', fontWeight: 'bold' }}>+</span>
-                        </div>
-                      </div>
-                      <p className="agb-item-title">{gItem.name}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          <button onClick={saveProducts} disabled={saving} className="agb-save-db-btn">
-            {saving ? 'Saving...' : '💾 Save Items to Database'}
-          </button>
-        </div>
-      )}
-    </div>
-  );
-}
 
 function Admin_GiftBoxes() {
   const navigate = useNavigate();
@@ -524,13 +417,7 @@ function Admin_GiftBoxes() {
                       <p style={{ fontSize: '11px', color: '#6b7280', marginTop: '4px', lineHeight: '1.4' }}>{box.description}</p>
                     )}
 
-                    {/* Products Manager */}
-                    <BoxProductsPanel
-                      box={box}
-                      globalItems={globalItems}
-                      token={token}
-                      onMsg={showMsg}
-                    />
+
 
                     <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
                       <button className="ap-edit-btn" style={{ flex: 1 }} onClick={() => setEditBox({ ...box })}>✏️ Edit</button>
