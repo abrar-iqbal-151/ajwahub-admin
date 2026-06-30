@@ -111,42 +111,112 @@ function BoxForm({ box, onChange, onSave, onCancel, isNew, onUpload }) {
   );
 }
 
+// ── Global Items Manager ──
+function GlobalItemsManager({ items, token, onRefresh, onCancel, onMsg }) {
+  const [name, setName] = useState('');
+  const [price, setPrice] = useState('');
+  const [image, setImage] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleUpload = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
+    if (res.ok) {
+      const data = await res.json();
+      setImage(data.path);
+    } else {
+      onMsg('❌ Image upload failed');
+    }
+  };
+
+  const addItem = async () => {
+    if (!name || !price || !image) return onMsg('⚠️ Name, Price, and Image required');
+    setLoading(true);
+    const res = await fetch(`${API}/gift-box-items`, {
+      method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ name, price: Number(price), image })
+    });
+    setLoading(false);
+    if (res.ok) { onMsg('✅ Item Added to Global List'); setName(''); setPrice(''); setImage(''); onRefresh(); }
+    else onMsg('❌ Failed to add item');
+  };
+
+  const deleteItem = async (id) => {
+    if (!window.confirm('Delete this global item? It will not remove it from already saved boxes, but it will be removed from this list.')) return;
+    const res = await fetch(`${API}/gift-box-items/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` } });
+    if (res.ok) { onMsg('✅ Item Deleted'); onRefresh(); }
+  };
+
+  return (
+    <div className="ap-modal-overlay">
+      <div className="ap-modal-container" style={{ maxWidth: '700px' }}>
+        <div className="ap-modal-header">
+          <h3>🛍️ Manage Global Gift Items</h3>
+          <button className="ap-modal-close" onClick={onCancel}>✕</button>
+        </div>
+        
+        <div style={{ padding: '20px' }}>
+          <div className="agb-new-item-form" style={{ marginBottom: '25px' }}>
+            <p className="agb-new-item-title">➕ Add New Item to Global List</p>
+            <div className="agb-form-row">
+              <div className="agb-form-col-2">
+                <input className="agb-input" placeholder="Item Name (e.g. Ajwa Dates)" value={name} onChange={e=>setName(e.target.value)} />
+              </div>
+              <div className="agb-form-col-1">
+                <input type="number" className="agb-input" placeholder="Price (PKR)" value={price} onChange={e=>setPrice(e.target.value)} />
+              </div>
+            </div>
+            <div className="agb-new-item-row" style={{ marginTop: '10px' }}>
+              <input className="agb-input" placeholder="Image URL or Upload 👉" value={image} onChange={e=>setImage(e.target.value)} style={{ flex: 1 }} />
+              <label className="agb-new-item-upload">📤
+                <input type="file" accept="image/*" style={{ display:'none' }} onChange={e => { if(e.target.files[0]) handleUpload(e.target.files[0]); }} />
+              </label>
+            </div>
+            <button onClick={addItem} disabled={loading} className="agb-save-db-btn" style={{ width: '100%', marginTop: '15px' }}>
+              {loading ? 'Adding...' : 'Add Item to Global Pool'}
+            </button>
+          </div>
+
+          <p className="agb-panel-title">Available Global Items ({items.length})</p>
+          {items.length === 0 ? <p className="agb-panel-empty">No global items found.</p> : (
+            <div className="agb-items-grid" style={{ maxHeight: '350px', overflowY: 'auto', paddingRight: '10px' }}>
+              {items.map(item => (
+                <div key={item._id} className="agb-item-wrapper" style={{ width: '80px' }}>
+                  <div className="agb-item-img-wrap" style={{ width: '80px', height: '80px' }}>
+                    <img src={item.image.startsWith('/') ? `http://localhost:5173${item.image}` : item.image} alt={item.name} className="agb-item-img" onError={e=>e.target.style.display='none'} />
+                    <button onClick={() => deleteItem(item._id)} className="agb-item-remove">✕</button>
+                  </div>
+                  <p className="agb-item-title" title={item.name} style={{ fontSize: '10px', marginTop: '4px' }}>{item.name}</p>
+                  <p style={{ fontSize: '10px', color: '#c5a059', margin: 0, textAlign: 'center', fontWeight: 'bold' }}>PKR {item.price}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 // ── Products Panel for each gift box ──
-function BoxProductsPanel({ box, token, onMsg }) {
+function BoxProductsPanel({ box, token, onMsg, globalItems }) {
   const [open, setOpen] = useState(false);
   const [boxProducts, setBoxProducts] = useState(box.products || []);
   const [saving, setSaving] = useState(false);
   
-  // Custom item state
-  const [itemName, setItemName] = useState('');
-  const [itemImage, setItemImage] = useState('');
-
-  const uploadItemImage = async (file) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    try {
-      const res = await fetch(`${API}/upload`, { method: 'POST', body: formData });
-      const data = await res.json();
-      if (res.ok) setItemImage(data.path);
-    } catch {
-      onMsg('❌ Upload failed');
-    }
-  };
-
-  const addItem = () => {
-    if (!itemName || !itemImage) {
-      onMsg('⚠️ Name aur Image dono zaruri hain!');
+  const addItemFromGlobal = (gItem) => {
+    if (boxProducts.some(p => p.globalId === gItem._id)) {
+      onMsg('⚠️ Item already in box!');
       return;
     }
     if (boxProducts.length >= box.maxItems) {
       onMsg(`⚠️ Max ${box.maxItems} items allowed!`);
       return;
     }
-    const newItem = { id: Date.now().toString(), name: itemName, image: itemImage };
+    const newItem = { id: Date.now().toString(), globalId: gItem._id, name: gItem.name, image: gItem.image, price: gItem.price };
     setBoxProducts(prev => [...prev, newItem]);
-    setItemName('');
-    setItemImage('');
   };
 
   const removeItem = (id) => {
@@ -206,34 +276,27 @@ function BoxProductsPanel({ box, token, onMsg }) {
             )}
           </div>
 
-          {/* Add New Item Form */}
+          {/* Global Items Selector */}
           {boxProducts.length < box.maxItems && (
             <div className="agb-new-item-form">
-              <p className="agb-new-item-title">➕ Add New Item</p>
-              <div className="agb-new-item-inputs">
-                <input
-                  placeholder="Item Name (e.g. Ajwa Dates)"
-                  value={itemName}
-                  onChange={e => setItemName(e.target.value)}
-                  className="agb-new-item-input"
-                />
-                <div className="agb-new-item-row">
-                  <input
-                    placeholder="Image URL or Upload 👉"
-                    value={itemImage}
-                    onChange={e => setItemImage(e.target.value)}
-                    className="agb-new-item-input"
-                    style={{ flex: 1 }}
-                  />
-                  <label className="agb-new-item-upload" title="Upload Image">
-                    📤
-                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { if (e.target.files[0]) uploadItemImage(e.target.files[0]); }} />
-                  </label>
+              <p className="agb-new-item-title">👇 Click to add from Global Items</p>
+              {globalItems.length === 0 ? (
+                <p className="agb-panel-empty">No global items found. Create them from the top button first.</p>
+              ) : (
+                <div className="agb-items-grid" style={{ maxHeight: '150px', overflowY: 'auto' }}>
+                  {globalItems.map(gItem => (
+                    <div key={gItem._id} className="agb-item-wrapper" style={{ cursor: 'pointer' }} onClick={() => addItemFromGlobal(gItem)}>
+                      <div className="agb-item-img-wrap">
+                        <img src={gItem.image.startsWith('/') ? `http://localhost:5173${gItem.image}` : gItem.image} alt={gItem.name} className="agb-item-img" style={{ border: '2px dashed #4b5563' }} />
+                        <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '10px' }}>
+                          <span style={{ color: 'white', fontSize: '20px', fontWeight: 'bold' }}>+</span>
+                        </div>
+                      </div>
+                      <p className="agb-item-title">{gItem.name}</p>
+                    </div>
+                  ))}
                 </div>
-                <button onClick={addItem} className="agb-add-item-btn">
-                  Add Item to Box
-                </button>
-              </div>
+              )}
             </div>
           )}
 
@@ -253,12 +316,14 @@ function Admin_GiftBoxes() {
   const [token, setToken] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [boxes, setBoxes] = useState([]);
+  const [globalItems, setGlobalItems] = useState([]);
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState('');
   const [editBox, setEditBox] = useState(null);
   const [search, setSearch] = useState('');
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showGlobalManager, setShowGlobalManager] = useState(false);
   const [newBox, setNewBox] = useState(emptyBox);
 
   useEffect(() => {
@@ -268,8 +333,17 @@ function Admin_GiftBoxes() {
     setAdmin(JSON.parse(adminData));
     setToken(t);
     fetchBoxes();
+    fetchGlobalItems();
     fetchProducts();
   }, []);
+
+  const fetchGlobalItems = async () => {
+    try {
+      const res = await fetch(`${API}/gift-box-items`);
+      const data = await res.json();
+      setGlobalItems(data.items || []);
+    } catch {}
+  };
 
   const fetchBoxes = async () => {
     setLoading(true);
@@ -385,10 +459,23 @@ function Admin_GiftBoxes() {
           <div className="ap-toolbar">
             <input className="search-input" placeholder="🔍 Search gift boxes..." value={search} onChange={e => setSearch(e.target.value)} />
             <span className="ap-count">{filtered.length} Boxes</span>
+            <button className="ap-save" style={{ width: 'auto', padding: '8px 18px', background: '#3b82f6', borderColor: '#2563eb' }} onClick={() => setShowGlobalManager(true)}>
+              🛍️ Manage Global Items
+            </button>
             <button className="ap-save" style={{ width: 'auto', padding: '8px 18px' }} onClick={() => setShowAddForm(true)}>
               ➕ Add Gift Box
             </button>
           </div>
+
+          {showGlobalManager && (
+            <GlobalItemsManager
+              items={globalItems}
+              token={token}
+              onMsg={showMsg}
+              onRefresh={fetchGlobalItems}
+              onCancel={() => setShowGlobalManager(false)}
+            />
+          )}
 
           <div className="da-video-specs-note" style={{ borderColor: '#c5a059', background: '#fdfaf3', margin: '15px 0 20px 0', borderLeft: '4px solid #c5a059', padding: '12px 15px', borderRadius: '8px', borderTop: '1px solid rgba(197, 160, 89, 0.2)', borderRight: '1px solid rgba(197, 160, 89, 0.2)', borderBottom: '1px solid rgba(197, 160, 89, 0.2)', boxShadow: '0 4px 15px rgba(0, 0, 0, 0.05)' }}>
             <strong style={{ color: '#8d7558', display: 'block', fontSize: '14px', marginBottom: '8px' }}>📸 Recommended Gift Box Image Specs:</strong>
@@ -440,7 +527,7 @@ function Admin_GiftBoxes() {
                     {/* Products Manager */}
                     <BoxProductsPanel
                       box={box}
-                      allProducts={allProducts}
+                      globalItems={globalItems}
                       token={token}
                       onMsg={showMsg}
                     />
