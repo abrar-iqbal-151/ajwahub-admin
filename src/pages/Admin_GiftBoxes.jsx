@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import '../css/AdminPanel.css';
 import '../css/Admin_Product.css';
+import '../css/Admin_GiftBoxes.css';
 
 const API = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api`;
 
@@ -33,33 +34,33 @@ function BoxForm({ box, onChange, onSave, onCancel, isNew, onUpload }) {
           <h3>{isNew ? '➕ Add Gift Box' : '✏️ Edit Gift Box'}</h3>
           <button className="ap-modal-close" onClick={onCancel}>✕</button>
         </div>
-        <div className="ap-edit-flex" style={{ display: 'flex', gap: '24px', padding: '20px', flexWrap: 'wrap' }}>
+        <div className="ap-edit-flex">
           
-          <div className="ap-edit-left" style={{ flex: '1', minWidth: '300px', display: 'flex', flexDirection: 'column', gap: '15px' }}>
-            <div style={{ position: 'relative', background: '#fdfaf3', borderRadius: '16px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(197, 160, 89, 0.2)', overflow: 'hidden', padding: '10px' }}>
-              <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 2, background: 'rgba(0,0,0,0.6)', padding: '2px 8px', borderRadius: '4px', color: '#fff', fontSize: '10px', fontWeight: 'bold' }}>📦 Cover Image</div>
+          <div className="ap-edit-left">
+            <div className="agb-img-preview-box">
+              <div className="agb-img-preview-badge">📦 Cover Image</div>
               {box.image ? (
-                <img src={box.image.startsWith('/') ? `http://localhost:5173${box.image}` : box.image} alt="cover" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', zIndex: 1, filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.15))' }} onError={e => e.target.style.display = 'none'} />
+                <img src={box.image.startsWith('/') ? `http://localhost:5173${box.image}` : box.image} alt="cover" className="agb-img-preview-img" onError={e => e.target.style.display = 'none'} />
               ) : (
-                <div style={{ color: '#ccc', textAlign: 'center', zIndex: 1 }}><span style={{ fontSize: '32px' }}>📦</span><p style={{ color: '#94a3b8', fontSize: '12px' }}>No cover image</p></div>
+                <div className="agb-img-placeholder"><span>📦</span><p>No cover image</p></div>
               )}
-              <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 10 }}>
-                <label className="ap-upload-label" style={{ background: 'rgba(255,255,255,0.9)', margin: 0, padding: '6px 10px', fontSize: '11px', cursor: 'pointer', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+              <div className="agb-upload-wrapper">
+                <label className="agb-upload-label">
                   📤 Upload Cover
                   <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files[0]; if (f) onUpload(f, 'image'); }} />
                 </label>
               </div>
             </div>
             
-            <div style={{ position: 'relative', background: '#fdfaf3', borderRadius: '16px', height: '200px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(197, 160, 89, 0.2)', overflow: 'hidden', padding: '10px' }}>
-              <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 2, background: 'rgba(0,0,0,0.6)', padding: '2px 8px', borderRadius: '4px', color: '#fff', fontSize: '10px', fontWeight: 'bold' }}>🍬 Inner Image</div>
+            <div className="agb-img-preview-box">
+              <div className="agb-img-preview-badge">🍬 Inner Image</div>
               {box.innerImage ? (
-                <img src={box.innerImage.startsWith('/') ? `http://localhost:5173${box.innerImage}` : box.innerImage} alt="inner" style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', zIndex: 1, filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.15))' }} onError={e => e.target.style.display = 'none'} />
+                <img src={box.innerImage.startsWith('/') ? `http://localhost:5173${box.innerImage}` : box.innerImage} alt="inner" className="agb-img-preview-img" onError={e => e.target.style.display = 'none'} />
               ) : (
-                <div style={{ color: '#ccc', textAlign: 'center', zIndex: 1 }}><span style={{ fontSize: '32px' }}>🍬</span><p style={{ color: '#94a3b8', fontSize: '12px' }}>No inner image</p></div>
+                <div className="agb-img-placeholder"><span>🍬</span><p>No inner image</p></div>
               )}
-              <div style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 10 }}>
-                <label className="ap-upload-label" style={{ background: 'rgba(255,255,255,0.9)', margin: 0, padding: '6px 10px', fontSize: '11px', cursor: 'pointer', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+              <div className="agb-upload-wrapper">
+                <label className="agb-upload-label">
                   📤 Upload Inner
                   <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { const f = e.target.files[0]; if (f) onUpload(f, 'innerImage'); }} />
                 </label>
@@ -67,40 +68,40 @@ function BoxForm({ box, onChange, onSave, onCancel, isNew, onUpload }) {
             </div>
           </div>
 
-          <div className="ap-edit-right" style={{ flex: '1.2', minWidth: '300px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <div style={{ flex: 2, display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Name</label>
-                <input style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={box.name} onChange={e => onChange('name', e.target.value)} placeholder="e.g. Classic Date Box" />
+          <div className="ap-edit-right">
+            <div className="agb-form-row">
+              <div className="agb-form-col-2">
+                <label className="agb-form-label">Name</label>
+                <input className="agb-input" value={box.name} onChange={e => onChange('name', e.target.value)} placeholder="e.g. Classic Date Box" />
               </div>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Max Items</label>
-                <input type="number" min="1" max="10" style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={box.maxItems} onChange={e => onChange('maxItems', e.target.value)} />
+              <div className="agb-form-col-1">
+                <label className="agb-form-label">Max Items</label>
+                <input type="number" min="1" max="10" className="agb-input" value={box.maxItems} onChange={e => onChange('maxItems', e.target.value)} />
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Box Price (PKR)</label>
-              <input type="number" style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={box.price} onChange={e => onChange('price', e.target.value)} placeholder="e.g. 1200" />
+            <div className="agb-form-group">
+              <label className="agb-form-label">Box Price (PKR)</label>
+              <input type="number" className="agb-input" value={box.price} onChange={e => onChange('price', e.target.value)} placeholder="e.g. 1200" />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Cover Image URL</label>
-              <input style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={box.image || ''} onChange={e => onChange('image', e.target.value)} placeholder="/Gift 1.png" />
+            <div className="agb-form-group">
+              <label className="agb-form-label">Cover Image URL</label>
+              <input className="agb-input" value={box.image || ''} onChange={e => onChange('image', e.target.value)} placeholder="/Gift 1.png" />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Inner Image URL</label>
-              <input style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={box.innerImage || ''} onChange={e => onChange('innerImage', e.target.value)} placeholder="/Gift 1 Inner.png" />
+            <div className="agb-form-group">
+              <label className="agb-form-label">Inner Image URL</label>
+              <input className="agb-input" value={box.innerImage || ''} onChange={e => onChange('innerImage', e.target.value)} placeholder="/Gift 1 Inner.png" />
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-              <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Description</label>
-              <textarea rows={3} style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0', resize: 'vertical' }} value={box.description} onChange={e => onChange('description', e.target.value)} placeholder="Short description..." />
+            <div className="agb-form-group">
+              <label className="agb-form-label">Description</label>
+              <textarea rows={3} className="agb-textarea" value={box.description} onChange={e => onChange('description', e.target.value)} placeholder="Short description..." />
             </div>
 
             <div className="ap-btns" style={{ marginTop: 'auto', paddingTop: '15px' }}>
-              <button className="ap-save" onClick={onSave} style={{ flex: 2, padding: '12px', background: 'linear-gradient(135deg, #c5a059, #b08d4f)' }}>{isNew ? '➕ Create Box' : '💾 Save Changes'}</button>
+              <button className="ap-save" onClick={onSave} style={{ flex: 2, padding: '12px' }}>{isNew ? '➕ Create Box' : '💾 Save Changes'}</button>
               <button className="ap-cancel" onClick={onCancel} style={{ flex: 1, padding: '12px' }}>Cancel</button>
             </div>
           </div>
@@ -111,27 +112,17 @@ function BoxForm({ box, onChange, onSave, onCancel, isNew, onUpload }) {
 }
 
 
-// ── Global Gift Items Panel ──
-function GlobalGiftItemsPanel({ token, onMsg }) {
-  const [items, setItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+// ── Products Panel for each gift box ──
+function BoxProductsPanel({ box, token, onMsg }) {
+  const [open, setOpen] = useState(false);
+  const [boxProducts, setBoxProducts] = useState(box.products || []);
+  const [saving, setSaving] = useState(false);
+  
+  // Custom item state
   const [itemName, setItemName] = useState('');
   const [itemImage, setItemImage] = useState('');
-  const [uploading, setUploading] = useState(false);
-
-  useEffect(() => { fetchItems(); }, []);
-
-  const fetchItems = async () => {
-    try {
-      const res = await fetch(`${API}/gift-items`);
-      const data = await res.json();
-      setItems(data.items || []);
-    } catch {}
-    setLoading(false);
-  };
 
   const uploadItemImage = async (file) => {
-    setUploading(true);
     const formData = new FormData();
     formData.append('file', file);
     try {
@@ -141,80 +132,119 @@ function GlobalGiftItemsPanel({ token, onMsg }) {
     } catch {
       onMsg('❌ Upload failed');
     }
-    setUploading(false);
   };
 
-  const addItem = async () => {
-    if (!itemName || !itemImage) return onMsg('⚠️ Name aur Image dono zaruri hain!');
+  const addItem = () => {
+    if (!itemName || !itemImage) {
+      onMsg('⚠️ Name aur Image dono zaruri hain!');
+      return;
+    }
+    if (boxProducts.length >= box.maxItems) {
+      onMsg(`⚠️ Max ${box.maxItems} items allowed!`);
+      return;
+    }
+    const newItem = { id: Date.now().toString(), name: itemName, image: itemImage };
+    setBoxProducts(prev => [...prev, newItem]);
+    setItemName('');
+    setItemImage('');
+  };
+
+  const removeItem = (id) => {
+    setBoxProducts(prev => prev.filter(p => p.id !== id));
+  };
+
+  const saveProducts = async () => {
+    setSaving(true);
     try {
-      const res = await fetch(`${API}/gift-items`, {
-        method: 'POST',
+      const res = await fetch(`${API}/gift-boxes/${box._id}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ name: itemName, image: itemImage })
+        body: JSON.stringify({ ...box, products: boxProducts, price: Number(box.price), maxItems: Number(box.maxItems) })
       });
-      if (res.ok) {
-        onMsg('✅ Item added globally!');
-        setItemName(''); setItemImage('');
-        fetchItems();
-      } else { onMsg('❌ Failed to add item'); }
-    } catch { onMsg('❌ Error adding item'); }
-  };
-
-  const deleteItem = async (id) => {
-    if (!window.confirm('Delete this item? It will be removed from all future gift boxes.')) return;
-    try {
-      const res = await fetch(`${API}/gift-items/${id}`, { method: 'DELETE', headers: { Authorization: `Bearer ${token}` }});
-      if (res.ok) {
-        onMsg('✅ Item deleted!');
-        fetchItems();
-      }
-    } catch {}
+      if (res.ok) onMsg('✅ Products saved in database!');
+      else onMsg('❌ Save failed');
+    } catch { onMsg('❌ Network error'); }
+    setSaving(false);
   };
 
   return (
-    <div style={{ marginTop: '40px', padding: '20px', background: '#111827', borderRadius: '16px', border: '1px solid rgba(197, 160, 89, 0.2)' }}>
-      <h2 style={{ color: '#c5a059', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-        <span>🍬</span> Global Gift Items <span style={{ fontSize: '12px', color: '#64748b', fontWeight: 'normal' }}>(Shows in ALL gift boxes)</span>
-      </h2>
-      
-      {/* Add Form */}
-      <div style={{ display: 'flex', gap: '15px', alignItems: 'flex-end', background: 'rgba(255,255,255,0.02)', padding: '15px', borderRadius: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
-        <div style={{ flex: '1 1 250px' }}>
-          <label style={{ display: 'block', fontSize: '12px', color: '#94a3b8', marginBottom: '6px' }}>Item Name</label>
-          <input value={itemName} onChange={e => setItemName(e.target.value)} placeholder="e.g. Premium Almonds" style={{ width: '100%', padding: '10px', borderRadius: '8px', border: '1px solid #334155', background: '#1e293b', color: '#fff', outline: 'none' }} />
-        </div>
-        <div style={{ flex: '2 1 300px' }}>
-          <label style={{ display: 'block', fontSize: '12px', color: '#94a3b8', marginBottom: '6px' }}>Image URL</label>
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <input value={itemImage} onChange={e => setItemImage(e.target.value)} placeholder="/image.png" style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid #334155', background: '#1e293b', color: '#fff', outline: 'none' }} />
-            <label style={{ padding: '10px 15px', background: '#334155', borderRadius: '8px', cursor: 'pointer', color: '#fff', fontSize: '13px', display: 'flex', alignItems: 'center' }}>
-              {uploading ? '⏳' : '📤 Upload'}
-              <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { if (e.target.files[0]) uploadItemImage(e.target.files[0]); }} />
-            </label>
-          </div>
-        </div>
-        <button onClick={addItem} style={{ padding: '10px 20px', background: 'linear-gradient(135deg, #c5a059, #b08d4f)', color: '#fff', fontWeight: 'bold', border: 'none', borderRadius: '8px', cursor: 'pointer', height: '40px', flex: 'none' }}>
-          ➕ Add Item
-        </button>
-      </div>
+    <div style={{ marginTop: '10px' }}>
+      <button
+        onClick={() => setOpen(!open)}
+        className={`agb-panel-btn ${open ? 'open' : 'closed'}`}
+      >
+        <span>🛒 Box Items ({boxProducts.length}/{box.maxItems})</span>
+        <span>{open ? '▲' : '▼'}</span>
+      </button>
 
-      {/* Items Grid */}
-      {loading ? <p style={{ color: '#94a3b8' }}>Loading items...</p> : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: '15px' }}>
-          {items.map(item => (
-            <div key={item._id} style={{ background: '#1e293b', borderRadius: '12px', padding: '10px', border: '1px solid #334155', position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <img src={item.image.startsWith('/') ? `http://localhost:5173${item.image}` : item.image} alt={item.name} style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px', marginBottom: '8px', border: '2px solid #c5a059' }} onError={e => e.target.style.display = 'none'} />
-              <p style={{ fontSize: '11px', color: '#e2e8f0', textAlign: 'center', margin: 0, fontWeight: 'bold' }}>{item.name}</p>
-              <button onClick={() => deleteItem(item._id)} style={{ position: 'absolute', top: '-8px', right: '-8px', background: '#ef4444', color: '#fff', border: 'none', borderRadius: '50%', width: '24px', height: '24px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', boxShadow: '0 2px 4px rgba(0,0,0,0.3)' }}>✕</button>
+      {open && (
+        <div className="agb-panel-content">
+          
+          {/* List of currently added items */}
+          <div>
+            <p className="agb-panel-title">
+              Items in Box ({boxProducts.length} / {box.maxItems})
+            </p>
+            {boxProducts.length === 0 ? (
+              <p className="agb-panel-empty">No items added yet.</p>
+            ) : (
+              <div className="agb-items-grid">
+                {boxProducts.map((p) => (
+                  <div key={p.id} className="agb-item-wrapper">
+                    <div className="agb-item-img-wrap">
+                      <img
+                        src={p.image.startsWith('/') ? `http://localhost:5173${p.image}` : p.image} alt={p.name}
+                        className="agb-item-img"
+                        onError={e => e.target.style.display = 'none'}
+                      />
+                      <button onClick={() => removeItem(p.id)} className="agb-item-remove">✕</button>
+                    </div>
+                    <p className="agb-item-title" title={p.name}>{p.name}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Add New Item Form */}
+          {boxProducts.length < box.maxItems && (
+            <div className="agb-new-item-form">
+              <p className="agb-new-item-title">➕ Add New Item</p>
+              <div className="agb-new-item-inputs">
+                <input
+                  placeholder="Item Name (e.g. Ajwa Dates)"
+                  value={itemName}
+                  onChange={e => setItemName(e.target.value)}
+                  className="agb-new-item-input"
+                />
+                <div className="agb-new-item-row">
+                  <input
+                    placeholder="Image URL or Upload 👉"
+                    value={itemImage}
+                    onChange={e => setItemImage(e.target.value)}
+                    className="agb-new-item-input"
+                    style={{ flex: 1 }}
+                  />
+                  <label className="agb-new-item-upload" title="Upload Image">
+                    📤
+                    <input type="file" accept="image/*" style={{ display: 'none' }} onChange={e => { if (e.target.files[0]) uploadItemImage(e.target.files[0]); }} />
+                  </label>
+                </div>
+                <button onClick={addItem} className="agb-add-item-btn">
+                  Add Item to Box
+                </button>
+              </div>
             </div>
-          ))}
-          {items.length === 0 && <p style={{ color: '#64748b', fontSize: '13px', gridColumn: '1/-1', textAlign: 'center', padding: '20px' }}>No global items added yet. Yahan upar form se add karein.</p>}
+          )}
+
+          <button onClick={saveProducts} disabled={saving} className="agb-save-db-btn">
+            {saving ? 'Saving...' : '💾 Save Items to Database'}
+          </button>
         </div>
       )}
     </div>
   );
 }
-
 
 function Admin_GiftBoxes() {
   const navigate = useNavigate();
@@ -223,6 +253,7 @@ function Admin_GiftBoxes() {
   const [token, setToken] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [boxes, setBoxes] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [msg, setMsg] = useState('');
   const [editBox, setEditBox] = useState(null);
@@ -237,6 +268,7 @@ function Admin_GiftBoxes() {
     setAdmin(JSON.parse(adminData));
     setToken(t);
     fetchBoxes();
+    fetchProducts();
   }, []);
 
   const fetchBoxes = async () => {
@@ -247,6 +279,14 @@ function Admin_GiftBoxes() {
       setBoxes(data.boxes || []);
     } catch {}
     setLoading(false);
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const res = await fetch(`${API}/shop-products`);
+      const data = await res.json();
+      setAllProducts(data.products || []);
+    } catch {}
   };
 
   const authHeaders = () => ({ 'Content-Type': 'application/json', Authorization: `Bearer ${token}` });
@@ -326,7 +366,7 @@ function Admin_GiftBoxes() {
       <div className="dashboard-main">
         <header className="topbar">
           <button className="topbar-toggle" onClick={() => setSidebarOpen(!sidebarOpen)}>{sidebarOpen ? '◀' : '▶'}</button>
-          <h1 className="topbar-title">📦 Gift Boxes Management</h1>
+          <h1 className="topbar-title">📦 Gift Boxes</h1>
           <div className="topbar-right">
             {admin && <span className="topbar-admin">👤 {admin.name}</span>}
           </div>
@@ -334,13 +374,6 @@ function Admin_GiftBoxes() {
 
         <div className="dashboard-content">
           {msg && <div className="ap-msg">{msg}</div>}
-
-          {/* GLOBAL GIFT ITEMS PANEL */}
-          <GlobalGiftItemsPanel token={token} onMsg={showMsg} />
-
-          <hr style={{ border: 'none', borderTop: '1px solid rgba(197, 160, 89, 0.2)', margin: '40px 0' }} />
-
-          <h2 style={{ color: '#fff', marginBottom: '20px' }}>📦 Manage Gift Boxes</h2>
 
           {boxes.length === 0 && !loading && (
             <div style={{ background: '#111827', border: '1px solid rgba(220,38,38,0.3)', borderRadius: '14px', padding: '30px', textAlign: 'center', marginBottom: '20px' }}>
@@ -404,7 +437,15 @@ function Admin_GiftBoxes() {
                       <p style={{ fontSize: '11px', color: '#6b7280', marginTop: '4px', lineHeight: '1.4' }}>{box.description}</p>
                     )}
 
-                    <div style={{ display: 'flex', gap: '8px', marginTop: '15px' }}>
+                    {/* Products Manager */}
+                    <BoxProductsPanel
+                      box={box}
+                      allProducts={allProducts}
+                      token={token}
+                      onMsg={showMsg}
+                    />
+
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '10px' }}>
                       <button className="ap-edit-btn" style={{ flex: 1 }} onClick={() => setEditBox({ ...box })}>✏️ Edit</button>
                       <button className="ap-cancel" style={{ flex: 'none', padding: '7px 12px' }} onClick={() => deleteBox(box._id)}>🗑️</button>
                     </div>
