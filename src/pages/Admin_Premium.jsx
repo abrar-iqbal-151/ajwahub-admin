@@ -51,7 +51,7 @@ function Admin_Premium() {
       const res = await fetch(`${API}/premium-products`);
       const data = await res.json();
       setProducts(data.products || []);
-    } catch {}
+    } catch { }
     setLoading(false);
   };
 
@@ -254,7 +254,7 @@ function Admin_Premium() {
               {filtered.map(p => (
                 <div key={p._id} className="ap-card">
                   <div className="ap-view">
-                    <img src={p.image} alt={p.name} className="ap-img" onError={e => e.target.style.display='none'} />
+                    <img src={p.image} alt={p.name} className="ap-img" onError={e => e.target.style.display = 'none'} />
                     {p.featured && <span style={{ fontSize: '11px', color: '#fbbf24', fontWeight: 700, position: 'absolute', top: '10px', left: '10px', background: 'rgba(0,0,0,0.7)', padding: '4px 8px', borderRadius: '4px' }}>⭐ Featured</span>}
                     <h4>{p.name}</h4>
                     <div className="ap-meta">
