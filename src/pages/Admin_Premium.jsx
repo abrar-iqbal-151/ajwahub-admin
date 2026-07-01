@@ -20,7 +20,7 @@ const menuItems = [
   { icon: '📦', label: 'Inventory', path: '/admin-inventory' },
 ];
 
-const empty = { name: '', description: '', price: '', originalPrice: '', image: '', category: 'dates', badge: 'Premium', stock: true, rating: 4.5, weight: '1kg', featured: false };
+const empty = { name: '', description: '', price: '', originalPrice: '', image: '', category: 'dates', badge: 'Premium', stock: true, rating: 4.5, weight: '1kg', featured: false, weights: [] };
 
 function Admin_Premium() {
   const navigate = useNavigate();
@@ -80,7 +80,7 @@ function Admin_Premium() {
   };
 
   const handleEdit = (p) => {
-    setForm({ name: p.name, description: p.description, price: p.price, originalPrice: p.originalPrice, image: p.image, category: p.category, badge: p.badge, stock: p.stock, rating: p.rating, weight: p.weight, featured: p.featured });
+    setForm({ name: p.name, description: p.description, price: p.price, originalPrice: p.originalPrice, image: p.image, category: p.category, badge: p.badge, stock: p.stock, rating: p.rating, weight: p.weight, featured: p.featured, weights: p.weights || [] });
     setEditId(p._id);
     setShowForm(true);
   };
@@ -229,6 +229,45 @@ function Admin_Premium() {
 
                     <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold', marginTop: '5px' }}>Description</label>
                     <textarea rows={3} style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0', resize: 'vertical' }} value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))} placeholder="Premium product description..." />
+
+                    <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold', marginTop: '5px' }}>Weight Options & Savings</label>
+                    <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
+                      <button type="button" style={{ padding: '5px 10px', fontSize: '12px', borderRadius: '4px', background: '#e2e8f0', border: 'none', cursor: 'pointer' }} onClick={() => setForm(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '500g Mini Box', savings: '' }] }))}>+ 500g Mini Box</button>
+                      <button type="button" style={{ padding: '5px 10px', fontSize: '12px', borderRadius: '4px', background: '#e2e8f0', border: 'none', cursor: 'pointer' }} onClick={() => setForm(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '1kg Special Box', savings: '' }] }))}>+ 1kg Special Box</button>
+                      <button type="button" style={{ padding: '5px 10px', fontSize: '12px', borderRadius: '4px', background: '#e2e8f0', border: 'none', cursor: 'pointer' }} onClick={() => setForm(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '2kg Briefcase Box', savings: '(Save Rs 500)' }] }))}>+ 2kg Briefcase Box</button>
+                      <button type="button" style={{ padding: '5px 10px', fontSize: '12px', borderRadius: '4px', background: '#e2e8f0', border: 'none', cursor: 'pointer' }} onClick={() => setForm(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '5kg Family Carton', savings: '(Save Rs 1500)' }] }))}>+ 5kg Family Carton</button>
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
+                      {(form.weights || []).map((w, idx) => (
+                        <div key={idx} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                          <input placeholder="e.g. 2kg Box" value={w.label} onChange={e => {
+                            setForm(prev => {
+                              const newWeights = [...prev.weights];
+                              newWeights[idx] = { ...newWeights[idx], label: e.target.value };
+                              return { ...prev, weights: newWeights };
+                            });
+                          }} style={{ padding: '8px', borderRadius: '6px', border: '1px solid #e2e8f0', flex: 1 }} />
+                          <input placeholder="e.g. (Save Rs 500)" value={w.savings} onChange={e => {
+                            setForm(prev => {
+                              const newWeights = [...prev.weights];
+                              newWeights[idx] = { ...newWeights[idx], savings: e.target.value };
+                              return { ...prev, weights: newWeights };
+                            });
+                          }} style={{ padding: '8px', borderRadius: '6px', border: '1px solid #e2e8f0', flex: 1 }} />
+                          <button type="button" onClick={() => {
+                            setForm(prev => {
+                              const newWeights = prev.weights.filter((_, i) => i !== idx);
+                              return { ...prev, weights: newWeights };
+                            });
+                          }} style={{ background: '#fee2e2', color: '#dc2626', border: 'none', width: '32px', height: '32px', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' }}>✕</button>
+                        </div>
+                      ))}
+                      <button type="button" style={{ padding: '8px', border: '1px dashed #cbd5e1', background: 'transparent', borderRadius: '6px', color: '#64748b', cursor: 'pointer', fontWeight: 'bold' }} onClick={() => {
+                        setForm(prev => ({ ...prev, weights: [...(prev.weights || []), { label: '', savings: '' }] }));
+                      }} >
+                        + Add Weight Option
+                      </button>
+                    </div>
 
                     <div style={{ display: 'flex', gap: '20px', marginTop: '10px' }}>
                       <label className="ap-stock-label" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '600', padding: 0 }}>
