@@ -157,7 +157,7 @@ function Admin_Product() {
       method: 'PUT', headers: authHeaders,
       body: JSON.stringify({
         name: product.name,
-        price: 4300,
+        price: product.price || 0,
         discount: product.discount,
         stock: product.stock,
         description: product.description,
@@ -193,7 +193,8 @@ function Admin_Product() {
       method: 'POST', headers: authHeaders,
       body: JSON.stringify({
         ...newProduct,
-        price: 4300,
+        price: newProduct.price || 0,
+        description: newProduct.description,
         storageNote: newProduct.storageNote,
         weights: newProduct.weights,
         arabicName: newProduct.arabicName
@@ -411,6 +412,12 @@ function Admin_Product() {
                   <label>Arabic Name</label>
                   <input placeholder="عجوة" className="ap-style-38" value={newProduct.arabicName} onChange={e => setNewProduct({ ...newProduct, arabicName: e.target.value })} />
 
+                  <label>Price (PKR)</label>
+                  <input type="number" placeholder="e.g. 800" value={newProduct.price} onChange={e => setNewProduct({ ...newProduct, price: Number(e.target.value) })} />
+
+                  <label>Description</label>
+                  <textarea rows={3} placeholder="Product description..." value={newProduct.description} onChange={e => setNewProduct({ ...newProduct, description: e.target.value })} />
+
                   <label>Category</label>
                   <select value={newProduct.category} onChange={e => setNewProduct({ ...newProduct, category: e.target.value })}>
                     <option value="dates">Dates</option>
@@ -610,6 +617,12 @@ function Admin_Product() {
 
                 <label>Arabic Name</label>
                 <input className="ap-style-76" value={editProduct.arabicName} onChange={e => setEditProduct(prev => ({ ...prev, arabicName: e.target.value }))} />
+
+                <label>Price (PKR)</label>
+                <input type="number" placeholder="e.g. 800" value={editProduct.price} onChange={e => setEditProduct(prev => ({ ...prev, price: Number(e.target.value) }))} />
+
+                <label>Description</label>
+                <textarea rows={3} placeholder="Product description..." value={editProduct.description} onChange={e => setEditProduct(prev => ({ ...prev, description: e.target.value }))} />
 
                 <label>Category</label>
                 <select value={editProduct.category} onChange={e => setEditProduct(prev => ({ ...prev, category: e.target.value }))}>
