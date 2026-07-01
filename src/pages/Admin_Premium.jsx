@@ -194,19 +194,8 @@ function Admin_Premium() {
                         <input style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={form.name} onChange={e => setForm(p => ({ ...p, name: e.target.value }))} placeholder="Product name" />
                       </div>
                       <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                        <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Weight</label>
-                        <input style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={form.weight} onChange={e => setForm(p => ({ ...p, weight: e.target.value }))} placeholder="e.g. 500g" />
-                      </div>
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '10px' }}>
-                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '5px' }}>
                         <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Price (PKR)</label>
                         <input type="number" style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={form.price} onChange={e => setForm(p => ({ ...p, price: e.target.value }))} placeholder="e.g. 2500" />
-                      </div>
-                      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                        <label style={{ fontSize: '12px', color: '#64748b', fontWeight: 'bold' }}>Original Price</label>
-                        <input type="number" style={{ padding: '10px', borderRadius: '8px', border: '1px solid #e2e8f0' }} value={form.originalPrice} onChange={e => setForm(p => ({ ...p, originalPrice: e.target.value }))} placeholder="e.g. 3000" />
                       </div>
                     </div>
 
